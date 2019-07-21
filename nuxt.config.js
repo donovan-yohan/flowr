@@ -6,7 +6,7 @@ export default {
   ** Headers of the page
   */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
+    titleTemplate: 'Flowr',
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
@@ -64,8 +64,15 @@ export default {
       info: colors.teal.lighten1,
       warning: colors.amber.base,
       error: colors.deepOrange.accent4,
-      success: colors.green.accent3
+      success: colors.green.accent3,
+      red: "#D33535",
+      orange: "#FF8500",
+      yellow: "#FFC74A",
     }
+  },
+
+  router: {
+    base: "/flowr/"
   },
   /*
   ** Build configuration
