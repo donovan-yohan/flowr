@@ -4,9 +4,7 @@
       <v-calendar
         id="month-calendar"
         ref="calendar"
-        v-model="start"
         :type="type"
-        :end="end"
         color="primary"
         :show-month-on-first="false"
         :weekday-format="(vTimestamp) => {
@@ -45,6 +43,20 @@
     }
     .v-calendar-weekly__day {
       border: none;
+      padding: 0;
+      display: inline-flex;
+      min-width: calc((100vw - 32px) / 7);
+      min-height: calc((100vw - 32px) / 7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .v-calendar-weekly__day-label {
+      position: static;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .v-past {
       color: #ECECEC;

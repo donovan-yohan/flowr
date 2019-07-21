@@ -78,7 +78,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .v-btn__content span {
     font-size: 12px;
     color: gray;
@@ -87,8 +87,51 @@ export default {
     color: black;
   }
 
-  .v-item-group.v-bottom-nav .v-btn--active {
-    padding-top: 8px;
+  .v-item-group.v-bottom-nav {
+    .v-btn--active {
+      padding-top: 8px;
+    }
   }
+
+  /* iPhone X Series adjustments */
+@media only screen
+    and (device-width : 375px)
+    and (device-height : 812px)
+    and (-webkit-device-pixel-ratio : 3) {
+    .v-bottom-nav {
+      height: auto !important;
+      padding-bottom: 16px;
+    }
+}
+
+@media only screen
+    and (device-width : 414px)
+    and (device-height : 896px)
+    and (-webkit-device-pixel-ratio : 2) {
+      .v-bottom-nav {
+        height: auto !important;
+        padding-bottom: 16px;
+      }
+}
+
+@media only screen
+    and (device-width : 375px)
+    and (device-height : 812px)
+    and (-webkit-device-pixel-ratio : 3) {
+      .v-bottom-nav {
+        height: auto !important;
+        padding-bottom: 16px;
+      }
+}
+
+@media only screen
+    and (device-width : 414px)
+    and (device-height : 896px)
+    and (-webkit-device-pixel-ratio : 3) {
+      .v-bottom-nav {
+        height: auto !important;
+        padding-bottom: 16px;
+      }
+}
 
 </style>
