@@ -100,7 +100,9 @@ export default {
     and (-webkit-device-pixel-ratio : 3) {
     .v-bottom-nav {
       height: auto !important;
-      padding-bottom: 16px;
+    }
+    .v-item-group.v-bottom-nav .v-btn {
+      padding-bottom: 28px;
     }
 }
 
@@ -110,7 +112,9 @@ export default {
     and (-webkit-device-pixel-ratio : 2) {
       .v-bottom-nav {
         height: auto !important;
-        padding-bottom: 16px;
+      }
+      .v-item-group.v-bottom-nav .v-btn {
+        padding-bottom: 28px;
       }
 }
 
@@ -120,7 +124,9 @@ export default {
     and (-webkit-device-pixel-ratio : 3) {
       .v-bottom-nav {
         height: auto !important;
-        padding-bottom: 16px;
+      }
+      .v-item-group.v-bottom-nav .v-btn {
+        padding-bottom: 28px;
       }
 }
 
@@ -130,7 +136,9 @@ export default {
     and (-webkit-device-pixel-ratio : 3) {
       .v-bottom-nav {
         height: auto !important;
-        padding-bottom: 16px;
+      }
+      .v-item-group.v-bottom-nav .v-btn {
+        padding-bottom: 28px;
       }
 }
 
