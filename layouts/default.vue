@@ -94,7 +94,7 @@ export default {
 }
 
 .application {
-	font-family: "Montserrat";
+	font-family: "Montserrat", sans-serif;
 }
 
 .v-btn__content span {

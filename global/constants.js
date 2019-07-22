@@ -14,3 +14,13 @@ export const MONTHS = [
 ];
 
 export const SHORTDAYS = ["S", "M", "T", "W", "T", "F", "S"];
+
+export const DAYSOFWEEK = [
+	"Sunday",
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday"
+];

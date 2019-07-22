@@ -5,13 +5,12 @@
 				{{ month }}
 			</h1>
 		</v-flex>
-		<v-flex text-xs-center>
+		<v-flex text-xs-center class="calendar-wrapper">
 			<v-calendar
 				id="month-calendar"
 				ref="calendar"
 				v-model="start"
 				type="month"
-				color="primary"
 				:show-month-on-first="false"
 				:weekday-format="
 					vTimestamp => {
@@ -21,23 +20,51 @@
 				@change="updateMonth($event)"
 			/>
 		</v-flex>
+		<v-flex>
+			<h2>{{ day }}</h2>
+		</v-flex>
+		<v-flex text-xs-center>
+			<v-calendar
+				id="schedule"
+				ref="schedule"
+				v-model="start"
+				type="day"
+				:hide-header="true"
+				@change="updateDay($event)"
+			/>
+		</v-flex>
 	</v-layout>
 </template>
 <script>
-import { MONTHS, SHORTDAYS } from "@/global/constants.js";
+import { MONTHS, SHORTDAYS, DAYSOFWEEK } from "@/global/constants.js";
 export default {
 	shortdays: SHORTDAYS,
 	data() {
 		let currentMonth = MONTHS[new Date().getMonth()];
+		let currentDay =
+			DAYSOFWEEK[new Date().getDay()] +
+			", " +
+			currentMonth +
+			" " +
+			new Date().getDate();
 		return {
 			type: "month",
 			month: currentMonth,
+			day: currentDay,
 			start: new Date().toString()
 		};
 	},
 	methods: {
 		updateMonth(e) {
 			this.month = MONTHS[e.start.month - 1];
+		},
+		updateDay(e) {
+			this.day =
+				DAYSOFWEEK[e.start.weekday] +
+				", " +
+				MONTHS[e.start.month - 1] +
+				" " +
+				e.start.day;
 		}
 	}
 };
@@ -49,6 +76,10 @@ export default {
 
 #header {
 	padding-bottom: 8px;
+}
+
+.calendar-wrapper {
+	padding-bottom: 16px;
 }
 
 #month-calendar {
@@ -72,9 +103,18 @@ export default {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
+		padding: 4vw;
+	}
+
+	.v-present .v-calendar-weekly__day-label {
+		border-radius: 4vw;
+		border-color: var(--v-secondary);
+	}
+	.primary--text {
+		color: black !important;
 	}
 	.v-past {
-		color: #ececec;
+		color: #bfbfbf;
 	}
 }
 </style>
