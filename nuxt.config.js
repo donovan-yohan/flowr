@@ -70,7 +70,14 @@ export default {
 			success: colors.green.accent3,
 			red: "#D33535",
 			orange: "#FF8500",
-			yellow: "#FFC74A"
+			yellow: "#FFC74A",
+			green: "AAE565",
+			turquoise: "2CC6AB",
+			blue: "09A9ED",
+			darkblue: "0C85E8",
+			purple: "6E5EE5",
+			violet: "AB5DE6",
+			magenta: "EA4BBD"
 		}
 	},
 

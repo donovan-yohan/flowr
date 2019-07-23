@@ -24,3 +24,13 @@ export const DAYSOFWEEK = [
 	"Friday",
 	"Saturday"
 ];
+
+export const COLOURS = {
+	green: "",
+	turquoise: "",
+	blue: "",
+	indigo: "",
+	violet: "",
+	lavender: "",
+	magenta: ""
+};

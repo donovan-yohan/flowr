@@ -22,7 +22,7 @@
 			mandatory
 		>
 			<v-btn
-				color="red"
+				color="yellow"
 				flat
 				value="grades"
 				to="grades"
@@ -45,7 +45,7 @@
 			</v-btn>
 
 			<v-btn
-				color="yellow"
+				color="red"
 				flat
 				value="calendar"
 				to="calendar"
