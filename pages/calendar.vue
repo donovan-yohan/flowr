@@ -11,7 +11,7 @@
 				ref="calendar"
 				v-model="start"
 				type="month"
-				color="red"
+				color="flowrRed"
 				:show-month-on-first="false"
 				:weekday-format="
 					vTimestamp => {
@@ -82,7 +82,7 @@
 						<div
 							class="current-time"
 							:style="{
-								borderBottom: '2px solid var(--v-red-base)',
+								borderBottom: '2px solid var(--v-flowrRed-base)',
 								top: minutesToPixels(getCurrentMinutes(date)) + 'px'
 							}"
 						/>
@@ -232,8 +232,8 @@ export default {
 }
 
 #schedule {
-	margin-bottom: 64px;
 }
+
 .schedule-event {
 	text-align: left;
 	overflow: hidden;

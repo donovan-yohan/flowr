@@ -22,7 +22,7 @@
 			mandatory
 		>
 			<v-btn
-				color="yellow"
+				color="flowrYellow"
 				flat
 				value="grades"
 				to="grades"
@@ -33,7 +33,7 @@
 			</v-btn>
 
 			<v-btn
-				color="orange"
+				color="flowrOrange"
 				flat
 				value="tasks"
 				to="/"
@@ -45,7 +45,7 @@
 			</v-btn>
 
 			<v-btn
-				color="red"
+				color="flowrRed"
 				flat
 				value="calendar"
 				to="calendar"
@@ -95,6 +95,10 @@ export default {
 
 .application {
 	font-family: "Montserrat", sans-serif;
+}
+
+.v-content {
+	margin-bottom: 64px;
 }
 
 .v-btn__content span {
