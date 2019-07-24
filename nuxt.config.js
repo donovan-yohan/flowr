@@ -77,7 +77,8 @@ export default {
 			darkblue: "0C85E8",
 			purple: "6E5EE5",
 			violet: "AB5DE6",
-			magenta: "EA4BBD"
+			magenta: "EA4BBD",
+			gray: "#bfbfbf"
 		}
 	},
 

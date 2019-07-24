@@ -1,8 +1,8 @@
 <template>
 	<v-layout column>
-		<v-text v-for="e in events" :key="e.event_id">
+		<p v-for="e in events" :key="e.event_id">
 			{{ e.title }}
-		</v-text>
+		</p>
 	</v-layout>
 </template>
 

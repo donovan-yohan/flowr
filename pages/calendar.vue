@@ -50,12 +50,14 @@
 				:hide-header="true"
 				@change="updateDay($event)"
 			>
-				<template v-slot:dayBody="{ date, timeToY, minutesToPixels }">
+				<template
+					v-slot:dayBody="{ date, timeToY, minutesToPixels, present, past }"
+				>
 					<template v-for="event in eventsMap[date]">
 						<!-- timed events -->
 						<div
 							v-if="event.time"
-							:key="event.title"
+							:key="event.event_id"
 							:style="{
 								top: timeToY(event.time) + 'px',
 								height: minutesToPixels(event.duration) + 'px',
@@ -66,7 +68,31 @@
 									'-base)'
 							}"
 							class="schedule-event with-time"
+							@click="open(event)"
 							v-html="event.title"
+						/>
+					</template>
+					<template v-if="present">
+						<div
+							class="current-time past-time"
+							:style="{
+								height: minutesToPixels(getCurrentMinutes(date)) + 'px'
+							}"
+						/>
+						<div
+							class="current-time"
+							:style="{
+								borderBottom: '2px solid var(--v-red-base)',
+								top: minutesToPixels(getCurrentMinutes(date)) + 'px'
+							}"
+						/>
+					</template>
+					<template v-if="past">
+						<div
+							class="current-time past-time"
+							:style="{
+								height: '100%'
+							}"
 						/>
 					</template>
 				</template>
@@ -108,7 +134,6 @@ export default {
 			this.$store.state.events.forEach(e =>
 				(map[e.date] = map[e.date] || []).push(e)
 			);
-			console.log(map);
 			return map;
 		}
 	},
@@ -126,6 +151,15 @@ export default {
 		},
 		getClassColour(id) {
 			return this.$store.state.classes.find(c => c.class_id === id).colour;
+		},
+		getCurrentMinutes(date) {
+			return (
+				(new Date().getTime() - new Date(date).getTime()) / (1000 * 60) -
+				new Date().getTimezoneOffset()
+			);
+		},
+		open(event) {
+			alert(event.title);
 		}
 	}
 };
@@ -177,7 +211,7 @@ export default {
 		color: black !important;
 	}
 	.v-past {
-		color: #bfbfbf;
+		color: var(--v-gray-base);
 	}
 }
 
@@ -197,6 +231,9 @@ export default {
 .calendar-event {
 }
 
+#schedule {
+	margin-bottom: 64px;
+}
 .schedule-event {
 	text-align: left;
 	overflow: hidden;
@@ -216,6 +253,17 @@ export default {
 		position: absolute;
 		right: 8px;
 		margin-right: 0px;
+	}
+}
+
+.current-time {
+	position: absolute;
+	width: 100%;
+	&.past-time {
+		background-color: var(--v-gray-base);
+		opacity: 0.33;
+		top: 0;
+		pointer-events: none;
 	}
 }
 </style>

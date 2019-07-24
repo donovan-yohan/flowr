@@ -74,9 +74,7 @@ export const state = () => ({
 			end_date: "",
 			days: [0, 1, 0, 1, 0]
 		}
-	],
-	number1: 1,
-	number2: 2
+	]
 });
 
 export const mutations = {};
