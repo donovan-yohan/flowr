@@ -20,8 +20,8 @@
 				"
 				@change="updateMonth($event)"
 			>
-				<template v-slot:day="{ date, future, present }">
-					<template v-if="eventsMap[date] && (future || present)">
+				<template v-slot:day="{ date, past }">
+					<template v-if="eventsMap[date]">
 						<div class="weight-wrapper">
 							<div
 								v-for="event in eventsMap[date]"
@@ -31,7 +31,7 @@
 									background:
 										'var(--v-' + getClassColour(event.class_id) + '-base)'
 								}"
-								class="calendar-weight"
+								:class="{ calendarWeight: 'true', faded: past }"
 							/>
 						</div>
 					</template>
@@ -71,7 +71,6 @@
 							}"
 							class="schedule-event with-time"
 							@click="open(event)"
-							v-html="event.title"
 						/>
 					</template>
 					<template v-if="present">
@@ -225,9 +224,12 @@ export default {
 	flex-flow: column-reverse;
 }
 
-.calendar-weight {
+.calendarWeight {
 	width: 100%;
 	z-index: 0;
+	&.faded {
+		opacity: 0.33;
+	}
 }
 
 .calendar-event {

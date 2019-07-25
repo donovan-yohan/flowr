@@ -1,6 +1,22 @@
 export const state = () => ({
 	events: [
 		{
+			title: "Test 4",
+			event_id: "4",
+			date: "2019-07-29",
+			time: "01:00",
+			duration: 45,
+			weight: 15,
+			class_id: "4",
+			completed: "",
+			checklist: [
+				{
+					name: "",
+					completed: ""
+				}
+			]
+		},
+		{
 			title: "Test",
 			event_id: "1",
 			date: "2019-07-24",
@@ -40,6 +56,22 @@ export const state = () => ({
 			duration: 90,
 			weight: 25,
 			class_id: "0",
+			completed: "",
+			checklist: [
+				{
+					name: "",
+					completed: ""
+				}
+			]
+		},
+		{
+			title: "August",
+			event_id: "4",
+			date: "2019-08-17",
+			time: "18:00",
+			duration: 90,
+			weight: 25,
+			class_id: "4",
 			completed: "",
 			checklist: [
 				{

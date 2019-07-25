@@ -69,7 +69,6 @@ export default {
 			this.$store.state.events.forEach(e =>
 				(map[e.date] = map[e.date] || []).push(e)
 			);
-			console.log(map);
 			return map;
 		}
 	},
