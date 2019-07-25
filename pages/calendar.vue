@@ -39,7 +39,9 @@
 			</v-calendar>
 		</v-flex>
 		<v-flex>
-			<h2>{{ day }}</h2>
+			<h2 class="day-header">
+				{{ day }}
+			</h2>
 		</v-flex>
 		<v-flex text-xs-center>
 			<v-calendar
@@ -229,6 +231,10 @@ export default {
 }
 
 .calendar-event {
+}
+
+.day-header {
+	padding-bottom: 8px;
 }
 
 #schedule {

@@ -9,7 +9,9 @@
 								<h1>{{ c.name }}</h1>
 							</v-card-title>
 							<v-card-text>
-								<span class="class-time">{{ c.start + " - " + c.end }}</span>
+								<span class="class-time">{{
+									formatTime(c.start) + " - " + formatTime(c.end)
+								}}</span>
 								<span>
 									{{ c.end >= "12:00" ? "PM" : "AM" }}
 								</span>
@@ -74,6 +76,13 @@ export default {
 	methods: {
 		getClassColour(id) {
 			return this.$store.state.classes.find(c => c.class_id === id).colour;
+		},
+		formatTime(time) {
+			let hour = time.substring(0, 2);
+			if (time >= "13:00") hour = parseInt(hour) - 12;
+			else if (hour[0] === "0") hour = hour[1];
+
+			return hour + time.substring(2, 5);
 		}
 	}
 };

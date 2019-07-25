@@ -103,7 +103,7 @@ export const state = () => ({
 			name: "BU402",
 			grade: 24,
 			colour: "flowrViolet",
-			start: "9:30",
+			start: "09:30",
 			end: "10:20",
 			duration: 50,
 			start_date: "",

@@ -1,6 +1,11 @@
 <template>
 	<v-app>
-		<v-toolbar :clipped-left="clipped" fixed app color="white">
+		<v-toolbar
+			:clipped-left="clipped"
+			fixed
+			app
+			color="white"
+		>
 			<v-toolbar-title class="text-capitalize" v-text="title" />
 			<v-spacer />
 
@@ -27,17 +32,36 @@
 			color="white"
 			mandatory
 		>
-			<v-btn color="flowrYellow" flat value="grades" to="grades" nuxt>
-				<span>Grades</span>
+			<v-btn
+				color="flowrYellow"
+				flat
+				value="grades"
+				to="grades"
+				nuxt
+			>
+				<span>Classes</span>
 				<v-icon>spellcheck</v-icon>
 			</v-btn>
 
-			<v-btn color="flowrOrange" flat value="tasks" to="/" exact nuxt>
+			<v-btn
+				color="flowrOrange"
+				flat
+				value="tasks"
+				to="/"
+				exact
+				nuxt
+			>
 				<span>Tasks</span>
 				<v-icon>list</v-icon>
 			</v-btn>
 
-			<v-btn color="flowrRed" flat value="calendar" to="calendar" nuxt>
+			<v-btn
+				color="flowrRed"
+				flat
+				value="calendar"
+				to="calendar"
+				nuxt
+			>
 				<span>Calendar</span>
 				<v-icon>calendar_today</v-icon>
 			</v-btn>
