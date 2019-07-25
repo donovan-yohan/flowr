@@ -18,7 +18,7 @@
 								<div class="class-day-wrapper">
 									<div
 										v-for="(day, i) in c.days"
-										:key="daysOfWeek[i + 1]"
+										:key="i"
 										:class="{ day: 'true', class: day > 0 }"
 									>
 										{{ daysOfWeek[i + 1] }}

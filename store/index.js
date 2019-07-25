@@ -143,7 +143,7 @@ export const mutations = {
 	toggleHidden(state) {
 		state.hidden = !state.hidden;
 
-		if (state.hidden) state.gradesIcon = "visibility";
-		else state.gradesIcon = "visibility_off";
+		if (state.hidden) state.gradesIcon = "visibility_off";
+		else state.gradesIcon = "visibility";
 	}
 };
