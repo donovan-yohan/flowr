@@ -7,6 +7,17 @@
 			color="white"
 		>
 			<v-toolbar-title class="text-capitalize" v-text="title" />
+			<v-spacer />
+
+			<v-btn v-if="title === 'grades'" icon @click="toggleHidden()">
+				<v-icon color="flowrYellow">
+					{{ gradesIcon }}
+				</v-icon>
+			</v-btn>
+
+			<v-btn icon>
+				<v-icon>more_vert</v-icon>
+			</v-btn>
 		</v-toolbar>
 		<v-content>
 			<v-container>
@@ -59,16 +70,23 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
 	data() {
 		return {
 			clipped: false,
-			fixed: false,
 			miniVariant: false,
-			right: true,
-			rightDrawer: false,
 			title: ""
 		};
+	},
+	computed: {
+		hidden() {
+			return this.$store.state.hidden;
+		},
+		gradesIcon() {
+			return this.$store.state.gradesIcon;
+		}
 	},
 	mounted() {
 		const bottomNav = this.$refs.bottomNav.$el;
@@ -76,6 +94,9 @@ export default {
 			.querySelector("a.v-btn--active")
 			.getAttribute("value");
 		this.title = navValue;
+	},
+	methods: {
+		...mapMutations(["toggleHidden"])
 	}
 };
 </script>
