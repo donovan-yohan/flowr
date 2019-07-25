@@ -53,7 +53,7 @@ export const state = () => ({
 		{
 			class_id: "0",
 			name: "CP317",
-			grade: "",
+			grade: 100,
 			colour: "flowrGreen",
 			start: "08:30",
 			end: "09:20",
@@ -65,7 +65,7 @@ export const state = () => ({
 		{
 			class_id: "1",
 			name: "BU212",
-			grade: "",
+			grade: 67,
 			colour: "flowrTurquoise",
 			start: "12:30",
 			end: "13:50",
@@ -77,64 +77,73 @@ export const state = () => ({
 		{
 			class_id: "2",
 			name: "CP412",
-			grade: "",
+			grade: 90,
 			colour: "flowrBlue",
-			start: "12:30",
-			end: "13:50",
+			start: "17:30",
+			end: "18:50",
 			duration: 80,
 			start_date: "",
 			end_date: "",
-			days: [0, 1, 0, 1, 0]
+			days: [1, 0, 1, 0, 0]
 		},
 		{
 			class_id: "3",
 			name: "PS302",
-			grade: "",
+			grade: 8,
 			colour: "flowrIndigo",
-			start: "12:30",
-			end: "13:50",
-			duration: 80,
+			start: "19:00",
+			end: "21:50",
+			duration: 170,
 			start_date: "",
 			end_date: "",
-			days: [0, 1, 0, 1, 0]
+			days: [1, 0, 0, 0, 0]
 		},
 		{
 			class_id: "4",
 			name: "BU402",
-			grade: "",
+			grade: 24,
 			colour: "flowrViolet",
-			start: "12:30",
-			end: "13:50",
-			duration: 80,
+			start: "9:30",
+			end: "10:20",
+			duration: 50,
 			start_date: "",
 			end_date: "",
-			days: [0, 1, 0, 1, 0]
+			days: [1, 0, 1, 0, 1]
 		},
 		{
 			class_id: "5",
 			name: "CP102",
-			grade: "",
+			grade: 67,
 			colour: "flowrPurple",
-			start: "12:30",
-			end: "13:50",
+			start: "19:00",
+			end: "22:50",
 			duration: 80,
 			start_date: "",
 			end_date: "",
-			days: [0, 1, 0, 1, 0]
+			days: [0, 0, 0, 1, 0]
 		},
 		{
 			class_id: "6",
 			name: "CP468",
-			grade: "",
+			grade: 88,
 			colour: "flowrMagenta",
-			start: "12:30",
-			end: "13:50",
+			start: "11:30",
+			end: "12:50",
 			duration: 80,
 			start_date: "",
 			end_date: "",
 			days: [0, 1, 0, 1, 0]
 		}
-	]
+	],
+	hidden: true,
+	gradesIcon: "visibility_off"
 });
 
-export const mutations = {};
+export const mutations = {
+	toggleHidden(state) {
+		state.hidden = !state.hidden;
+
+		if (state.hidden) state.gradesIcon = "visibility";
+		else state.gradesIcon = "visibility_off";
+	}
+};

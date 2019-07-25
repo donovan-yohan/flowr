@@ -3,15 +3,39 @@
 		<v-layout column>
 			<v-flex v-for="c in classes" :key="c.classes_id">
 				<v-card :color="c.colour" class="class-card">
-					<v-layout column>
-						<v-card-title>
-							<h1>{{ c.name }}</h1>
-						</v-card-title>
-						<v-card-text>
-							{{ c.start + " - " + c.end }}
-						</v-card-text>
+					<v-layout row>
+						<div>
+							<v-card-title>
+								<h1>{{ c.name }}</h1>
+							</v-card-title>
+							<v-card-text>
+								<span class="class-time">{{ c.start + " - " + c.end }}</span>
+								<span>
+									{{ c.end >= "12:00" ? "PM" : "AM" }}
+								</span>
+							</v-card-text>
+							<v-card-text>
+								<div class="class-day-wrapper">
+									<div
+										v-for="(day, i) in c.days"
+										:key="daysOfWeek[i + 1]"
+										:class="{ day: 'true', class: day > 0 }"
+									>
+										{{ daysOfWeek[i + 1] }}
+									</div>
+								</div>
+							</v-card-text>
+						</div>
+						<v-spacer />
+						<div class="grade-wrapper">
+							<h2 v-if="hidden" class="hidden">
+								--%
+							</h2>
+							<h2 v-else>
+								{{ c.grade + "%" }}
+							</h2>
+						</div>
 					</v-layout>
-					<v-spacer />
 				</v-card>
 			</v-flex>
 		</v-layout>
@@ -20,10 +44,13 @@
 
 <script>
 import { mapMutations } from "vuex";
+import { SHORTDAYS } from "@/global/constants.js";
 
 export default {
 	data() {
-		return {};
+		return {
+			daysOfWeek: SHORTDAYS
+		};
 	},
 	computed: {
 		events() {
@@ -31,6 +58,9 @@ export default {
 		},
 		classes() {
 			return this.$store.state.classes;
+		},
+		hidden() {
+			return this.$store.state.hidden;
 		},
 		eventsMap() {
 			const map = {};
@@ -53,12 +83,53 @@ export default {
 .grid-list-md {
 	padding: 0;
 }
+
 .class-card {
-	padding: 16px 0;
+	padding: 12px 0;
+	border-radius: 0;
+
+	.v-card__title {
+		line-height: 1.2;
+	}
+
+	.v-card__text {
+		line-height: 1.3;
+	}
+
 	.v-card__title,
 	.v-card__text {
 		padding: 0px 16px;
 		color: white;
+	}
+}
+
+.class-time {
+	font-size: 16px;
+}
+
+.class-day-wrapper {
+	display: flex;
+	.day {
+		margin-right: 1em;
+		opacity: 0.5;
+	}
+	.class {
+		font-weight: 700;
+		opacity: 1;
+	}
+}
+
+.grade-wrapper {
+	display: inline-flex;
+	color: white;
+	padding: 16px;
+	align-items: center;
+	font-size: 16px;
+	h2 {
+		transition: 1.2s;
+	}
+	.hidden {
+		opacity: 0.5;
 	}
 }
 </style>

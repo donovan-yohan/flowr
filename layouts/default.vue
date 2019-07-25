@@ -1,12 +1,18 @@
 <template>
 	<v-app>
-		<v-toolbar
-			:clipped-left="clipped"
-			fixed
-			app
-			color="white"
-		>
+		<v-toolbar :clipped-left="clipped" fixed app color="white">
 			<v-toolbar-title class="text-capitalize" v-text="title" />
+			<v-spacer />
+
+			<v-btn v-if="title === 'grades'" icon @click="toggleHidden()">
+				<v-icon color="flowrYellow">
+					{{ gradesIcon }}
+				</v-icon>
+			</v-btn>
+
+			<v-btn icon>
+				<v-icon>more_vert</v-icon>
+			</v-btn>
 		</v-toolbar>
 		<v-content>
 			<v-container>
@@ -21,36 +27,17 @@
 			color="white"
 			mandatory
 		>
-			<v-btn
-				color="flowrYellow"
-				flat
-				value="grades"
-				to="grades"
-				nuxt
-			>
+			<v-btn color="flowrYellow" flat value="grades" to="grades" nuxt>
 				<span>Grades</span>
 				<v-icon>spellcheck</v-icon>
 			</v-btn>
 
-			<v-btn
-				color="flowrOrange"
-				flat
-				value="tasks"
-				to="/"
-				exact
-				nuxt
-			>
+			<v-btn color="flowrOrange" flat value="tasks" to="/" exact nuxt>
 				<span>Tasks</span>
 				<v-icon>list</v-icon>
 			</v-btn>
 
-			<v-btn
-				color="flowrRed"
-				flat
-				value="calendar"
-				to="calendar"
-				nuxt
-			>
+			<v-btn color="flowrRed" flat value="calendar" to="calendar" nuxt>
 				<span>Calendar</span>
 				<v-icon>calendar_today</v-icon>
 			</v-btn>
@@ -59,16 +46,23 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
 	data() {
 		return {
 			clipped: false,
-			fixed: false,
 			miniVariant: false,
-			right: true,
-			rightDrawer: false,
 			title: ""
 		};
+	},
+	computed: {
+		hidden() {
+			return this.$store.state.hidden;
+		},
+		gradesIcon() {
+			return this.$store.state.gradesIcon;
+		}
 	},
 	mounted() {
 		const bottomNav = this.$refs.bottomNav.$el;
@@ -76,6 +70,9 @@ export default {
 			.querySelector("a.v-btn--active")
 			.getAttribute("value");
 		this.title = navValue;
+	},
+	methods: {
+		...mapMutations(["toggleHidden"])
 	}
 };
 </script>
