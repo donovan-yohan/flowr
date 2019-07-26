@@ -1,3 +1,7 @@
+import VuexPersist from "vuex-persist";
+
+export const plugins = [VuexPersist];
+
 export const state = () => ({
 	events: [
 		{
@@ -168,7 +172,9 @@ export const state = () => ({
 		}
 	],
 	hidden: true,
-	gradesIcon: "visibility_off"
+	gradesIcon: "visibility_off",
+	unfolded: false,
+	unfoldIcon: "unfold_more"
 });
 
 export const mutations = {
@@ -177,5 +183,12 @@ export const mutations = {
 
 		if (state.hidden) state.gradesIcon = "visibility_off";
 		else state.gradesIcon = "visibility";
+	},
+
+	toggleUnfold(state) {
+		state.unfolded = !state.unfolded;
+
+		if (state.unfolded) state.unfoldIcon = "unfold_less";
+		else state.unfoldIcon = "unfold_more";
 	}
 };

@@ -56,9 +56,8 @@
 					v-slot:dayBody="{ date, timeToY, minutesToPixels, present, past }"
 				>
 					<template v-for="event in eventsMap[date]">
-						<!-- timed events -->
 						<div
-							v-if="event.time"
+							v-if="event.duration"
 							:key="event.event_id"
 							:style="{
 								top: timeToY(event.time) + 'px',
@@ -71,7 +70,31 @@
 							}"
 							class="schedule-event with-time"
 							@click="open(event)"
-						/>
+						>
+							<div
+								class="schedule-event--details"
+								:style="{
+									backgroundColor:
+										'var(--v-' + getClassColour(event.class_id) + '-base)',
+									width: event.weight + '%',
+									height: minutesToPixels(event.duration) - 3 + 'px'
+								}"
+							>
+								<div class="schedule-event--details__text-wrapper">
+									<div class="schedule-event--details__left">
+										<span class="schedule-event--details__title">{{
+											event.title
+										}}</span>
+										<span class="schedule-event--details__time">{{
+											event.time
+										}}</span>
+									</div>
+									<span class="schedule-event--details__weight">{{
+										event.weight + "%"
+									}}</span>
+								</div>
+							</div>
+						</div>
 					</template>
 					<template v-if="present">
 						<div
@@ -240,17 +263,16 @@ export default {
 }
 
 #schedule {
+	margin-left: -8px;
 }
 
 .schedule-event {
 	text-align: left;
-	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	color: white;
 
-	font-size: 12px;
-	padding: 3px;
+	font-size: 14px;
 	cursor: pointer;
 	margin-bottom: 1px;
 	left: 0px;
@@ -261,6 +283,31 @@ export default {
 		position: absolute;
 		right: 8px;
 		margin-right: 0px;
+	}
+	.schedule-event--details {
+		padding: 0 4px;
+		color: black;
+		min-height: fit-content;
+		overflow: visible;
+
+		.schedule-event--details__text-wrapper {
+			position: absolute;
+			width: 96%;
+			display: flex;
+			justify-content: space-between;
+			.schedule-event--details__left {
+				display: flex;
+				flex-direction: column;
+			}
+			.schedule-event--details__title {
+				font-weight: 700;
+			}
+			.schedule-event--details__weight {
+				text-align: right;
+				font-weight: 700;
+				font-size: 18px;
+			}
+		}
 	}
 }
 

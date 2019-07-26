@@ -1,6 +1,7 @@
 <template>
 	<v-layout column>
 		<div v-for="(date, i) in nextMonth" :key="i">
+			<!-- should probably be computed -->
 			<h2
 				v-if="
 					(i == 0 ||
@@ -15,6 +16,7 @@
 					topHeader: i == 0
 				}"
 			>
+				<!-- should probably be computed -->
 				{{
 					i &lt; remainingDays
 						? "This Week"
@@ -25,18 +27,20 @@
 			</h2>
 			<template v-if="eventsMap[date.stringDate]">
 				<v-layout
-					row
 					v-for="e in eventsMap[date.stringDate].sort((a, b) => {
 						if (a.time < b.time) return -1;
 						else if (a.time > b - time) return 1;
 						else return 0;
 					})"
 					:key="e.event_id"
+					row
 				>
-					<div v-ripple @click="" class="task-wrapper">
+					<div v-ripple class="task-wrapper" @click="">
 						<div class="task-info">
 							<v-btn icon class="task-checkbox">
-								<v-icon color="gray">check_circle_outline</v-icon>
+								<v-icon color="gray">
+									check_circle_outline
+								</v-icon>
 							</v-btn>
 							<span class="task-title">{{ e.title }}</span>
 							<span
@@ -53,7 +57,7 @@
 										'var(--v-' + getClassColour(e.class_id) + '-base)'
 								}"
 								class="task-weight-bar"
-							></div>
+							/>
 						</div>
 						<div class="task-class-info">
 							<span class="task-class-date">{{ getDayString(e.date) }}</span>
@@ -238,7 +242,7 @@ export default {
 			display: flex;
 			border-radius: 10px;
 			margin-left: 4px;
-			padding: 1px 6px;
+			padding: 0px 6px;
 			.task-class-name {
 				font-weight: 700;
 				font-size: 11px;

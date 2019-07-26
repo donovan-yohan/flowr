@@ -1,17 +1,27 @@
 <template>
 	<v-app>
-		<v-toolbar
-			:clipped-left="clipped"
-			fixed
-			app
-			color="white"
-		>
-			<v-toolbar-title class="text-capitalize" v-text="title" />
+		<v-toolbar :clipped-left="clipped" fixed app color="white">
+			<transition name="fade" mode="out-in">
+				<v-toolbar-title :key="title" class="text-capitalize">
+					{{ title }}
+				</v-toolbar-title>
+			</transition>
 			<v-spacer />
 
-			<v-btn v-if="title === 'grades'" icon @click="toggleHidden()">
+			<v-btn v-if="title === 'classes'" icon @click="toggleHidden()">
 				<v-icon color="flowrYellow">
 					{{ gradesIcon }}
+				</v-icon>
+			</v-btn>
+
+			<v-btn v-if="title === 'tasks'" icon @click="">
+				<v-icon color="flowrOrange">
+					spellcheck
+				</v-icon>
+			</v-btn>
+			<v-btn v-if="title === 'tasks'" icon @click="toggleUnfold()">
+				<v-icon color="flowrOrange">
+					{{ unfoldIcon }}
 				</v-icon>
 			</v-btn>
 
@@ -19,49 +29,43 @@
 				<v-icon>more_vert</v-icon>
 			</v-btn>
 		</v-toolbar>
-		<v-content>
+
+		<v-content
+			v-touch="{
+				left: () => swipeLeft(title),
+				right: () => swipeRight(title)
+			}"
+		>
 			<v-container>
-				<nuxt />
+				<transition :name="getTransition()">
+					<nuxt />
+				</transition>
 			</v-container>
 		</v-content>
+
 		<v-bottom-nav
 			ref="bottomNav"
+			v-touch="{
+				left: () => swipeLeft(title),
+				right: () => swipeRight(title)
+			}"
 			:active.sync="title"
 			:value="true"
 			fixed
 			color="white"
 			mandatory
 		>
-			<v-btn
-				color="flowrYellow"
-				flat
-				value="grades"
-				to="grades"
-				nuxt
-			>
+			<v-btn color="flowrYellow" flat value="classes" to="grades" nuxt>
 				<span>Classes</span>
 				<v-icon>spellcheck</v-icon>
 			</v-btn>
 
-			<v-btn
-				color="flowrOrange"
-				flat
-				value="tasks"
-				to="/"
-				exact
-				nuxt
-			>
+			<v-btn color="flowrOrange" flat value="tasks" to="/" exact nuxt>
 				<span>Tasks</span>
 				<v-icon>list</v-icon>
 			</v-btn>
 
-			<v-btn
-				color="flowrRed"
-				flat
-				value="calendar"
-				to="calendar"
-				nuxt
-			>
+			<v-btn color="flowrRed" flat value="calendar" to="calendar" nuxt>
 				<span>Calendar</span>
 				<v-icon>calendar_today</v-icon>
 			</v-btn>
@@ -86,6 +90,9 @@ export default {
 		},
 		gradesIcon() {
 			return this.$store.state.gradesIcon;
+		},
+		unfoldIcon() {
+			return this.$store.state.unfoldIcon;
 		}
 	},
 	mounted() {
@@ -96,12 +103,69 @@ export default {
 		this.title = navValue;
 	},
 	methods: {
-		...mapMutations(["toggleHidden"])
+		...mapMutations(["toggleHidden", "toggleUnfold"]),
+		swipeLeft(title) {
+			if (title == "tasks") {
+				this.title = "calendar";
+				this.$router.push({ path: "/calendar" });
+			}
+			if (title == "classes") {
+				this.title = "tasks";
+				this.$router.push({ path: "/" });
+			}
+		},
+		swipeRight(title) {
+			if (title == "tasks") {
+				this.title = "classes";
+				this.$router.push({ path: "/grades" });
+			}
+			if (title == "calendar") {
+				this.title = "tasks";
+				this.$router.push({ path: "/" });
+			}
+		},
+		getTransition(target) {}
 	}
 };
 </script>
 
 <style lang="scss" scoped>
+.slide-enter-active {
+	animation: acrossIn 0.4s ease-out both;
+}
+.slide-leave-to {
+	animation: acrossOut 0.6s ease-in both;
+}
+
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
+}
+
+.fade-enter-active {
+	transition: opacity 0.2s ease;
+}
+
+.fade-leave-active {
+	transition: opacity 0.2s ease;
+}
+@keyframes acrossIn {
+	0% {
+		transform: translate3d(-100%, 0, 0);
+	}
+	100% {
+		transform: translate3d(0, 0, 0);
+	}
+}
+@keyframes acrossOut {
+	0% {
+		transform: translate3d(0, 0, 0);
+	}
+	100% {
+		transform: translate3d(100%, 0, 0);
+	}
+}
+
 @font-face {
 	font-family: "Montserrat";
 	src: url("../static/fonts/Montserrat-Regular.ttf");
