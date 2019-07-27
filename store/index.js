@@ -1,7 +1,3 @@
-import VuexPersist from "vuex-persist";
-
-export const plugins = [VuexPersist];
-
 export const state = () => ({
 	events: [
 		{
