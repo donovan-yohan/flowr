@@ -1,134 +1,155 @@
 <template>
 	<v-layout column>
-		<v-flex>
-			<h1 id="header">
-				{{ month }}
-			</h1>
-		</v-flex>
-		<v-flex text-xs-center class="calendar-wrapper">
-			<v-calendar
-				id="month-calendar"
-				ref="calendar"
-				v-model="start"
-				type="month"
-				color="flowrRed"
-				:show-month-on-first="false"
-				:weekday-format="
-					vTimestamp => {
-						return this.$options.shortdays[vTimestamp.weekday];
-					}
-				"
-				@change="updateMonth($event)"
-			>
-				<template v-slot:day="{ date, past }">
-					<template v-if="eventsMap[date]">
-						<div class="weight-wrapper">
-							<div
-								v-for="event in eventsMap[date]"
-								:key="event.event_id"
-								:style="{
-									height: event.weight + '%',
-									background:
-										'var(--v-' + getClassColour(event.class_id) + '-base)'
-								}"
-								:class="{ calendarWeight: 'true', faded: past }"
-							/>
-						</div>
-					</template>
-				</template>
-			</v-calendar>
-		</v-flex>
-		<v-flex>
-			<h2 class="day-header">
-				{{ day }}
-			</h2>
-		</v-flex>
-		<v-flex id="scheduleWrapper" text-xs-center class="schedule-wrapper">
-			<v-calendar
-				id="schedule"
-				ref="schedule"
-				v-model="start"
-				type="day"
-				:hide-header="true"
-				@change="updateDay($event)"
-			>
-				<template
-					v-slot:dayBody="{ date, timeToY, minutesToPixels, present, past }"
-				>
-					<template v-for="event in eventsMap[date]">
-						<div
-							v-if="event.duration"
-							:key="event.event_id"
-							:style="{
-								top: timeToY(event.time) + 'px',
-								height: minutesToPixels(event.duration) + 'px',
-								border:
-									'2px solid ' +
-									'var(--v-' +
-									getClassColour(event.class_id) +
-									'-base)'
-							}"
-							class="schedule-event with-time"
-							@click="open(event)"
-						>
-							<div
-								class="schedule-event--details"
-								:style="{
-									backgroundColor:
-										'var(--v-' + getClassColour(event.class_id) + '-base)',
-									width: event.weight + '%',
-									height: minutesToPixels(event.duration) - 3 + 'px'
-								}"
-							>
-								<div class="schedule-event--details__text-wrapper">
-									<div class="schedule-event--details__left">
-										<span class="schedule-event--details__title">{{
-											event.title
-										}}</span>
-										<span class="schedule-event--details__time">{{
-											event.time
-										}}</span>
-									</div>
-									<span class="schedule-event--details__weight">{{
-										event.weight + "%"
-									}}</span>
+		<transition name="fade" mode="out-in">
+			<div v-if="showingEvents" :key="0">
+				<div class="calendar-header">
+					<h1 id="header" :key="month">
+						{{ month }}
+					</h1>
+					<v-spacer />
+					<v-btn icon @click="$refs.calendar.prev()">
+						<v-icon color="gray">
+							chevron_left
+						</v-icon>
+					</v-btn>
+					<v-btn icon @click="$refs.calendar.next()">
+						<v-icon color="gray">
+							chevron_right
+						</v-icon>
+					</v-btn>
+				</div>
+				<v-flex text-xs-center class="calendar-wrapper">
+					<v-calendar
+						id="month-calendar"
+						ref="calendar"
+						v-model="start"
+						type="month"
+						color="flowrRed"
+						:show-month-on-first="false"
+						:weekday-format="
+							vTimestamp => {
+								return this.$options.shortdays[vTimestamp.weekday];
+							}
+						"
+						@change="updateMonth($event)"
+					>
+						<template v-slot:day="{ date, past }">
+							<template v-if="eventsMap[date]">
+								<div class="weight-wrapper">
+									<div
+										v-for="event in eventsMap[date]"
+										:key="event.event_id"
+										:style="{
+											height: event.weight + '%',
+											background:
+												'var(--v-' + getClassColour(event.class_id) + '-base)'
+										}"
+										:class="{ calendarWeight: 'true', faded: past }"
+									/>
 								</div>
-							</div>
-						</div>
-					</template>
-					<template v-if="present">
-						<div
-							class="current-time past-time"
-							:style="{
-								height: minutesToPixels(getCurrentMinutes(date)) + 'px'
-							}"
-						/>
-						<div
-							id="currentTime"
-							class="current-time"
-							:style="{
-								borderBottom: '2px solid var(--v-flowrRed-base)',
-								top: minutesToPixels(getCurrentMinutes(date)) + 'px'
-							}"
-						/>
-					</template>
-					<template v-if="past">
-						<div
-							class="current-time past-time"
-							:style="{
-								height: '100%'
-							}"
-						/>
-					</template>
-				</template>
-			</v-calendar>
-		</v-flex>
+							</template>
+						</template>
+					</v-calendar>
+				</v-flex>
+				<v-flex>
+					<h2 :key="day" class="day-header">
+						{{ day }}
+					</h2>
+				</v-flex>
+				<v-flex id="scheduleWrapper" text-xs-center class="schedule-wrapper">
+					<v-calendar
+						id="schedule"
+						ref="schedule"
+						v-model="start"
+						type="day"
+						:hide-header="true"
+						@change="updateDay($event)"
+					>
+						<template
+							v-slot:dayBody="{ date, timeToY, minutesToPixels, present, past }"
+						>
+							<template v-for="event in eventsMap[date]">
+								<div
+									v-if="event.duration"
+									:key="event.event_id"
+									:style="{
+										top: timeToY(event.time) + 'px',
+										height: minutesToPixels(event.duration) + 'px',
+										border:
+											'2px solid ' +
+											'var(--v-' +
+											getClassColour(event.class_id) +
+											'-base)'
+									}"
+									class="schedule-event with-time"
+									@click="open(event)"
+								>
+									<div
+										class="schedule-event--details"
+										:style="{
+											backgroundColor:
+												'var(--v-' + getClassColour(event.class_id) + '-base)',
+											width: event.weight + '%',
+											height: minutesToPixels(event.duration) - 3 + 'px'
+										}"
+									>
+										<div class="schedule-event--details__text-wrapper">
+											<div class="schedule-event--details__left">
+												<span class="schedule-event--details__title">{{
+													event.title
+												}}</span>
+												<span class="schedule-event--details__time">{{
+													event.time
+												}}</span>
+											</div>
+											<span class="schedule-event--details__weight">{{
+												event.weight + "%"
+											}}</span>
+										</div>
+									</div>
+								</div>
+							</template>
+							<template v-if="present">
+								<div
+									class="current-time past-time"
+									:style="{
+										height: minutesToPixels(getCurrentMinutes(date)) + 'px'
+									}"
+								/>
+								<div
+									id="currentTime"
+									class="current-time"
+									:style="{
+										borderBottom: '2px solid var(--v-flowrRed-base)',
+										top: minutesToPixels(getCurrentMinutes(date)) + 'px'
+									}"
+								/>
+							</template>
+							<template v-if="past">
+								<div
+									class="current-time past-time"
+									:style="{
+										height: '100%'
+									}"
+								/>
+							</template>
+						</template>
+					</v-calendar>
+				</v-flex>
+			</div>
+			<div v-else :key="1">
+				<h1 class="week-header">
+					{{ getWeekString(weeksFromToday(new Date(), selectedDate)) }}
+				</h1>
+			</div>
+		</transition>
 	</v-layout>
 </template>
 
 <script>
 import { MONTHS, SHORTDAYS, DAYSOFWEEK } from "@/global/constants.js";
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
+import * as helpers from "@/global/mixins.js";
 
 export default {
 	key: to => to.fullPath,
@@ -152,7 +173,8 @@ export default {
 			type: "month",
 			month: currentMonth,
 			day: currentDay,
-			start: new Date().toString()
+			start: new Date().toString(),
+			selectedDate: new Date()
 		};
 	},
 	computed: {
@@ -168,17 +190,10 @@ export default {
 				(map[e.date] = map[e.date] || []).push(e)
 			);
 			return map;
+		},
+		showingEvents() {
+			return this.$store.state.showingEvents;
 		}
-	},
-	mounted() {
-		// scroll schedule view to show current time
-		const currentTime = document.getElementById("currentTime");
-		const schedule = document.getElementById("scheduleWrapper");
-		console.log(currentTime.offsetTop);
-		console.log(schedule.scrollTop);
-		schedule.scrollTop = currentTime.offsetTop - 75;
-		console.log(currentTime.offsetTop);
-		console.log(schedule.scrollTop);
 	},
 	methods: {
 		updateMonth(e) {
@@ -191,6 +206,9 @@ export default {
 				MONTHS[e.start.month - 1] +
 				" " +
 				e.start.day;
+			this.currentDay = new Date(
+				`${MONTHS[e.start.month - 1]} ${e.start.day} ${e.start.year}`
+			);
 		},
 		getClassColour(id) {
 			return this.$store.state.classes.find(c => c.class_id == id).colour;
@@ -203,7 +221,9 @@ export default {
 		},
 		open(event) {
 			alert(event.title);
-		}
+		},
+		getWeekString: helpers.getWeekString,
+		weeksFromToday: helpers.weeksFromToday
 	}
 };
 </script>
@@ -213,10 +233,14 @@ export default {
 	background: white;
 }
 
-#header {
+.calendar-header {
+	display: flex;
+	align-items: center;
 	padding-bottom: 8px;
+	button {
+		margin: 0;
+	}
 }
-
 .calendar-wrapper {
 	padding-bottom: 16px;
 }

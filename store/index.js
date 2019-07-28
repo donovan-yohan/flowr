@@ -1,3 +1,5 @@
+import { MONTHS, DAYSOFWEEK, SHORTMONTHS } from "@/global/constants.js";
+
 export const state = () => ({
 	events: [
 		{

@@ -9,6 +9,7 @@ const reducer = state => {
 
 	delete persistedState.gradesHidden;
 	delete persistedState.unfolded;
+	delete persistedState.showingEvents;
 
 	return persistedState;
 };

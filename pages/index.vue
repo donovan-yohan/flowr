@@ -87,6 +87,7 @@
 <script>
 import { mapMutations } from "vuex";
 import { MONTHS, DAYSOFWEEK, SHORTMONTHS } from "@/global/constants.js";
+import * as helpers from "@/global/mixins.js";
 
 export default {
 	key: to => to.fullPath,
@@ -114,14 +115,7 @@ export default {
 				const today = new Date();
 
 				if (eventDate > today) {
-					const currentWeek = this.getWeekNumber(today);
-					const eventWeek = this.getWeekNumber(eventDate);
-
-					const weekIndex = eventWeek[1] - currentWeek[1];
-
-					if (weekIndex < 0 || eventWeek[0] != currentWeek[0]) {
-						weekIndex += 52 * eventWeek[0] - currentWeek[0];
-					}
+					let weekIndex = this.weeksFromToday(today, eventDate);
 
 					// make length of array match number of weeks
 					if (r.length < weekIndex + 1) {
@@ -183,6 +177,7 @@ export default {
 				return `${month} ${day}`;
 			}
 		},
+		getWeekString: helpers.getWeekString,
 		parseEndTime(time, duration) {
 			let t = new Date(`01-01-01 ${time}`);
 			t.setMinutes(t.getMinutes() + duration);
@@ -217,41 +212,14 @@ export default {
 
 			return `${weekday}, ${month} ${day}`;
 		},
-		getWeekString(i) {
-			if (i == 0) return "This Week";
-			if (i == 1) return "Next Week";
-
-			// find first day of week i weeks away
-			let date = new Date();
-			date.setDate(date.getDate() + (i - 1) * 7);
-			while (date.getDay() != 0) {
-				date.setDate(date.getDate() + 1);
-			}
-
-			let day = date.getDate();
-			let month = MONTHS[date.getMonth()];
-
-			date.setDate(date.getDate() + 6);
-
-			let endDay = date.getDate();
-			let endMonth = MONTHS[date.getMonth()];
-
-			return month + " " + day + " - " + endMonth + " " + endDay;
-		},
 		getClassName(id) {
 			return this.$store.state.classes.find(c => c.class_id == id).name;
 		},
 		getClassColour(id) {
 			return this.$store.state.classes.find(c => c.class_id == id).colour;
 		},
-		getWeekNumber(d) {
-			d = new Date(+d);
-			d.setHours(0, 0, 0, 0);
-			d.setDate(d.getDate() + 4 - (d.getDay() || 7));
-			var yearStart = new Date(d.getFullYear(), 0, 1);
-			var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-			return [d.getFullYear(), weekNo];
-		},
+		getWeekNumber: helpers.getWeekNumber,
+		weeksFromToday: helpers.weeksFromToday,
 		formatTime(time) {
 			let hour = time.substring(0, 2);
 			if (time >= "12:00") hour = parseInt(hour) - 12;

@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 
 export default {
 	data() {
@@ -173,6 +173,7 @@ export default {
 	},
 	methods: {
 		...mapMutations(["toggleHidden", "toggleUnfold", "toggleCalendar"]),
+		...mapActions(["scrollScheduleIntoView"]),
 		swipeLeft(title) {
 			if (title == "tasks") {
 				this.title = "calendar";
