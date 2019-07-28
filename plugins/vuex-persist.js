@@ -16,7 +16,5 @@ const reducer = state => {
 };
 
 export default ({ store }) => {
-	window.onNuxtReady(() => {
-		new VuexPersistence({ reducer }).plugin(store);
-	});
+	new VuexPersistence({}).plugin(store);
 };
