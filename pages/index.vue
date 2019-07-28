@@ -102,6 +102,7 @@ import { mapMutations } from "vuex";
 import { MONTHS, DAYSOFWEEK, SHORTMONTHS } from "@/global/constants.js";
 
 export default {
+	transition: "fade",
 	data() {
 		return {
 			startMonday: false,

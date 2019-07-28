@@ -49,6 +49,7 @@ import { mapMutations } from "vuex";
 import { SHORTDAYS } from "@/global/constants.js";
 
 export default {
+	transition: "fade",
 	data() {
 		return {
 			daysOfWeek: SHORTDAYS

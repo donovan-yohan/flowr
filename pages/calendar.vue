@@ -130,6 +130,7 @@ import { MONTHS, SHORTDAYS, DAYSOFWEEK } from "@/global/constants.js";
 import { mapMutations } from "vuex";
 
 export default {
+	transition: "fade",
 	shortdays: SHORTDAYS,
 	data() {
 		let currentMonth = MONTHS[new Date().getMonth()];

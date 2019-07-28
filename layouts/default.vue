@@ -60,9 +60,7 @@
 			}"
 		>
 			<v-container>
-				<transition :name="getTransition()">
-					<nuxt />
-				</transition>
+				<nuxt />
 			</v-container>
 		</v-content>
 
@@ -169,42 +167,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.slide-enter-active {
-	animation: acrossIn 0.4s ease-out both;
-}
-.slide-leave-to {
-	animation: acrossOut 0.6s ease-in both;
-}
-
-.fade-enter,
-.fade-leave-to {
-	opacity: 0;
-}
-
-.fade-enter-active {
-	transition: opacity 0.2s ease;
-}
-
-.fade-leave-active {
-	transition: opacity 0.2s ease;
-}
-@keyframes acrossIn {
-	0% {
-		transform: translate3d(-100%, 0, 0);
-	}
-	100% {
-		transform: translate3d(0, 0, 0);
-	}
-}
-@keyframes acrossOut {
-	0% {
-		transform: translate3d(0, 0, 0);
-	}
-	100% {
-		transform: translate3d(100%, 0, 0);
-	}
-}
-
 @font-face {
 	font-family: "Montserrat";
 	src: url("../static/fonts/Montserrat-Regular.ttf");

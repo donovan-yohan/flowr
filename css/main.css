@@ -1,0 +1,63 @@
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
+}
+.fade-enter-active {
+	transition: opacity 0.2s ease;
+}
+.fade-leave-active {
+	transition: opacity 0.2s ease;
+}
+
+/*
+Code for sliding transition
+
+.slide-left-enter {
+  transform: translate(100%, 0);
+  opacity: 0;
+}
+.slide-left-enter-to, .slide-left-leave {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+.slide-left-leave-to {
+  transform: translate(-100%, 0);
+  opacity: 0;
+}
+.slide-left-enter-active {
+  transition: all 0.2s ease-out;
+}
+.slide-left-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.slide-right-enter {
+  transform: translate(-100%, 0);
+  opacity: 0;
+}
+.slide-right-enter-to, .slide-right-leave {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+.slide-right-leave-to {
+  transform: translate(100%, 0);
+  opacity: 0;
+}
+.slide-right-enter-active {
+  transition: all 0.2s ease-out;
+}
+.slide-right-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+key: to => to.fullPath,
+transition(to, from) {
+  console.log(to)
+  console.log(from)
+  if (to.name == "calendar") {
+    return { name: 'slide-left', mode: '' }
+  }
+  else {
+    return { name: 'slide-right', mode: '' }
+  }
+}, */
