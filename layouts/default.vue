@@ -1,11 +1,6 @@
 <template>
-	<v-app>
-		<v-toolbar
-			:clipped-left="clipped"
-			fixed
-			app
-			color="white"
-		>
+	<v-app class="app-wrapper">
+		<v-toolbar :clipped-left="clipped" fixed app color="white">
 			<transition name="fade" mode="out-in">
 				<v-toolbar-title :key="title" class="text-capitalize">
 					{{ title }}
@@ -15,12 +10,7 @@
 			<transition name="fade" mode="out-in" />
 
 			<transition name="fade" mode="out-in">
-				<v-btn
-					v-if="title === 'classes'"
-					:key="0"
-					icon
-					@click="toggleHidden()"
-				>
+				<v-btn v-if="title === 'classes'" :key="0" icon @click="toggleHidden()">
 					<v-icon color="flowrYellow">
 						{{ gradesHidden ? "visibility_off" : "visibility" }}
 					</v-icon>
@@ -63,7 +53,22 @@
 				<nuxt />
 			</v-container>
 		</v-content>
-
+		<transition appear name="fade">
+			<v-btn
+				v-if="title == 'tasks'"
+				color="flowrOrange"
+				style="bottom: 72px"
+				fixed
+				bottom
+				right
+				fab
+				@click="() => {}"
+			>
+				<v-icon color="white">
+					add
+				</v-icon>
+			</v-btn>
+		</transition>
 		<v-bottom-nav
 			ref="bottomNav"
 			v-touch="{
@@ -76,36 +81,17 @@
 			color="white"
 			mandatory
 		>
-			<v-btn
-				color="flowrYellow"
-				flat
-				value="classes"
-				to="grades"
-				nuxt
-			>
+			<v-btn color="flowrYellow" flat value="classes" to="grades" nuxt>
 				<span>Classes</span>
 				<v-icon>spellcheck</v-icon>
 			</v-btn>
 
-			<v-btn
-				color="flowrOrange"
-				flat
-				value="tasks"
-				to="/"
-				exact
-				nuxt
-			>
+			<v-btn color="flowrOrange" flat value="tasks" to="/" exact nuxt>
 				<span>Tasks</span>
 				<v-icon>list</v-icon>
 			</v-btn>
 
-			<v-btn
-				color="flowrRed"
-				flat
-				value="calendar"
-				to="calendar"
-				nuxt
-			>
+			<v-btn color="flowrRed" flat value="calendar" to="calendar" nuxt>
 				<span>Calendar</span>
 				<v-icon>calendar_today</v-icon>
 			</v-btn>
@@ -181,6 +167,13 @@ export default {
 
 .application {
 	font-family: "Montserrat", sans-serif;
+}
+
+.app-wrapper {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
 }
 
 .v-content {

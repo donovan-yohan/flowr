@@ -81,19 +81,6 @@
 				</v-layout>
 			</template>
 		</div>
-		<v-btn
-			color="flowrOrange"
-			style="margin-bottom: 4em"
-			fixed
-			bottom
-			right
-			fab
-			@click="() => {}"
-		>
-			<v-icon color="white">
-				add
-			</v-icon>
-		</v-btn>
 	</v-layout>
 </template>
 
@@ -102,7 +89,14 @@ import { mapMutations } from "vuex";
 import { MONTHS, DAYSOFWEEK, SHORTMONTHS } from "@/global/constants.js";
 
 export default {
-	transition: "fade",
+	key: to => to.fullPath,
+	transition(to, from) {
+		if (to.name == "calendar" || (from && from.name == "grades")) {
+			return { name: "slide-left" };
+		} else {
+			return { name: "slide-right" };
+		}
+	},
 	data() {
 		return {
 			startMonday: false,
@@ -273,6 +267,7 @@ export default {
 .page {
 	margin-bottom: 64px;
 }
+
 .weekheader {
 	font-size: 21px;
 	padding-top: 16px;

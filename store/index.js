@@ -103,7 +103,7 @@ export const state = () => ({
 			]
 		},
 		{
-			title: "August",
+			title: "July",
 			event_id: 7,
 			date: "2019-07-29",
 			time: "13:00",
@@ -111,6 +111,23 @@ export const state = () => ({
 			location: "MLS",
 			weight: 25,
 			class_id: 6,
+			completed: "",
+			checklist: [
+				{
+					name: "",
+					completed: ""
+				}
+			]
+		},
+		{
+			title: "bad",
+			event_id: 8,
+			date: "2019-08-29",
+			time: "13:00",
+			duration: 30,
+			location: "Somewhere",
+			weight: 25,
+			class_id: 3,
 			completed: "",
 			checklist: [
 				{
