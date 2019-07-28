@@ -43,7 +43,7 @@
 				{{ day }}
 			</h2>
 		</v-flex>
-		<v-flex text-xs-center>
+		<v-flex id="scheduleWrapper" text-xs-center class="schedule-wrapper">
 			<v-calendar
 				id="schedule"
 				ref="schedule"
@@ -104,6 +104,7 @@
 							}"
 						/>
 						<div
+							id="currentTime"
 							class="current-time"
 							:style="{
 								borderBottom: '2px solid var(--v-flowrRed-base)',
@@ -132,8 +133,6 @@ import { mapMutations } from "vuex";
 export default {
 	key: to => to.fullPath,
 	transition(to, from) {
-		console.log(to);
-		console.log(from);
 		if (to.name == "calendar") {
 			return { name: "slide-left" };
 		} else {
@@ -170,6 +169,16 @@ export default {
 			);
 			return map;
 		}
+	},
+	mounted() {
+		// scroll schedule view to show current time
+		const currentTime = document.getElementById("currentTime");
+		const schedule = document.getElementById("scheduleWrapper");
+		console.log(currentTime.offsetTop);
+		console.log(schedule.scrollTop);
+		schedule.scrollTop = currentTime.offsetTop - 75;
+		console.log(currentTime.offsetTop);
+		console.log(schedule.scrollTop);
 	},
 	methods: {
 		updateMonth(e) {
@@ -265,11 +274,14 @@ export default {
 	}
 }
 
-.calendar-event {
-}
-
 .day-header {
 	padding-bottom: 8px;
+}
+
+.schedule-wrapper {
+	// total height - toolbar - footer - margin - header
+	max-height: calc(100vh - 56px - 56px - 32px - 39px);
+	overflow-y: scroll;
 }
 
 #schedule {

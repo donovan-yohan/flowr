@@ -1,6 +1,11 @@
 <template>
 	<v-app class="app-wrapper">
-		<v-toolbar :clipped-left="clipped" fixed app color="white">
+		<v-toolbar
+			:clipped-left="clipped"
+			fixed
+			app
+			color="white"
+		>
 			<transition name="fade" mode="out-in">
 				<v-toolbar-title :key="title" class="text-capitalize">
 					{{ title }}
@@ -10,7 +15,12 @@
 			<transition name="fade" mode="out-in" />
 
 			<transition name="fade" mode="out-in">
-				<v-btn v-if="title === 'classes'" :key="0" icon @click="toggleHidden()">
+				<v-btn
+					v-if="title === 'classes'"
+					:key="0"
+					icon
+					@click="toggleHidden()"
+				>
 					<v-icon color="flowrYellow">
 						{{ gradesHidden ? "visibility_off" : "visibility" }}
 					</v-icon>
@@ -35,7 +45,21 @@
 						</v-icon>
 					</v-btn>
 				</div>
-				<div v-else :key="2" />
+				<div v-else :key="2" class="calendar-switch">
+					<v-btn
+						small
+						flat
+						round
+						@click="toggleCalendar()"
+					>
+						<span :class="{ 'active-calendar': showingEvents }">
+							Tasks
+						</span>
+						<span :class="{ 'active-calendar': !showingEvents }">
+							Classes
+						</span>
+					</v-btn>
+				</div>
 			</transition>
 
 			<v-btn icon>
@@ -81,17 +105,36 @@
 			color="white"
 			mandatory
 		>
-			<v-btn color="flowrYellow" flat value="classes" to="grades" nuxt>
+			<v-btn
+				color="flowrYellow"
+				flat
+				value="classes"
+				to="grades"
+				nuxt
+			>
 				<span>Classes</span>
 				<v-icon>spellcheck</v-icon>
 			</v-btn>
 
-			<v-btn color="flowrOrange" flat value="tasks" to="/" exact nuxt>
+			<v-btn
+				color="flowrOrange"
+				flat
+				value="tasks"
+				to="/"
+				exact
+				nuxt
+			>
 				<span>Tasks</span>
 				<v-icon>list</v-icon>
 			</v-btn>
 
-			<v-btn color="flowrRed" flat value="calendar" to="calendar" nuxt>
+			<v-btn
+				color="flowrRed"
+				flat
+				value="calendar"
+				to="calendar"
+				nuxt
+			>
 				<span>Calendar</span>
 				<v-icon>calendar_today</v-icon>
 			</v-btn>
@@ -116,6 +159,9 @@ export default {
 		},
 		unfolded() {
 			return this.$store.state.unfolded;
+		},
+		showingEvents() {
+			return this.$store.state.showingEvents;
 		}
 	},
 	mounted() {
@@ -126,7 +172,7 @@ export default {
 		this.title = navValue;
 	},
 	methods: {
-		...mapMutations(["toggleHidden", "toggleUnfold"]),
+		...mapMutations(["toggleHidden", "toggleUnfold", "toggleCalendar"]),
 		swipeLeft(title) {
 			if (title == "tasks") {
 				this.title = "calendar";
@@ -176,6 +222,21 @@ export default {
 	overflow-x: hidden;
 }
 
+.calendar-switch {
+	button {
+		margin: 0;
+		padding: 0;
+	}
+	.v-btn__content span {
+		color: black;
+		padding: 0px 6px;
+	}
+	.active-calendar {
+		font-weight: 700;
+		color: var(--v-flowrRed-base) !important;
+	}
+}
+
 .v-content {
 	margin-bottom: 64px;
 }
@@ -184,11 +245,7 @@ export default {
 	font-size: 12px;
 	color: gray;
 }
-.v-btn--icon {
-	.v-btn__content i {
-		max-width: 24px;
-	}
-}
+
 .v-btn--active span {
 	color: black;
 }

@@ -50,8 +50,6 @@ import { SHORTDAYS } from "@/global/constants.js";
 
 export default {
 	transition(to, from) {
-		console.log(to);
-		console.log(from);
 		if (to.name == "grades") {
 			return { name: "slide-right" };
 		} else {

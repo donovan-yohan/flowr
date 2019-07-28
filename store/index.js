@@ -224,15 +224,18 @@ export const state = () => ({
 		}
 	],
 	gradesHidden: true,
-	unfolded: true
+	unfolded: true,
+	showingEvents: true
 });
 
 export const mutations = {
 	toggleHidden(state) {
 		state.gradesHidden = !state.gradesHidden;
 	},
-
 	toggleUnfold(state) {
 		state.unfolded = !state.unfolded;
+	},
+	toggleCalendar(state) {
+		state.showingEvents = !state.showingEvents;
 	}
 };
