@@ -1,29 +1,15 @@
 <template>
 	<v-layout column>
 		<div v-for="(date, i) in nextMonth" :key="i">
-			<!-- should probably be computed -->
 			<h2
-				v-if="
-					(i == 0 ||
-						(startMonday
-							? date.date.getDay() === 1
-							: date.date.getDay() === 0)) &&
-						weekHasEvents(i)
-				"
+				v-if="beginningOfWeek(date.date, i)"
 				:class="{
 					weekheader: true,
 					longheader: i > remainingDays + 6,
 					topHeader: i == 0
 				}"
 			>
-				<!-- should probably be computed -->
-				{{
-					i &lt; remainingDays
-						? "This Week"
-						: i &lt; remainingDays + 7
-							? "Next Week"
-							: getWeekString(date.date)
-				}}
+				{{ getWeekString(date.date, i) }}
 			</h2>
 			<template v-if="eventsMap[date.stringDate]">
 				<v-layout
@@ -35,7 +21,15 @@
 					:key="e.event_id"
 					row
 				>
-					<div v-ripple class="task-wrapper" @click="">
+					<div
+						v-ripple
+						class="task-wrapper"
+						@click="
+							() => {
+								return null;
+							}
+						"
+					>
 						<div class="task-info">
 							<v-btn icon class="task-checkbox">
 								<v-icon color="gray">
@@ -148,20 +142,42 @@ export default {
 		}
 	},
 	methods: {
-		getWeekString(date) {
-			let day = date.getDate();
-			let month = MONTHS[date.getMonth()];
+		getWeekString(date, i) {
+			if (i < this.remainingDays) {
+				return "This Week";
+			} else if (i < this.remainingDays + 7) {
+				return "Next Week";
+			} else {
+				let day = date.getDate();
+				let month = MONTHS[date.getMonth()];
 
-			date.setDate(date.getDate() + 6);
+				date.setDate(date.getDate() + 6);
 
-			let endDay = date.getDate();
-			let endMonth = MONTHS[date.getMonth()];
+				let endDay = date.getDate();
+				let endMonth = MONTHS[date.getMonth()];
 
-			return month + " " + day + " - " + endMonth + " " + endDay;
+				return month + " " + day + " - " + endMonth + " " + endDay;
+			}
 		},
-		weekHasEvents(startOfWeek) {
+		beginningOfWeek(date, i) {
+			if (i == 0 && this.weekHasEvents(date, i)) {
+				return true;
+			} else if (this.weekHasEvents(date, i)) {
+				if (this.startMonday) {
+					return date.getDay() === 1;
+				} else {
+					return date.getDay() === 0;
+				}
+			}
+		},
+		weekHasEvents(date, startingEventIndex) {
 			let hasEvents = false;
-			for (let i = startOfWeek; i < startOfWeek + 7 && !hasEvents; i++) {
+			let daysRemaining = 7 - date.getDay();
+			for (
+				let i = startingEventIndex;
+				i < startingEventIndex + daysRemaining && !hasEvents;
+				i++
+			) {
 				if (this.eventsMap[this.nextMonth[i].stringDate]) hasEvents = true;
 			}
 			return hasEvents;
