@@ -1,5 +1,5 @@
 <template>
-	<v-layout column>
+	<v-layout column class="page">
 		<div v-for="(week, i) in eventsMap" :key="i">
 			<h2
 				v-if="week.length > 0"
@@ -13,50 +13,68 @@
 			</h2>
 			<template>
 				<v-layout v-for="e in eventsMap[i]" :key="e.event_id" row>
-					<div
-						v-ripple
-						class="task-wrapper"
-						@click="
-							() => {
-								return null;
-							}
-						"
-					>
-						<div class="task-info">
-							<v-btn icon class="task-checkbox">
-								<v-icon color="gray">
-									check_circle_outline
-								</v-icon>
-							</v-btn>
-							<span class="task-title">{{ e.title }}</span>
-							<span
-								:style="{
-									color: 'var(--v-' + getClassColour(e.class_id) + '-base)'
-								}"
-								class="task-weight"
-								>{{ e.weight + "%" }}</span
-							>
-							<div
-								:style="{
-									width: e.weight / 1.25 + 'px',
-									backgroundColor:
-										'var(--v-' + getClassColour(e.class_id) + '-base)'
-								}"
-								class="task-weight-bar"
-							/>
+					<div v-ripple class="task-wrapper" @click="() => {}">
+						<div class="task-folded">
+							<div class="task-info">
+								<v-btn icon class="task-checkbox">
+									<v-icon color="gray">
+										check_circle_outline
+									</v-icon>
+								</v-btn>
+								<span
+									:style="{
+										maxWidth:
+											'calc(100vw - 32px - 30px - 80px' + e.weight / 1.25 + ')'
+									}"
+									class="task-title"
+								>
+									{{ e.title }}
+								</span>
+								<span
+									:style="{
+										color: 'var(--v-' + getClassColour(e.class_id) + '-base)'
+									}"
+									class="task-weight"
+								>{{ e.weight + "%" }}</span>
+								<div
+									:style="{
+										width: e.weight / 1.25 + 'px',
+										backgroundColor:
+											'var(--v-' + getClassColour(e.class_id) + '-base)'
+									}"
+									class="task-weight-bar"
+								/>
+							</div>
+
+							<div class="task-class-info">
+								<span v-if="!unfolded" class="task-class-date">
+									{{ `${getDayString(e.date, i)}` }}
+								</span>
+								<div
+									:style="{
+										backgroundColor:
+											'var(--v-' + getClassColour(e.class_id) + '-base)'
+									}"
+									class="task-class-wrapper"
+								>
+									<span v-if="unfolded" class="task-class-name">{{
+										getClassName(e.class_id)
+									}}</span>
+								</div>
+							</div>
 						</div>
-						<div class="task-class-info">
-							<span class="task-class-date">{{ getDayString(e.date) }}</span>
-							<div
-								:style="{
-									backgroundColor:
-										'var(--v-' + getClassColour(e.class_id) + '-base)'
-								}"
-								class="task-class-wrapper"
-							>
-								<span v-if="unfolded" class="task-class-name">{{
-									getClassName(e.class_id)
-								}}</span>
+						<div v-if="unfolded" class="task-unfolded">
+							<div class="task-detail">
+								<div class="task-detail-date">
+									{{ getDetailDayString(e.date) }}
+								</div>
+								<div class="task-detail-time">
+									{{ `${getTimeString(e.time, e.duration)}` }}
+								</div>
+							</div>
+							<v-spacer />
+							<div v-if="unfolded" class="task-location">
+								{{ e.location }}
 							</div>
 						</div>
 					</div>
@@ -81,7 +99,7 @@
 
 <script>
 import { mapMutations } from "vuex";
-import { MONTHS, DAYSOFWEEK } from "@/global/constants.js";
+import { MONTHS, DAYSOFWEEK, SHORTMONTHS } from "@/global/constants.js";
 
 export default {
 	data() {
@@ -93,37 +111,6 @@ export default {
 	computed: {
 		events() {
 			return this.$store.state.events;
-		},
-		nextMonth() {
-			let currentDay = new Date().getDay();
-			let remainingDays = 0;
-			let days = [];
-
-			if (this.startMonday) {
-				if (currentDay > 1) remainingDays = 8 - currentDay;
-				else if (currentDay < 1) remainingDays = 1;
-			} else {
-				if (currentDay > 0) remainingDays = 7 - currentDay;
-			}
-
-			for (let i = 0; i < remainingDays + 28; i++) {
-				let date = new Date();
-				date.setDate(date.getDate() + i);
-
-				let day = date.getDate() + "";
-				if (day.length === 1) day = "0" + day;
-
-				let month = date.getMonth() + 1 + "";
-				if (month.length === 1) month = "0" + month;
-
-				days.push({
-					stringDate: date.getFullYear() + "-" + month + "-" + day,
-					date: date
-				});
-			}
-
-			this.setRemainingDays(remainingDays);
-			return days;
 		},
 		eventsMap() {
 			let weekArray = this.$store.state.events.reduce((r, e, i, a) => {
@@ -171,21 +158,69 @@ export default {
 		}
 	},
 	methods: {
-		getDayString(dateString) {
-			let day = dateString.substring(8, 10);
-			let monthString = dateString.substring(5, 7);
+		getDayString(dateString, week) {
+			const date = new Date(`${dateString} ${"00:00"}`);
+			const today = new Date();
+			const weekday = DAYSOFWEEK[date.getDay()];
+			const month = SHORTMONTHS[date.getMonth()];
+			const day = date.getDate();
 
-			if (monthString[0] === "0") monthString = monthString.substring(1, 2);
-			let monthIndex = parseInt(monthString) - 1;
-
-			let today = new Date();
-			if (today.getDate() == day && today.getMonth() == monthIndex)
+			if (
+				today.getDate() == date.getDate() &&
+				today.getMonth() == date.getMonth()
+			)
 				return "Today";
-			else if (today.getDate() + 1 == day && today.getMonth() == monthIndex)
+			else if (
+				today.getDate() + 1 == date.getDate() &&
+				today.getMonth() == date.getMonth()
+			)
 				return "Tomorrow";
+			else if (week == 0 || week == 1) {
+				let oneWeekFromToday = new Date();
+				oneWeekFromToday = oneWeekFromToday.setDate(
+					oneWeekFromToday.getDate() + 7
+				);
 
-			let month = MONTHS[monthIndex];
-			return month + " " + day;
+				if (date.getDate() <= oneWeekFromToday.getDate()) {
+					return `${weekday}`;
+				}
+			} else {
+				return `${month} ${day}`;
+			}
+		},
+		parseEndTime(time, duration) {
+			let t = new Date(`01-01-01 ${time}`);
+			t.setMinutes(t.getMinutes() + duration);
+			let hours = t.getHours();
+			if (hours < 10) hours = `0${hours}`;
+			return `${hours}:${t.getMinutes()}`;
+		},
+		getTimeString(time, duration) {
+			let endTime = this.parseEndTime(time, duration);
+			let end = this.formatTime(endTime);
+			let start = this.formatTime(time);
+
+			return `${start} - ${end} ${endTime >= "12:00" ? "PM" : "AM"}`;
+		},
+		getDetailDayString(dateString) {
+			const today = new Date();
+			const date = new Date(`${dateString} ${"00:00"}`);
+			let weekday = DAYSOFWEEK[date.getDay()];
+			const month = SHORTMONTHS[date.getMonth()];
+			const day = date.getDate();
+
+			if (
+				today.getDate() == date.getDate() &&
+				today.getMonth() == date.getMonth()
+			)
+				weekday = "Today";
+			else if (
+				today.getDate() + 1 == date.getDate() &&
+				today.getMonth() == date.getMonth()
+			)
+				weekday = "Tomorrow";
+
+			return `${weekday}, ${month} ${day}`;
 		},
 		getWeekString(i) {
 			if (i == 0) return "This Week";
@@ -221,12 +256,22 @@ export default {
 			var yearStart = new Date(d.getFullYear(), 0, 1);
 			var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
 			return [d.getFullYear(), weekNo];
+		},
+		formatTime(time) {
+			let hour = time.substring(0, 2);
+			if (time >= "12:00") hour = parseInt(hour) - 12;
+			else if (hour[0] === "0") hour = hour[1];
+
+			return hour + time.substring(2, 5);
 		}
 	}
 };
 </script>
 
 <style lang="scss">
+.page {
+	margin-bottom: 64px;
+}
 .weekheader {
 	font-size: 21px;
 	padding-top: 16px;
@@ -240,17 +285,23 @@ export default {
 
 .task-wrapper {
 	display: inline-flex;
-	justify-content: space-between;
+	flex-direction: column;
 	width: 100%;
 	padding: 4px 0;
 	border-bottom: 1px solid var(--v-gray-base);
+	height: auto;
 
 	.task-info {
 		display: inline-flex;
 		align-items: center;
 		.task-checkbox {
-			margin: 0;
+			margin: 0 0 0 -0.5em;
 			z-index: 1;
+		}
+		.task-title {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 		.task-weight {
 			font-weight: 700;
@@ -259,10 +310,12 @@ export default {
 			margin-right: 3px;
 		}
 		.task-weight-bar {
-			height: 33%;
+			height: 0.8em;
 		}
 	}
-
+	.task-detail {
+		font-size: 12px;
+	}
 	.task-class-info {
 		display: inline-flex;
 		align-items: center;
@@ -270,7 +323,10 @@ export default {
 			font-size: 12px;
 		}
 		.task-class-wrapper {
+			height: 1em;
+			min-width: 1em;
 			display: flex;
+			align-items: center;
 			border-radius: 10px;
 			margin-left: 4px;
 			padding: 0px 6px;
@@ -280,6 +336,21 @@ export default {
 				color: white;
 			}
 		}
+	}
+	.task-location {
+		font-size: 12px;
+	}
+
+	.task-unfolded {
+		display: flex;
+		margin-left: calc(36px - 0.5em);
+		margin-top: -4px;
+	}
+
+	.task-folded {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 	}
 }
 </style>

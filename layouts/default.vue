@@ -1,38 +1,52 @@
 <template>
 	<v-app>
-		<v-toolbar :clipped-left="clipped" fixed app color="white">
+		<v-toolbar
+			:clipped-left="clipped"
+			fixed
+			app
+			color="white"
+		>
 			<transition name="fade" mode="out-in">
 				<v-toolbar-title :key="title" class="text-capitalize">
 					{{ title }}
 				</v-toolbar-title>
 			</transition>
 			<v-spacer />
+			<transition name="fade" mode="out-in" />
 
-			<v-btn v-if="title === 'classes'" icon @click="toggleHidden()">
-				<v-icon color="flowrYellow">
-					{{ gradesHidden ? "visibility_off" : "visibility" }}
-				</v-icon>
-			</v-btn>
+			<transition name="fade" mode="out-in">
+				<v-btn
+					v-if="title === 'classes'"
+					:key="0"
+					icon
+					@click="toggleHidden()"
+				>
+					<v-icon color="flowrYellow">
+						{{ gradesHidden ? "visibility_off" : "visibility" }}
+					</v-icon>
+				</v-btn>
+				<div v-else-if="title === 'tasks'" :key="1">
+					<v-btn
+						icon
+						@click="
+							() => {
+								return null;
+							}
+						"
+					>
+						<v-icon color="flowrOrange">
+							spellcheck
+						</v-icon>
+					</v-btn>
 
-			<v-btn
-				v-if="title === 'tasks'"
-				icon
-				@click="
-					() => {
-						return null;
-					}
-				"
-			>
-				<v-icon color="flowrOrange">
-					spellcheck
-				</v-icon>
-			</v-btn>
-
-			<v-btn v-if="title === 'tasks'" icon @click="toggleUnfold()">
-				<v-icon color="flowrOrange">
-					{{ unfolded ? "unfold_more" : "unfold_less" }}
-				</v-icon>
-			</v-btn>
+					<v-btn icon @click="toggleUnfold()">
+						<v-icon color="flowrOrange">
+							{{ unfolded ? "unfold_less" : "unfold_more" }}
+						</v-icon>
+					</v-btn>
+				</div>
+				<div v-else :key="2" />
+			</transition>
 
 			<v-btn icon>
 				<v-icon>more_vert</v-icon>
@@ -64,17 +78,36 @@
 			color="white"
 			mandatory
 		>
-			<v-btn color="flowrYellow" flat value="classes" to="grades" nuxt>
+			<v-btn
+				color="flowrYellow"
+				flat
+				value="classes"
+				to="grades"
+				nuxt
+			>
 				<span>Classes</span>
 				<v-icon>spellcheck</v-icon>
 			</v-btn>
 
-			<v-btn color="flowrOrange" flat value="tasks" to="/" exact nuxt>
+			<v-btn
+				color="flowrOrange"
+				flat
+				value="tasks"
+				to="/"
+				exact
+				nuxt
+			>
 				<span>Tasks</span>
 				<v-icon>list</v-icon>
 			</v-btn>
 
-			<v-btn color="flowrRed" flat value="calendar" to="calendar" nuxt>
+			<v-btn
+				color="flowrRed"
+				flat
+				value="calendar"
+				to="calendar"
+				nuxt
+			>
 				<span>Calendar</span>
 				<v-icon>calendar_today</v-icon>
 			</v-btn>

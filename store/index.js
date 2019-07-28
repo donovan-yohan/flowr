@@ -6,6 +6,7 @@ export const state = () => ({
 			date: "2019-07-29",
 			time: "01:00",
 			duration: 45,
+			location: "LH1024",
 			weight: 15,
 			class_id: 4,
 			completed: "",
@@ -22,6 +23,7 @@ export const state = () => ({
 			date: "2019-07-24",
 			time: "04:00",
 			duration: 30,
+			location: "SC1001",
 			weight: 15,
 			class_id: 0,
 			completed: "",
@@ -38,6 +40,7 @@ export const state = () => ({
 			date: "2019-07-24",
 			time: "05:00",
 			duration: 60,
+			location: "BS1005",
 			weight: 50,
 			class_id: 1,
 			completed: "",
@@ -54,6 +57,7 @@ export const state = () => ({
 			date: "2019-07-26",
 			time: "08:00",
 			duration: 90,
+			location: "CU204",
 			weight: 25,
 			class_id: 0,
 			completed: "",
@@ -70,6 +74,7 @@ export const state = () => ({
 			date: "2019-08-17",
 			time: "18:00",
 			duration: 90,
+			location: "Online",
 			weight: 25,
 			class_id: 4,
 			completed: "",
@@ -86,6 +91,7 @@ export const state = () => ({
 			date: "2019-08-17",
 			time: "20:00",
 			duration: 60,
+			location: "Online",
 			weight: 20,
 			class_id: 5,
 			completed: "",
@@ -102,6 +108,7 @@ export const state = () => ({
 			date: "2019-07-29",
 			time: "13:00",
 			duration: 30,
+			location: "MLS",
 			weight: 25,
 			class_id: 6,
 			completed: "",
@@ -200,7 +207,7 @@ export const state = () => ({
 		}
 	],
 	gradesHidden: true,
-	unfolded: false
+	unfolded: true
 });
 
 export const mutations = {

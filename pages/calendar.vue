@@ -174,7 +174,7 @@ export default {
 				e.start.day;
 		},
 		getClassColour(id) {
-			return this.$store.state.classes.find(c => c.class_id === id).colour;
+			return this.$store.state.classes.find(c => c.class_id == id).colour;
 		},
 		getCurrentMinutes(date) {
 			return (
