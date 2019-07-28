@@ -21,6 +21,7 @@
 				<v-flex text-xs-center class="calendar-wrapper">
 					<v-calendar
 						id="month-calendar"
+						:key="10"
 						ref="calendar"
 						v-model="start"
 						type="month"
@@ -63,7 +64,13 @@
 						v-model="start"
 						type="day"
 						:hide-header="true"
-						@change="updateDay($event)"
+						@change="
+							updateDay($event);
+							scrollScheduleIntoView(
+								new Date($event.start.date + ' 00:00'),
+								eventsMap
+							);
+						"
 					>
 						<template
 							v-slot:dayBody="{ date, timeToY, minutesToPixels, present, past }"
@@ -195,7 +202,14 @@ export default {
 			return this.$store.state.showingEvents;
 		}
 	},
+	mounted() {
+		// scroll schedule view to show current time
+		if (this.showingEvents) {
+			this.scrollScheduleIntoView(new Date(), this.eventsMap);
+		}
+	},
 	methods: {
+		scrollScheduleIntoView: helpers.scrollScheduleIntoView,
 		updateMonth(e) {
 			this.month = MONTHS[e.start.month - 1];
 		},

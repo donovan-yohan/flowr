@@ -42,3 +42,33 @@ export function weeksFromToday(today, target) {
 	}
 	return weekIndex;
 }
+
+export function scrollScheduleIntoView(date, eventsMap) {
+	const intervalSize = 40;
+	const schedule = document.getElementById("scheduleWrapper");
+
+	let month = date.getMonth() + 1;
+	month < 10 ? (month = "0" + month) : (month = month + "");
+	let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+	let dateString = `${date.getFullYear()}-${month}-${day}`;
+	let today = new Date();
+	today.setHours(0, 0, 0, 0);
+	date.setHours(0, 0, 0, 0);
+
+	let value = 9 * intervalSize;
+
+	if (+today == +date) {
+		setTimeout(() => {
+			const currentTime = document.getElementById("currentTime");
+			value = currentTime.offsetTop;
+			schedule.scrollTop = value - 75;
+		}, 1);
+	} else if (eventsMap[dateString]) {
+		let hoursToMinutes =
+			eventsMap[dateString][0].time.substring(0, 2) * intervalSize;
+		let minutes = eventsMap[dateString][0].time.substring(3, 5);
+		value = hoursToMinutes + minutes / intervalSize;
+	}
+
+	schedule.scrollTop = value - 75;
+}
