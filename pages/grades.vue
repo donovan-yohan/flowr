@@ -62,14 +62,7 @@ export default {
 			return this.$store.state.classes;
 		},
 		hidden() {
-			return this.$store.state.hidden;
-		},
-		eventsMap() {
-			const map = {};
-			this.$store.state.events.forEach(e =>
-				(map[e.date] = map[e.date] || []).push(e)
-			);
-			return map;
+			return this.$store.state.gradesHidden;
 		}
 	},
 	methods: {

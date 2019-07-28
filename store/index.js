@@ -2,12 +2,12 @@ export const state = () => ({
 	events: [
 		{
 			title: "Test 4",
-			event_id: "4",
+			event_id: 5,
 			date: "2019-07-29",
 			time: "01:00",
 			duration: 45,
 			weight: 15,
-			class_id: "4",
+			class_id: 4,
 			completed: "",
 			checklist: [
 				{
@@ -18,12 +18,12 @@ export const state = () => ({
 		},
 		{
 			title: "Test",
-			event_id: "1",
+			event_id: 1,
 			date: "2019-07-24",
 			time: "04:00",
 			duration: 30,
 			weight: 15,
-			class_id: "0",
+			class_id: 0,
 			completed: "",
 			checklist: [
 				{
@@ -34,12 +34,12 @@ export const state = () => ({
 		},
 		{
 			title: "Test2",
-			event_id: "2",
+			event_id: 2,
 			date: "2019-07-24",
 			time: "05:00",
 			duration: 60,
 			weight: 50,
-			class_id: "1",
+			class_id: 1,
 			completed: "",
 			checklist: [
 				{
@@ -50,12 +50,12 @@ export const state = () => ({
 		},
 		{
 			title: "Test3",
-			event_id: "3",
+			event_id: 3,
 			date: "2019-07-26",
 			time: "08:00",
 			duration: 90,
 			weight: 25,
-			class_id: "0",
+			class_id: 0,
 			completed: "",
 			checklist: [
 				{
@@ -66,12 +66,44 @@ export const state = () => ({
 		},
 		{
 			title: "August",
-			event_id: "4",
+			event_id: 4,
 			date: "2019-08-17",
 			time: "18:00",
 			duration: 90,
 			weight: 25,
-			class_id: "4",
+			class_id: 4,
+			completed: "",
+			checklist: [
+				{
+					name: "",
+					completed: ""
+				}
+			]
+		},
+		{
+			title: "Assignment",
+			event_id: 6,
+			date: "2019-08-17",
+			time: "20:00",
+			duration: 60,
+			weight: 20,
+			class_id: 5,
+			completed: "",
+			checklist: [
+				{
+					name: "",
+					completed: ""
+				}
+			]
+		},
+		{
+			title: "August",
+			event_id: 7,
+			date: "2019-07-29",
+			time: "13:00",
+			duration: 30,
+			weight: 25,
+			class_id: 6,
 			completed: "",
 			checklist: [
 				{
@@ -83,7 +115,7 @@ export const state = () => ({
 	],
 	classes: [
 		{
-			class_id: "0",
+			class_id: 0,
 			name: "CP317",
 			grade: 100,
 			colour: "flowrGreen",
@@ -95,7 +127,7 @@ export const state = () => ({
 			days: [1, 0, 1, 0, 1]
 		},
 		{
-			class_id: "1",
+			class_id: 1,
 			name: "BU212",
 			grade: 67,
 			colour: "flowrTurquoise",
@@ -107,7 +139,7 @@ export const state = () => ({
 			days: [0, 1, 0, 1, 0]
 		},
 		{
-			class_id: "2",
+			class_id: 2,
 			name: "CP412",
 			grade: 90,
 			colour: "flowrBlue",
@@ -119,7 +151,7 @@ export const state = () => ({
 			days: [1, 0, 1, 0, 0]
 		},
 		{
-			class_id: "3",
+			class_id: 3,
 			name: "PS302",
 			grade: 8,
 			colour: "flowrIndigo",
@@ -131,7 +163,7 @@ export const state = () => ({
 			days: [1, 0, 0, 0, 0]
 		},
 		{
-			class_id: "4",
+			class_id: 4,
 			name: "BU402",
 			grade: 24,
 			colour: "flowrViolet",
@@ -143,7 +175,7 @@ export const state = () => ({
 			days: [1, 0, 1, 0, 1]
 		},
 		{
-			class_id: "5",
+			class_id: 5,
 			name: "CP102",
 			grade: 67,
 			colour: "flowrPurple",
@@ -155,7 +187,7 @@ export const state = () => ({
 			days: [0, 0, 0, 1, 0]
 		},
 		{
-			class_id: "6",
+			class_id: 6,
 			name: "CP468",
 			grade: 88,
 			colour: "flowrMagenta",
@@ -167,24 +199,16 @@ export const state = () => ({
 			days: [0, 1, 0, 1, 0]
 		}
 	],
-	hidden: true,
-	gradesIcon: "visibility_off",
-	unfolded: false,
-	unfoldIcon: "unfold_more"
+	gradesHidden: true,
+	unfolded: false
 });
 
 export const mutations = {
 	toggleHidden(state) {
-		state.hidden = !state.hidden;
-
-		if (state.hidden) state.gradesIcon = "visibility_off";
-		else state.gradesIcon = "visibility";
+		state.gradesHidden = !state.gradesHidden;
 	},
 
 	toggleUnfold(state) {
 		state.unfolded = !state.unfolded;
-
-		if (state.unfolded) state.unfoldIcon = "unfold_less";
-		else state.unfoldIcon = "unfold_more";
 	}
 };

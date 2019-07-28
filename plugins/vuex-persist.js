@@ -7,14 +7,11 @@ const clone = obj => JSON.parse(JSON.stringify(obj));
 const reducer = state => {
 	let persistedState = clone(state);
 
-	delete persistedState.hidden;
-	delete persistedState.gradesIcon;
-	delete persistedState.unfolded;
-	delete persistedState.unfoldIcon;
+	delete persistedState.gradesHidden;
 
 	return persistedState;
 };
 
 export default ({ store }) => {
-	new VuexPersistence({}).plugin(store);
+	new VuexPersistence({ reducer }).plugin(store);
 };

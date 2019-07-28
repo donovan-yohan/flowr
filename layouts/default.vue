@@ -10,18 +10,27 @@
 
 			<v-btn v-if="title === 'classes'" icon @click="toggleHidden()">
 				<v-icon color="flowrYellow">
-					{{ gradesIcon }}
+					{{ gradesHidden ? "visibility_off" : "visibility" }}
 				</v-icon>
 			</v-btn>
 
-			<v-btn v-if="title === 'tasks'" icon @click="">
+			<v-btn
+				v-if="title === 'tasks'"
+				icon
+				@click="
+					() => {
+						return null;
+					}
+				"
+			>
 				<v-icon color="flowrOrange">
 					spellcheck
 				</v-icon>
 			</v-btn>
+
 			<v-btn v-if="title === 'tasks'" icon @click="toggleUnfold()">
 				<v-icon color="flowrOrange">
-					{{ unfoldIcon }}
+					{{ unfolded ? "unfold_more" : "unfold_less" }}
 				</v-icon>
 			</v-btn>
 
@@ -85,14 +94,11 @@ export default {
 		};
 	},
 	computed: {
-		hidden() {
-			return this.$store.state.hidden;
+		gradesHidden() {
+			return this.$store.state.gradesHidden;
 		},
-		gradesIcon() {
-			return this.$store.state.gradesIcon;
-		},
-		unfoldIcon() {
-			return this.$store.state.unfoldIcon;
+		unfolded() {
+			return this.$store.state.unfolded;
 		}
 	},
 	mounted() {
@@ -189,6 +195,11 @@ export default {
 .v-btn__content span {
 	font-size: 12px;
 	color: gray;
+}
+.v-btn--icon {
+	.v-btn__content i {
+		max-width: 24px;
+	}
 }
 .v-btn--active span {
 	color: black;

@@ -1,26 +1,18 @@
 <template>
 	<v-layout column>
-		<div v-for="(date, i) in nextMonth" :key="i">
+		<div v-for="(week, i) in eventsMap" :key="i">
 			<h2
-				v-if="beginningOfWeek(date.date, i)"
+				v-if="week.length > 0"
 				:class="{
 					weekheader: true,
-					longheader: i > remainingDays + 6,
+					longheader: i > 1,
 					topHeader: i == 0
 				}"
 			>
-				{{ getWeekString(date.date, i) }}
+				{{ getWeekString(i) }}
 			</h2>
-			<template v-if="eventsMap[date.stringDate]">
-				<v-layout
-					v-for="e in eventsMap[date.stringDate].sort((a, b) => {
-						if (a.time < b.time) return -1;
-						else if (a.time > b - time) return 1;
-						else return 0;
-					})"
-					:key="e.event_id"
-					row
-				>
+			<template>
+				<v-layout v-for="e in eventsMap[i]" :key="e.event_id" row>
 					<div
 						v-ripple
 						class="task-wrapper"
@@ -62,7 +54,7 @@
 								}"
 								class="task-class-wrapper"
 							>
-								<span class="task-class-name">{{
+								<span v-if="unfolded" class="task-class-name">{{
 									getClassName(e.class_id)
 								}}</span>
 							</div>
@@ -78,7 +70,7 @@
 			bottom
 			right
 			fab
-			@click="testEventMap()"
+			@click="() => {}"
 		>
 			<v-icon color="white">
 				add
@@ -134,57 +126,51 @@ export default {
 			return days;
 		},
 		eventsMap() {
-			const map = {};
-			this.$store.state.events.forEach(e =>
-				(map[e.date] = map[e.date] || []).push(e)
-			);
-			return map;
+			let weekArray = this.$store.state.events.reduce((r, e, i, a) => {
+				// find week e belongs in as an index
+				const eventDate = new Date(`${e.date} ${e.time}`);
+				const today = new Date();
+
+				if (eventDate > today) {
+					const currentWeek = this.getWeekNumber(today);
+					const eventWeek = this.getWeekNumber(eventDate);
+
+					const weekIndex = eventWeek[1] - currentWeek[1];
+
+					if (weekIndex < 0 || eventWeek[0] != currentWeek[0]) {
+						weekIndex += 52 * eventWeek[0] - currentWeek[0];
+					}
+
+					// make length of array match number of weeks
+					if (r.length < weekIndex + 1) {
+						while (r.length < weekIndex + 1) {
+							r.push([]);
+						}
+					}
+
+					r[weekIndex].push(e);
+				}
+				return r;
+			}, []);
+			weekArray.forEach(week => {
+				// sort by date and time
+				week.sort((a, b) => {
+					if (a.date < b.date) return -1;
+					else if (a.date > b.date) return 1;
+					else {
+						if (a.time < b.time) return -1;
+						else if (a.time > b.time) return 1;
+						else return 0;
+					}
+				});
+			});
+			return weekArray;
+		},
+		unfolded() {
+			return this.$store.state.unfolded;
 		}
 	},
 	methods: {
-		getWeekString(date, i) {
-			if (i < this.remainingDays) {
-				return "This Week";
-			} else if (i < this.remainingDays + 7) {
-				return "Next Week";
-			} else {
-				let day = date.getDate();
-				let month = MONTHS[date.getMonth()];
-
-				date.setDate(date.getDate() + 6);
-
-				let endDay = date.getDate();
-				let endMonth = MONTHS[date.getMonth()];
-
-				return month + " " + day + " - " + endMonth + " " + endDay;
-			}
-		},
-		beginningOfWeek(date, i) {
-			if (i == 0 && this.weekHasEvents(date, i)) {
-				return true;
-			} else if (this.weekHasEvents(date, i)) {
-				if (this.startMonday) {
-					return date.getDay() === 1;
-				} else {
-					return date.getDay() === 0;
-				}
-			}
-		},
-		weekHasEvents(date, startingEventIndex) {
-			let hasEvents = false;
-			let daysRemaining = 7 - date.getDay();
-			for (
-				let i = startingEventIndex;
-				i < startingEventIndex + daysRemaining && !hasEvents;
-				i++
-			) {
-				if (this.eventsMap[this.nextMonth[i].stringDate]) hasEvents = true;
-			}
-			return hasEvents;
-		},
-		setRemainingDays(days) {
-			this.remainingDays = days;
-		},
 		getDayString(dateString) {
 			let day = dateString.substring(8, 10);
 			let monthString = dateString.substring(5, 7);
@@ -201,11 +187,40 @@ export default {
 			let month = MONTHS[monthIndex];
 			return month + " " + day;
 		},
+		getWeekString(i) {
+			if (i == 0) return "This Week";
+			if (i == 1) return "Next Week";
+
+			// find first day of week i weeks away
+			let date = new Date();
+			date.setDate(date.getDate() + (i - 1) * 7);
+			while (date.getDay() != 0) {
+				date.setDate(date.getDate() + 1);
+			}
+
+			let day = date.getDate();
+			let month = MONTHS[date.getMonth()];
+
+			date.setDate(date.getDate() + 6);
+
+			let endDay = date.getDate();
+			let endMonth = MONTHS[date.getMonth()];
+
+			return month + " " + day + " - " + endMonth + " " + endDay;
+		},
 		getClassName(id) {
-			return this.$store.state.classes.find(c => c.class_id === id).name;
+			return this.$store.state.classes.find(c => c.class_id == id).name;
 		},
 		getClassColour(id) {
-			return this.$store.state.classes.find(c => c.class_id === id).colour;
+			return this.$store.state.classes.find(c => c.class_id == id).colour;
+		},
+		getWeekNumber(d) {
+			d = new Date(+d);
+			d.setHours(0, 0, 0, 0);
+			d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+			var yearStart = new Date(d.getFullYear(), 0, 1);
+			var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+			return [d.getFullYear(), weekNo];
 		}
 	}
 };
