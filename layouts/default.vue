@@ -193,8 +193,7 @@ export default {
 				this.title = "tasks";
 				this.$router.push({ path: "/" });
 			}
-		},
-		getTransition(target) {}
+		}
 	}
 };
 </script>

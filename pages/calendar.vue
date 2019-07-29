@@ -145,9 +145,84 @@
 				</v-flex>
 			</div>
 			<div v-else :key="1">
-				<h1 class="week-header">
-					{{ getWeekString(weeksFromToday(new Date(), selectedDate)) }}
-				</h1>
+				<div class="calendar-header">
+					<h1 class="week-header">
+						{{ weekHeader }}
+					</h1>
+					<v-spacer />
+					<v-btn icon @click="changeWeek(-1)">
+						<v-icon color="gray">
+							chevron_left
+						</v-icon>
+					</v-btn>
+					<v-btn icon @click="changeWeek(1)">
+						<v-icon color="gray">
+							chevron_right
+						</v-icon>
+					</v-btn>
+				</div>
+				<div>
+					<v-calendar
+						id="classes"
+						ref="classes"
+						v-model="start"
+						:start="start"
+						:end="end"
+						:type="'custom-daily'"
+						:weekdays="[1, 2, 3, 4, 5]"
+						:weekday-format="
+							vTimestamp => {
+								return this.$options.shortdays[vTimestamp.weekday];
+							}
+						"
+						:max-days="5"
+						@change="updateWeek($event.start.date)"
+					>
+						<template v-slot:day-body="{ date }">
+							<template v-for="event in eventsMap[date]">
+								<div
+									v-if="event.duration"
+									:key="event.event_id"
+									:style="{
+										top: timeToY(event.time) + 'px',
+										height: minutesToPixels(event.duration) + 'px',
+										border:
+											'2px solid ' +
+											'var(--v-' +
+											getClassColour(event.class_id) +
+											'-base)'
+									}"
+									class="schedule-event with-time"
+									@click="open(event)"
+								>
+									<div
+										class="schedule-event--details"
+										:style="{
+											backgroundColor:
+												'var(--v-' + getClassColour(event.class_id) + '-base)',
+											width: event.weight + '%',
+											height: minutesToPixels(event.duration) - 3 + 'px'
+										}"
+									>
+										<div class="schedule-event--details__text-wrapper">
+											<div class="schedule-event--details__left">
+												<span class="schedule-event--details__title">{{
+													event.title
+												}}</span>
+												<span class="schedule-event--details__time">{{
+													event.time
+												}}</span>
+											</div>
+											<span class="schedule-event--details__weight">{{
+												event.weight + "%"
+											}}</span>
+										</div>
+									</div>
+								</div>
+							</template>
+						</template>
+					</v-calendar>
+				</div>
 			</div>
 		</transition>
 	</v-layout>
@@ -169,6 +244,7 @@ export default {
 	},
 	shortdays: SHORTDAYS,
 	data() {
+		let startString = this.dateToString(new Date());
 		let currentMonth = MONTHS[new Date().getMonth()];
 		let currentDay =
 			DAYSOFWEEK[new Date().getDay()] +
@@ -180,8 +256,9 @@ export default {
 			type: "month",
 			month: currentMonth,
 			day: currentDay,
-			start: new Date().toString(),
-			selectedDate: new Date()
+			start: startString,
+			end: "2050-01-01",
+			weekHeader: "This Week"
 		};
 	},
 	computed: {
@@ -202,11 +279,19 @@ export default {
 			return this.$store.state.showingEvents;
 		}
 	},
+	watch: {
+		showingEvents(newValue) {
+			if (newValue == false) {
+				this.updateWeek(this.start);
+			}
+		}
+	},
 	mounted() {
 		// scroll schedule view to show current time
 		if (this.showingEvents) {
 			this.scrollScheduleIntoView(new Date(), this.eventsMap);
 		}
+		this.updateWeek(this.start);
 	},
 	methods: {
 		scrollScheduleIntoView: helpers.scrollScheduleIntoView,
@@ -224,6 +309,17 @@ export default {
 				`${MONTHS[e.start.month - 1]} ${e.start.day} ${e.start.year}`
 			);
 		},
+		updateWeek(dateString) {
+			let weeksFromToday = this.weeksFromToday(
+				new Date(),
+				new Date(dateString + " 00:00")
+			);
+			this.weekHeader = this.getWeekString(weeksFromToday, true);
+
+			let date = new Date(this.start + " 00:00");
+			date.setDate(date.getDate() + (1 - date.getDay()));
+			this.start = this.dateToString(date);
+		},
 		getClassColour(id) {
 			return this.$store.state.classes.find(c => c.class_id == id).colour;
 		},
@@ -237,7 +333,19 @@ export default {
 			alert(event.title);
 		},
 		getWeekString: helpers.getWeekString,
-		weeksFromToday: helpers.weeksFromToday
+		weeksFromToday: helpers.weeksFromToday,
+		dateToString: helpers.dateToString,
+		changeWeek(direction) {
+			let date = new Date(this.start + " 00:00");
+
+			if (direction < 0) {
+				date.setDate(date.getDate() - 7);
+			} else {
+				date.setDate(date.getDate() + 7);
+			}
+
+			this.start = this.dateToString(date);
+		}
 	}
 };
 </script>
@@ -322,7 +430,8 @@ export default {
 	overflow-y: scroll;
 }
 
-#schedule {
+#schedule,
+#classes {
 	margin-left: -8px;
 }
 
@@ -379,6 +488,29 @@ export default {
 		opacity: 0.33;
 		top: 0;
 		pointer-events: none;
+	}
+}
+
+.week-header {
+	font-size: 18px;
+}
+
+#classes {
+	.v-calendar-daily_head-day {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: auto;
+		.v-calendar-daily_head-weekday {
+			font-weight: 700;
+			padding: 0;
+		}
+		.v-calendar-daily_head-day-label {
+			height: auto;
+			font-size: 12px;
+			line-height: 1.5;
+			padding: 0;
+		}
 	}
 }
 </style>

@@ -5,8 +5,7 @@
 				v-if="week.length > 0"
 				:class="{
 					weekheader: true,
-					longheader: i > 1,
-					topHeader: i == 0
+					longheader: i > 1
 				}"
 			>
 				{{ getWeekString(i) }}
@@ -234,6 +233,7 @@ export default {
 <style lang="scss">
 .page {
 	margin-bottom: 64px;
+	margin-top: -16px;
 }
 
 .weekheader {
@@ -241,9 +241,6 @@ export default {
 	padding-top: 16px;
 	&.longheader {
 		font-size: 18px;
-	}
-	&.topHeader {
-		padding-top: 0;
 	}
 }
 

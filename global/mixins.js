@@ -1,23 +1,37 @@
 import { MONTHS, DAYSOFWEEK, SHORTMONTHS } from "@/global/constants.js";
 
-export function getWeekString(i) {
+export function getWeekString(i, short) {
+	short = short || false;
+
 	if (i == 0) return "This Week";
 	if (i == 1) return "Next Week";
 
 	// find first day of week i weeks away
 	let date = new Date();
-	date.setDate(date.getDate() + (i - 1) * 7);
-	while (date.getDay() != 0) {
-		date.setDate(date.getDate() + 1);
+	if (i > 0) {
+		date.setDate(date.getDate() + (i - 1) * 7);
+		while (date.getDay() != 0) {
+			date.setDate(date.getDate() + 1);
+		}
+	} else {
+		date.setDate(date.getDate() + i * 7);
+		while (date.getDay() != 0) {
+			date.setDate(date.getDate() - 1);
+		}
 	}
-
 	let day = date.getDate();
-	let month = MONTHS[date.getMonth()];
+	let month = "";
+	short
+		? (month = SHORTMONTHS[date.getMonth()])
+		: (month = MONTHS[date.getMonth()]);
 
 	date.setDate(date.getDate() + 6);
 
 	let endDay = date.getDate();
-	let endMonth = MONTHS[date.getMonth()];
+	let endMonth = "";
+	short
+		? (endMonth = SHORTMONTHS[date.getMonth()])
+		: (endMonth = MONTHS[date.getMonth()]);
 
 	return month + " " + day + " - " + endMonth + " " + endDay;
 }
@@ -25,7 +39,8 @@ export function getWeekString(i) {
 export function getWeekNumber(d) {
 	d = new Date(+d);
 	d.setHours(0, 0, 0, 0);
-	d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+	// 	d.setDate(d.getDate() + 4 - (d.getDay() || 7)); for startMonday
+	d.setDate(d.getDate() + 4 - d.getDay());
 	var yearStart = new Date(d.getFullYear(), 0, 1);
 	var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
 	return [d.getFullYear(), weekNo];
@@ -37,8 +52,10 @@ export function weeksFromToday(today, target) {
 
 	let weekIndex = targetWeek[1] - currentWeek[1];
 
-	if (weekIndex < 0 || targetWeek[0] != currentWeek[0]) {
-		weekIndex += 52 * targeWeek[0] - currentWeek[0];
+	if (weekIndex < 0) {
+		weekIndex -= 52 * (currentWeek[0] - targetWeek[0]);
+	} else {
+		weekIndex += 52 * (targetWeek[0] - currentWeek[0]);
 	}
 	return weekIndex;
 }
@@ -47,10 +64,8 @@ export function scrollScheduleIntoView(date, eventsMap) {
 	const intervalSize = 40;
 	const schedule = document.getElementById("scheduleWrapper");
 
-	let month = date.getMonth() + 1;
-	month < 10 ? (month = "0" + month) : (month = month + "");
-	let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-	let dateString = `${date.getFullYear()}-${month}-${day}`;
+	let dateString = dateToString(date);
+
 	let today = new Date();
 	today.setHours(0, 0, 0, 0);
 	date.setHours(0, 0, 0, 0);
@@ -71,4 +86,11 @@ export function scrollScheduleIntoView(date, eventsMap) {
 	}
 
 	schedule.scrollTop = value - 75;
+}
+
+export function dateToString(date) {
+	let month = date.getMonth() + 1;
+	month < 10 ? (month = "0" + month) : (month = month + "");
+	let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+	return `${date.getFullYear()}-${month}-${day}`;
 }
