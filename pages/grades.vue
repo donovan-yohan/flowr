@@ -1,6 +1,8 @@
+<!-- Code for the grades view of flowr -->
 <template>
 	<v-container fluid grid-list-md>
 		<v-layout column>
+			<!-- Take the list of a users classes, display them all -->
 			<v-flex v-for="c in classes" :key="c.classes_id">
 				<v-card :color="c.colour" class="class-card">
 					<v-layout row>
@@ -12,10 +14,12 @@
 								<span class="class-time">{{
 									formatTime(c.start) + " - " + formatTime(c.end)
 								}}</span>
+								<!-- Check whether a time should be presenting itself as AM/PM -->
 								<span>
 									{{ c.end >= "12:00" ? "PM" : "AM" }}
 								</span>
 							</v-card-text>
+							<!-- Show which days classes are occuring on -->
 							<v-card-text>
 								<div class="class-day-wrapper">
 									<div
@@ -29,6 +33,7 @@
 							</v-card-text>
 						</div>
 						<v-spacer />
+						<!-- Allow grades to be toggled between being hidden and shown -->
 						<div class="grade-wrapper">
 							<h2 v-if="hidden" class="hidden">
 								--%
@@ -49,6 +54,7 @@ import { mapMutations } from "vuex";
 import { SHORTDAYS } from "@/global/constants.js";
 
 export default {
+	// Transition from different tabs within flowr
 	transition(to, from) {
 		if (to.name == "grades") {
 			return { name: "slide-right" };
@@ -61,6 +67,7 @@ export default {
 			daysOfWeek: SHORTDAYS
 		};
 	},
+	//Access global states for events, classes, and grades/grades hidden
 	computed: {
 		events() {
 			return this.$store.state.events;
@@ -73,9 +80,11 @@ export default {
 		}
 	},
 	methods: {
+		//Return the colour specified for the class
 		getClassColour(id) {
 			return this.$store.state.classes.find(c => c.class_id === id).colour;
 		},
+		// Formatting time to be in a AM/PM format rather than 24 hour format
 		formatTime(time) {
 			let hour = time.substring(0, 2);
 			if (time >= "13:00") hour = parseInt(hour) - 12;
@@ -87,6 +96,7 @@ export default {
 };
 </script>
 
+<!-- CSS Formatting -->
 <style lang="scss">
 .grid-list-md {
 	padding: 0;
