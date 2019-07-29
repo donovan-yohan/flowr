@@ -152,23 +152,27 @@
 					</v-calendar>
 				</v-flex>
 			</div>
+<!-- if key is 1, then we move to a weekly calendar view -->
 			<div v-else :key="1">
 				<div class="calendar-header">
 					<h1 class="week-header">
 						{{ weekHeader }}
 					</h1>
 					<v-spacer />
+					<!-- move back a week -->
 					<v-btn icon @click="changeWeek(-1)">
 						<v-icon color="gray">
 							chevron_left
 						</v-icon>
 					</v-btn>
+					<!-- move forward a week -->
 					<v-btn icon @click="changeWeek(1)">
 						<v-icon color="gray">
 							chevron_right
 						</v-icon>
 					</v-btn>
 				</div>
+				<!-- formatting/data for week view of classes -->
 				<div>
 					<v-calendar
 						id="classes"
@@ -192,6 +196,7 @@
 					>
 						<template v-slot:dayBody="{ date, timeToY, minutesToPixels }">
 							<template v-for="event in classMap[date]">
+								<!-- format the size of the event based on its given duration, and format colour based on the class it belongs to -->
 								<div
 									:key="event.event_id"
 									:style="{
@@ -203,6 +208,7 @@
 									class="class-event with-time"
 									@click="open(event)"
 								>
+								<!-- information on a specific event: time, location, details -->
 									<div class="class-event--details">
 										<span class="class-event--details__title">{{
 											event.title + "-" + event.section
@@ -231,6 +237,7 @@ import * as helpers from "@/global/mixins.js";
 
 export default {
 	key: to => to.fullPath,
+//transitions from different tabs within flowr
 	transition(to, from) {
 		if (to.name == "calendar") {
 			return { name: "slide-left" };
@@ -240,6 +247,7 @@ export default {
 	},
 	shortdays: SHORTDAYS,
 	data() {
+		//get current date, month, etc to instantiate calendar
 		let startString = this.dateToString(new Date());
 		let currentMonth = MONTHS[new Date().getMonth()];
 		let currentDay =
@@ -258,6 +266,7 @@ export default {
 			firstInterval: 24
 		};
 	},
+	//Access global states for events, classes, and heights of events
 	computed: {
 		events() {
 			return this.$store.state.events;
@@ -287,6 +296,7 @@ export default {
 		}
 	},
 	watch: {
+		// check if you need to show events or not
 		showingEvents(newValue) {
 			if (newValue == false) {
 				this.updateWeek(this.start);
@@ -302,9 +312,11 @@ export default {
 	},
 	methods: {
 		scrollScheduleIntoView: helpers.scrollScheduleIntoView,
+		// updates the month when navigating between months
 		updateMonth(e) {
 			this.month = MONTHS[e.start.month - 1];
 		},
+		// updates the day when navigating between days
 		updateDay(e) {
 			this.day =
 				DAYSOFWEEK[e.start.weekday] +
@@ -316,6 +328,7 @@ export default {
 				`${MONTHS[e.start.month - 1]} ${e.start.day} ${e.start.year}`
 			);
 		},
+		// updates the week when navigating between weeks
 		updateWeek(dateString) {
 			let weeksFromToday = this.weeksFromToday(
 				new Date(),
@@ -323,18 +336,22 @@ export default {
 			);
 			this.weekHeader = this.getWeekString(weeksFromToday, true);
 
+			//start of the week is the monday
 			let date = new Date(this.start + " 00:00");
 			date.setDate(date.getDate() + (1 - date.getDay()));
 			this.start = this.dateToString(date);
 
+			// for our purposes, end of week is a friday
 			let endOfWeek = new Date(+date);
 			endOfWeek.setDate(endOfWeek.getDate() + 4);
 			endOfWeek = this.dateToString(endOfWeek);
 
 			this.firstInterval = 24;
+
 			while (this.dateToString(date) != endOfWeek) {
 				if (this.classMap[this.dateToString(date)]) {
 					this.classMap[this.dateToString(date)].forEach(e => {
+						// view for the day in the week is based on when the first event occurs that day
 						if (e.time.substring(0, 2) < this.firstInterval)
 							this.firstInterval = e.time.substring(0, 2);
 					});
@@ -342,14 +359,16 @@ export default {
 				date.setDate(date.getDate() + 1);
 			}
 			this.firstInterval -= 1;
-
+			// if the first event is near the end of the day, or if no events are present, we set the screen to start at 9am
 			if (this.firstInterval > 20) {
 				this.firstInterval = 9;
 			}
 		},
+		// gets the colour based on the class the event belongs to
 		getClassColour(id) {
 			return this.$store.state.classes.find(c => c.class_id == id).colour;
 		},
+		// gets the current time, taking into account your timezone
 		getCurrentMinutes(date) {
 			return (
 				(new Date().getTime() - new Date(date).getTime()) / (1000 * 60) -
@@ -364,7 +383,7 @@ export default {
 		dateToString: helpers.dateToString,
 		changeWeek(direction) {
 			let date = new Date(this.start + " 00:00");
-
+			//decrements or increments the days by 7, depending on which way you progress through weeks
 			if (direction < 0) {
 				date.setDate(date.getDate() - 7);
 			} else {
