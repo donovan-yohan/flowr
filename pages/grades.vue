@@ -30,12 +30,22 @@
 						</div>
 						<v-spacer />
 						<div class="grade-wrapper">
-							<h2 v-if="hidden" class="hidden">
-								--%
-							</h2>
-							<h2 v-else>
-								{{ c.grade + "%" }}
-							</h2>
+							<v-card-title>
+								<transition name="fade" mode="out-in">
+									<h1 v-if="hidden" :key="'hidden'" class="hidden">
+										--%
+									</h1>
+									<h1 v-else :key="'unhidden'">
+										{{ c.grade + "%" }}
+									</h1>
+								</transition>
+							</v-card-title>
+							<v-card-text>
+								<span class="class-location">{{ c.location }}</span>
+							</v-card-text>
+							<v-card-text>
+								<span>{{ c.professor }}</span>
+							</v-card-text>
 						</div>
 					</v-layout>
 				</v-card>
@@ -111,7 +121,8 @@ export default {
 	}
 }
 
-.class-time {
+.class-time,
+.class-location {
 	font-size: 16px;
 }
 
@@ -128,14 +139,11 @@ export default {
 }
 
 .grade-wrapper {
-	display: inline-flex;
+	display: flex;
+	flex-direction: column;
 	color: white;
-	padding: 16px;
-	align-items: center;
-	font-size: 16px;
-	h2 {
-		transition: 1.2s;
-	}
+	align-items: flex-end;
+	text-align: right;
 	.hidden {
 		opacity: 0.5;
 	}

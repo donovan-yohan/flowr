@@ -5,10 +5,12 @@ export const state = () => ({
 	events: [
 		{
 			title: "Test 4",
+			details: "",
 			event_id: 5,
-			date: "2019-07-29",
-			time: "01:00",
+			date: "2019-08-03",
+			time: "12:00",
 			duration: 45,
+			open: false,
 			location: "LH1024",
 			weight: 15,
 			class_id: 4,
@@ -22,10 +24,12 @@ export const state = () => ({
 		},
 		{
 			title: "Test",
+			details: "",
 			event_id: 1,
 			date: "2019-07-24",
-			time: "04:00",
+			time: "09:30",
 			duration: 30,
+			open: false,
 			location: "SC1001",
 			weight: 15,
 			class_id: 0,
@@ -38,30 +42,15 @@ export const state = () => ({
 			]
 		},
 		{
-			title: "Test2",
+			title: "August 2",
+			details: "",
 			event_id: 2,
-			date: "2019-07-24",
-			time: "05:00",
-			duration: 60,
-			location: "BS1005",
-			weight: 50,
-			class_id: 1,
-			completed: false,
-			checklist: [
-				{
-					name: "",
-					completed: false
-				}
-			]
-		},
-		{
-			title: "Test3",
-			event_id: 3,
-			date: "2019-07-26",
-			time: "08:00",
-			duration: 90,
-			location: "CU204",
-			weight: 25,
+			date: "2019-08-17",
+			time: "09:30",
+			duration: 30,
+			open: false,
+			location: "SC1001",
+			weight: 15,
 			class_id: 0,
 			completed: false,
 			checklist: [
@@ -73,64 +62,15 @@ export const state = () => ({
 		},
 		{
 			title: "August",
+			details: "",
 			event_id: 4,
 			date: "2019-08-17",
 			time: "18:00",
 			duration: 90,
+			open: false,
 			location: "Online",
 			weight: 25,
 			class_id: 4,
-			completed: false,
-			checklist: [
-				{
-					name: "",
-					completed: false
-				}
-			]
-		},
-		{
-			title: "Assignment",
-			event_id: 6,
-			date: "2019-08-17",
-			time: "20:00",
-			duration: 60,
-			location: "Online",
-			weight: 20,
-			class_id: 5,
-			completed: false,
-			checklist: [
-				{
-					name: "",
-					completed: false
-				}
-			]
-		},
-		{
-			title: "July",
-			event_id: 7,
-			date: "2019-07-29",
-			time: "13:00",
-			duration: 30,
-			location: "MLS",
-			weight: 25,
-			class_id: 6,
-			completed: false,
-			checklist: [
-				{
-					name: "",
-					completed: false
-				}
-			]
-		},
-		{
-			title: "bad",
-			event_id: 8,
-			date: "2019-08-29",
-			time: "13:00",
-			duration: 30,
-			location: "Somewhere",
-			weight: 25,
-			class_id: 3,
 			completed: false,
 			checklist: [
 				{
@@ -311,9 +251,11 @@ export const mutations = {
 					if (c.days[weekdayIndex] > 0) {
 						let classEvent = {
 							title: c.name,
+							details: "",
 							event_id: state.classEventIDtracker++,
 							date: helpers.dateToString(current),
 							time: c.start,
+							open: false,
 							duration: c.duration,
 							location: c.location,
 							section: c.section,

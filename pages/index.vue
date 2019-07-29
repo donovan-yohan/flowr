@@ -11,73 +11,89 @@
 				{{ getWeekString(i) }}
 			</h2>
 			<template>
-				<v-layout v-for="e in eventsMap[i]" :key="e.event_id" row>
-					<div v-ripple class="task-wrapper" @click="() => {}">
-						<div class="task-folded">
-							<div class="task-info">
-								<v-btn icon class="task-checkbox">
-									<v-icon color="gray">
-										check_circle_outline
-									</v-icon>
-								</v-btn>
-								<span
-									:style="{
-										maxWidth:
-											'calc(100vw - 32px - 30px - 80px' + e.weight / 1.25 + ')'
-									}"
-									class="task-title"
-								>
-									{{ e.title }}
-								</span>
-								<span
-									:style="{
-										color: 'var(--v-' + getClassColour(e.class_id) + '-base)'
-									}"
-									class="task-weight"
-								>{{ e.weight + "%" }}</span>
-								<div
-									:style="{
-										width: e.weight / 1.25 + 'px',
-										backgroundColor:
-											'var(--v-' + getClassColour(e.class_id) + '-base)'
-									}"
-									class="task-weight-bar"
-								/>
-							</div>
+				<transition-group name="fade">
+					<v-layout v-for="e in eventsMap[i]" :key="e.event_id" row>
+						<div v-ripple class="task-wrapper" @click="() => {}">
+							<div class="task-folded">
+								<div class="task-info">
+									<v-btn icon class="task-checkbox">
+										<v-icon color="gray">
+											check_circle_outline
+										</v-icon>
+									</v-btn>
+									<span
+										:style="{
+											maxWidth:
+												'calc(100vw - 32px - 30px - 80px' +
+												e.weight / 1.25 +
+												')'
+										}"
+										class="task-title"
+									>
+										{{ e.title }}
+									</span>
+									<span
+										:style="{
+											color: 'var(--v-' + getClassColour(e.class_id) + '-base)'
+										}"
+										class="task-weight"
+									>{{ e.weight + "%" }}</span>
+									<div
+										:style="{
+											width: e.weight / 1.25 + 'px',
+											backgroundColor:
+												'var(--v-' + getClassColour(e.class_id) + '-base)'
+										}"
+										class="task-weight-bar"
+									/>
+								</div>
 
-							<div class="task-class-info">
-								<span v-if="!unfolded" class="task-class-date">
-									{{ `${getDayString(e.date, i)}` }}
-								</span>
-								<div
-									:style="{
-										backgroundColor:
-											'var(--v-' + getClassColour(e.class_id) + '-base)'
-									}"
-									class="task-class-wrapper"
-								>
-									<span v-if="unfolded" class="task-class-name">{{
-										getClassName(e.class_id)
-									}}</span>
+								<div class="task-class-info">
+									<transition name="fade" mode="out-in">
+										<span
+											v-if="!unfolded"
+											:key="e.class_id + 'U1'"
+											class="task-class-date"
+										>
+											{{ `${getDayString(e.date, i)}` }}
+										</span>
+									</transition>
+									<transition name="fade" mode="out-in">
+										<div
+											:style="{
+												backgroundColor:
+													'var(--v-' + getClassColour(e.class_id) + '-base)'
+											}"
+											class="task-class-wrapper"
+										>
+											<span
+												v-if="unfolded"
+												:key="e.class_id + 'F1'"
+												class="task-class-name"
+											>{{ getClassName(e.class_id) }}</span>
+										</div>
+									</transition>
 								</div>
 							</div>
+							<transition name="fade" mode="out-in">
+								<div v-if="unfolded" class="task-unfolded">
+									<div class="task-detail">
+										<div class="task-detail-date">
+											{{ getDetailDayString(e.date) }}
+										</div>
+										<div class="task-detail-time">
+											{{ `${getTimeString(e.time, e.duration)}` }}
+										</div>
+									</div>
+									<v-spacer />
+									<div v-if="unfolded" class="task-location">
+										{{ e.location }}
+									</div>
+								</div>
+							</transition>
 						</div>
-						<div v-if="unfolded" class="task-unfolded">
-							<div class="task-detail">
-								<div class="task-detail-date">
-									{{ getDetailDayString(e.date) }}
-								</div>
-								<div class="task-detail-time">
-									{{ `${getTimeString(e.time, e.duration)}` }}
-								</div>
-							</div>
-							<v-spacer />
-							<div v-if="unfolded" class="task-location">
-								{{ e.location }}
-							</div>
-						</div>
-					</div>
-				</v-layout>
+					</v-layout>
+				</transition-group>
 			</template>
 		</div>
 	</v-layout>
@@ -165,13 +181,12 @@ export default {
 				return "Tomorrow";
 			else if (week == 0 || week == 1) {
 				let oneWeekFromToday = new Date();
-				oneWeekFromToday = oneWeekFromToday.setDate(
-					oneWeekFromToday.getDate() + 7
-				);
 
+				oneWeekFromToday.setDate(oneWeekFromToday.getDate() + 7);
 				if (date.getDate() <= oneWeekFromToday.getDate()) {
 					return `${weekday}`;
 				}
+				console.log("made it?");
 			} else {
 				return `${month} ${day}`;
 			}

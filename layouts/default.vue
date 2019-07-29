@@ -1,11 +1,6 @@
 <template>
 	<v-app class="app-wrapper">
-		<v-toolbar
-			:clipped-left="clipped"
-			fixed
-			app
-			color="white"
-		>
+		<v-toolbar :clipped-left="clipped" fixed app color="white">
 			<transition name="fade" mode="out-in">
 				<v-toolbar-title :key="title" class="text-capitalize">
 					{{ title }}
@@ -44,12 +39,7 @@
 				</div>
 				<div v-else :key="2" class="calendar-toolbar">
 					<div class="calendar-switch">
-						<v-btn
-							small
-							flat
-							round
-							@click="toggleCalendar()"
-						>
+						<v-btn small flat round @click="toggleCalendar()">
 							<span :class="{ 'active-calendar': showingEvents }">
 								Tasks
 							</span>
@@ -98,7 +88,7 @@
 			<v-btn
 				v-if="title == 'tasks'"
 				color="flowrOrange"
-				style="bottom: 72px"
+				class="fab-button"
 				fixed
 				bottom
 				right
@@ -122,36 +112,17 @@
 			color="white"
 			mandatory
 		>
-			<v-btn
-				color="flowrYellow"
-				flat
-				value="classes"
-				to="grades"
-				nuxt
-			>
+			<v-btn color="flowrYellow" flat value="classes" to="grades" nuxt>
 				<span>Classes</span>
 				<v-icon>spellcheck</v-icon>
 			</v-btn>
 
-			<v-btn
-				color="flowrOrange"
-				flat
-				value="tasks"
-				to="/"
-				exact
-				nuxt
-			>
+			<v-btn color="flowrOrange" flat value="tasks" to="/" exact nuxt>
 				<span>Tasks</span>
 				<v-icon>list</v-icon>
 			</v-btn>
 
-			<v-btn
-				color="flowrRed"
-				flat
-				value="calendar"
-				to="calendar"
-				nuxt
-			>
+			<v-btn color="flowrRed" flat value="calendar" to="calendar" nuxt>
 				<span>Calendar</span>
 				<v-icon>calendar_today</v-icon>
 			</v-btn>
@@ -316,6 +287,10 @@ export default {
 	}
 }
 
+.fab-button {
+	bottom: 72px;
+}
+
 /* iPhone X Series adjustments */
 @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
 	.v-bottom-nav {
@@ -323,6 +298,9 @@ export default {
 	}
 	.v-item-group.v-bottom-nav .v-btn {
 		padding-bottom: 28px;
+	}
+	.fab-button {
+		bottom: 90px;
 	}
 }
 
@@ -333,6 +311,9 @@ export default {
 	.v-item-group.v-bottom-nav .v-btn {
 		padding-bottom: 28px;
 	}
+	.fab-button {
+		bottom: 90px;
+	}
 }
 
 @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
@@ -342,6 +323,9 @@ export default {
 	.v-item-group.v-bottom-nav .v-btn {
 		padding-bottom: 28px;
 	}
+	.fab-button {
+		bottom: 90px;
+	}
 }
 
 @media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) {
@@ -350,6 +334,9 @@ export default {
 	}
 	.v-item-group.v-bottom-nav .v-btn {
 		padding-bottom: 28px;
+	}
+	.fab-button {
+		bottom: 90px;
 	}
 }
 </style>

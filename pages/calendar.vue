@@ -7,6 +7,11 @@
 						{{ month }}
 					</h1>
 					<v-spacer />
+					<v-btn icon @click="start = dateToString(new Date())">
+						<v-icon color="gray">
+							today
+						</v-icon>
+					</v-btn>
 					<v-btn icon @click="$refs.calendar.prev()">
 						<v-icon color="gray">
 							chevron_left
@@ -150,6 +155,11 @@
 						{{ weekHeader }}
 					</h1>
 					<v-spacer />
+					<v-btn icon @click="start = dateToString(new Date())">
+						<v-icon color="gray">
+							today
+						</v-icon>
+					</v-btn>
 					<v-btn icon @click="changeWeek(-1)">
 						<v-icon color="gray">
 							chevron_left
@@ -182,7 +192,9 @@
 						class="classes-wrapper"
 						@change="updateWeek($event.start.date)"
 					>
-						<template v-slot:dayBody="{ date, timeToY, minutesToPixels }">
+						<template
+							v-slot:dayBody="{ date, timeToY, minutesToPixels, present, past }"
+						>
 							<template v-for="event in classMap[date]">
 								<div
 									:key="event.event_id"
@@ -207,6 +219,36 @@
 										}}</span>
 									</div>
 								</div>
+							</template>
+							<template v-if="present">
+								<div
+									class="current-time past-time"
+									:style="{
+										height:
+											minutesToPixels(
+												getCurrentMinutes(date) - firstInterval * intervalHeight
+											) + 'px'
+									}"
+								/>
+								<div
+									id="currentTime"
+									class="current-time"
+									:style="{
+										borderBottom: '2px solid var(--v-flowrRed-base)',
+										top:
+											minutesToPixels(
+												getCurrentMinutes(date) - firstInterval * intervalHeight
+											) + 'px'
+									}"
+								/>
+							</template>
+							<template v-if="past">
+								<div
+									class="current-time past-time"
+									:style="{
+										height: '100%'
+									}"
+								/>
 							</template>
 						</template>
 					</v-calendar>
