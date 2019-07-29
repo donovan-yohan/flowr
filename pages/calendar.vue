@@ -397,6 +397,7 @@ export default {
 };
 </script>
 
+<!-- CSS Styling -->
 <style lang="scss">
 .v-content {
 	background: white;
