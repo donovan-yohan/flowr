@@ -196,29 +196,91 @@
 							v-slot:dayBody="{ date, timeToY, minutesToPixels, present, past }"
 						>
 							<template v-for="event in classMap[date]">
-								<div
+								<v-menu
 									:key="event.event_id"
-									:style="{
-										top: timeToY(event.time) + 'px',
-										height: minutesToPixels(event.duration) + 'px',
-										backgroundColor:
-											'var(--v-' + getClassColour(event.class_id) + '-base)'
-									}"
-									class="class-event with-time"
-									@click="open(event)"
+									full-width
+									offset-x
+									transition="scale-transition"
+									max-height="255px"
 								>
-									<div class="class-event--details">
-										<span class="class-event--details__title">{{
-											event.title + "-" + event.section
-										}}</span>
-										<span class="class-event--details__time">{{
-											getTimeString(event.time, event.duration)
-										}}</span>
-										<span class="class-event--details__location">{{
-											event.location
-										}}</span>
-									</div>
-								</div>
+									<template v-slot:activator="{ on }">
+										<div
+											v-ripple
+											:style="{
+												top: timeToY(event.time) + 'px',
+												height: minutesToPixels(event.duration) + 'px',
+												backgroundColor:
+													'var(--v-' + getClassColour(event.class_id) + '-base)'
+											}"
+											class="class-event with-time"
+											v-on="on"
+										>
+											<div class="class-event--details">
+												<span class="class-event--details__title">{{
+													event.title + "-" + event.section
+												}}</span>
+												<span class="class-event--details__time">{{
+													getTimeString(event.time, event.duration)
+												}}</span>
+												<span class="class-event--details__location">{{
+													event.location
+												}}</span>
+											</div>
+										</div>
+									</template>
+									<v-card flat class="event-preview">
+										<v-toolbar
+											class="event-preview__toolbar"
+											:color="getClassColour(event.class_id)"
+											dark
+											flat
+										>
+											<v-toolbar-title class="event-preview__title">
+												{{ event.title + "-" + event.section }}
+											</v-toolbar-title>
+											<v-spacer />
+											<v-btn icon class="event-preview__button">
+												<v-icon>edit</v-icon>
+											</v-btn>
+											<v-btn icon class="event-preview__button">
+												<v-icon>delete</v-icon>
+											</v-btn>
+										</v-toolbar>
+										<v-card-title primary-title>
+											<div class="event-preview__detail">
+												<span class="event-preview__line-item event-preview__date">
+													<v-icon>calendar_today</v-icon>
+													<span>{{ getDetailDayString(event.date) }}</span>
+												</span>
+												<span class="event-preview__line-item event-preview__time">
+													<v-icon>access_time</v-icon>
+													<span>{{ getTimeString(event.time, event.duration) }}</span>
+												</span>
+												<span class="event-preview__line-item event-preview__location">
+													<v-icon>location_on</v-icon>
+													<span>{{ event.location }}</span>
+												</span>
+											</div>
+
+											<div class="event-preview__checklist">
+												<span
+													v-if="event.checklist.length == 0"
+													class="event-preview__empty-list"
+												>
+													No todos
+												</span>
+												<span
+													v-for="item in event.checklist"
+													v-else
+													:key="item.name + random()"
+													class="event-preview__list-item"
+												>
+													{{ item.name }}
+												</span>
+											</div>
+										</v-card-title>
+									</v-card>
+								</v-menu>
 							</template>
 							<template v-if="present">
 								<div
@@ -396,6 +458,7 @@ export default {
 		getWeekString: helpers.getWeekString,
 		weeksFromToday: helpers.weeksFromToday,
 		dateToString: helpers.dateToString,
+		getDetailDayString: helpers.getDetailDayString,
 		changeWeek(direction) {
 			let date = new Date(this.start + " 00:00");
 
@@ -600,6 +663,44 @@ export default {
 				font-size: 13px;
 				margin-bottom: 2px;
 			}
+		}
+	}
+}
+
+.event-preview {
+	min-width: 200px;
+	.v-card__title {
+		padding-top: 12px;
+	}
+	.event-preview__toolbar {
+		font-size: 14px;
+	}
+
+	.event-preview__title {
+		font-weight: 700;
+	}
+	.event-preview__detail {
+		display: flex;
+		flex-direction: column;
+		border-bottom: 1px solid var(--v-gray-base);
+		width: 100%;
+	}
+	.event-preview__line-item {
+		display: flex;
+		align-items: center;
+		i {
+			padding: 6px 8px 6px 0;
+			font-size: 20px;
+		}
+	}
+	.event-preview__checklist {
+		margin-top: 8px;
+		overflow: scroll;
+		// font-size * line height * number of lines
+		max-height: calc(1em * 1.5 * 3);
+		.event-preview__empty-list {
+			color: var(--v-gray-base);
+			font-style: italic;
 		}
 	}
 }

@@ -194,26 +194,7 @@ export default {
 		getWeekString: helpers.getWeekString,
 		parseEndTime: helpers.parseEndTime,
 		getTimeString: helpers.getTimeString,
-		getDetailDayString(dateString) {
-			const today = new Date();
-			const date = new Date(`${dateString} ${"00:00"}`);
-			let weekday = DAYSOFWEEK[date.getDay()];
-			const month = SHORTMONTHS[date.getMonth()];
-			const day = date.getDate();
-
-			if (
-				today.getDate() == date.getDate() &&
-				today.getMonth() == date.getMonth()
-			)
-				weekday = "Today";
-			else if (
-				today.getDate() + 1 == date.getDate() &&
-				today.getMonth() == date.getMonth()
-			)
-				weekday = "Tomorrow";
-
-			return `${weekday}, ${month} ${day}`;
-		},
+		getDetailDayString: helpers.getDetailDayString,
 		getClassName(id) {
 			return this.$store.state.classes.find(c => c.class_id == id).name;
 		},

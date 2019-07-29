@@ -6,7 +6,7 @@
 					<v-layout row>
 						<div>
 							<v-card-title>
-								<h1>{{ c.name }}</h1>
+								<h1>{{ c.name + "-" + c.section }}</h1>
 							</v-card-title>
 							<v-card-text>
 								<span class="class-time">{{

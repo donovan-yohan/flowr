@@ -100,7 +100,9 @@ export function parseEndTime(time, duration) {
 	t.setMinutes(t.getMinutes() + duration);
 	let hours = t.getHours();
 	if (hours < 10) hours = `0${hours}`;
-	return `${hours}:${t.getMinutes()}`;
+	let minutes = t.getMinutes();
+	if (minutes < 10) minutes = `0${minutes}`;
+	return `${hours}:${minutes}`;
 }
 
 export function getTimeString(time, duration) {
@@ -117,4 +119,22 @@ export function formatTime(time) {
 	else if (hour[0] === "0") hour = hour[1];
 
 	return hour + time.substring(2, 5);
+}
+
+export function getDetailDayString(dateString) {
+	const today = new Date();
+	const date = new Date(`${dateString} ${"00:00"}`);
+	let weekday = DAYSOFWEEK[date.getDay()];
+	const month = SHORTMONTHS[date.getMonth()];
+	const day = date.getDate();
+
+	if (today.getDate() == date.getDate() && today.getMonth() == date.getMonth())
+		weekday = "Today";
+	else if (
+		today.getDate() + 1 == date.getDate() &&
+		today.getMonth() == date.getMonth()
+	)
+		weekday = "Tomorrow";
+
+	return `${weekday}, ${month} ${day}`;
 }
