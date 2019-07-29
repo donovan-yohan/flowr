@@ -1,4 +1,5 @@
 import { MONTHS, DAYSOFWEEK, SHORTMONTHS } from "@/global/constants.js";
+import * as helpers from "@/global/mixins.js";
 
 export const state = () => ({
 	events: [
@@ -11,11 +12,11 @@ export const state = () => ({
 			location: "LH1024",
 			weight: 15,
 			class_id: 4,
-			completed: "",
+			completed: false,
 			checklist: [
 				{
 					name: "",
-					completed: ""
+					completed: false
 				}
 			]
 		},
@@ -28,11 +29,11 @@ export const state = () => ({
 			location: "SC1001",
 			weight: 15,
 			class_id: 0,
-			completed: "",
+			completed: false,
 			checklist: [
 				{
 					name: "",
-					completed: ""
+					completed: false
 				}
 			]
 		},
@@ -45,11 +46,11 @@ export const state = () => ({
 			location: "BS1005",
 			weight: 50,
 			class_id: 1,
-			completed: "",
+			completed: false,
 			checklist: [
 				{
 					name: "",
-					completed: ""
+					completed: false
 				}
 			]
 		},
@@ -62,11 +63,11 @@ export const state = () => ({
 			location: "CU204",
 			weight: 25,
 			class_id: 0,
-			completed: "",
+			completed: false,
 			checklist: [
 				{
 					name: "",
-					completed: ""
+					completed: false
 				}
 			]
 		},
@@ -79,11 +80,11 @@ export const state = () => ({
 			location: "Online",
 			weight: 25,
 			class_id: 4,
-			completed: "",
+			completed: false,
 			checklist: [
 				{
 					name: "",
-					completed: ""
+					completed: false
 				}
 			]
 		},
@@ -96,11 +97,11 @@ export const state = () => ({
 			location: "Online",
 			weight: 20,
 			class_id: 5,
-			completed: "",
+			completed: false,
 			checklist: [
 				{
 					name: "",
-					completed: ""
+					completed: false
 				}
 			]
 		},
@@ -113,11 +114,11 @@ export const state = () => ({
 			location: "MLS",
 			weight: 25,
 			class_id: 6,
-			completed: "",
+			completed: false,
 			checklist: [
 				{
 					name: "",
-					completed: ""
+					completed: false
 				}
 			]
 		},
@@ -130,11 +131,11 @@ export const state = () => ({
 			location: "Somewhere",
 			weight: 25,
 			class_id: 3,
-			completed: "",
+			completed: false,
 			checklist: [
 				{
 					name: "",
-					completed: ""
+					completed: false
 				}
 			]
 		}
@@ -148,9 +149,12 @@ export const state = () => ({
 			start: "08:30",
 			end: "09:20",
 			duration: 50,
-			start_date: "",
-			end_date: "",
-			days: [1, 0, 1, 0, 1]
+			start_date: "2019-07-01",
+			end_date: "2019-08-20",
+			days: [1, 0, 1, 0, 1],
+			location: "place",
+			section: "Q",
+			professor: "person"
 		},
 		{
 			class_id: 1,
@@ -160,9 +164,12 @@ export const state = () => ({
 			start: "12:30",
 			end: "13:50",
 			duration: 80,
-			start_date: "",
-			end_date: "",
-			days: [0, 1, 0, 1, 0]
+			start_date: "2019-07-01",
+			end_date: "019-08-31",
+			days: [0, 1, 0, 1, 0],
+			location: "place",
+			section: "J",
+			professor: "person"
 		},
 		{
 			class_id: 2,
@@ -172,9 +179,12 @@ export const state = () => ({
 			start: "17:30",
 			end: "18:50",
 			duration: 80,
-			start_date: "",
-			end_date: "",
-			days: [1, 0, 1, 0, 0]
+			start_date: "2019-07-01",
+			end_date: "2019-07-31",
+			days: [1, 0, 1, 0, 0],
+			location: "place",
+			section: "A3",
+			professor: "person"
 		},
 		{
 			class_id: 3,
@@ -184,9 +194,12 @@ export const state = () => ({
 			start: "19:00",
 			end: "21:50",
 			duration: 170,
-			start_date: "",
-			end_date: "",
-			days: [1, 0, 0, 0, 0]
+			start_date: "2019-07-01",
+			end_date: "2019-07-31",
+			days: [1, 0, 0, 0, 0],
+			location: "place",
+			section: "A5",
+			professor: "person"
 		},
 		{
 			class_id: 4,
@@ -196,9 +209,12 @@ export const state = () => ({
 			start: "09:30",
 			end: "10:20",
 			duration: 50,
-			start_date: "",
-			end_date: "",
-			days: [1, 0, 1, 0, 1]
+			start_date: "2019-07-01",
+			end_date: "2019-08-31",
+			days: [1, 0, 1, 0, 1],
+			location: "place",
+			section: "B5",
+			professor: "person"
 		},
 		{
 			class_id: 5,
@@ -208,9 +224,12 @@ export const state = () => ({
 			start: "19:00",
 			end: "22:50",
 			duration: 80,
-			start_date: "",
-			end_date: "",
-			days: [0, 0, 0, 1, 0]
+			start_date: "2019-07-01",
+			end_date: "2019-08-31",
+			days: [0, 0, 0, 1, 0],
+			location: "place",
+			section: "A",
+			professor: "person"
 		},
 		{
 			class_id: 6,
@@ -220,14 +239,21 @@ export const state = () => ({
 			start: "11:30",
 			end: "12:50",
 			duration: 80,
-			start_date: "",
-			end_date: "",
-			days: [0, 1, 0, 1, 0]
+			start_date: "2019-07-14",
+			end_date: "2019-09-21",
+			days: [0, 1, 0, 1, 0],
+			location: "place",
+			section: "V",
+			professor: "person"
 		}
 	],
+	classEvents: [],
 	gradesHidden: true,
 	unfolded: true,
-	showingEvents: true
+	showingEvents: true,
+	eventIDtracker: 0,
+	classIDtracker: 0,
+	classEventIDtracker: 0
 });
 
 export const mutations = {
@@ -239,5 +265,62 @@ export const mutations = {
 	},
 	toggleCalendar(state) {
 		state.showingEvents = !state.showingEvents;
+	},
+	generateClassEvents(state, class_id) {
+		let filter = state.classes.filter(classItem => {
+			return classItem.class_id == class_id;
+		});
+		let c = filter[0];
+		let current = new Date(`${c.start_date} ${c.start}`);
+		let end = new Date(`${c.end_date} ${c.end}`);
+		while (current.getTime() < end.getTime()) {
+			let weekdayIndex = current.getDay();
+			if (weekdayIndex > 0 && weekdayIndex < 6) {
+				weekdayIndex -= 1;
+				if (c.days[weekdayIndex] > 0) {
+					let classEvent = {
+						title: c.name,
+						event_id: state.classEventIDtracker++,
+						date: helpers.dateToString(current),
+						time: c.start,
+						duration: c.duration,
+						location: c.location,
+						class_id: c.class_id,
+						checklist: []
+					};
+					state.classEvents.push(classEvent);
+				}
+			}
+			current.setDate(current.getDate() + 1);
+		}
+	},
+
+	// testing function
+	generateAllClassEvents(state) {
+		state.classes.forEach(c => {
+			let current = new Date(`${c.start_date} ${c.start}`);
+			let end = new Date(`${c.end_date} ${c.end}`);
+			while (current.getTime() < end.getTime()) {
+				let weekdayIndex = current.getDay();
+				if (weekdayIndex > 0 && weekdayIndex < 6) {
+					weekdayIndex -= 1;
+					if (c.days[weekdayIndex] > 0) {
+						let classEvent = {
+							title: c.name,
+							event_id: state.classEventIDtracker++,
+							date: helpers.dateToString(current),
+							time: c.start,
+							duration: c.duration,
+							location: c.location,
+							section: c.section,
+							class_id: c.class_id,
+							checklist: []
+						};
+						state.classEvents.push(classEvent);
+					}
+				}
+				current.setDate(current.getDate() + 1);
+			}
+		});
 	}
 };

@@ -94,3 +94,27 @@ export function dateToString(date) {
 	let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
 	return `${date.getFullYear()}-${month}-${day}`;
 }
+
+export function parseEndTime(time, duration) {
+	let t = new Date(`01-01-01 ${time}`);
+	t.setMinutes(t.getMinutes() + duration);
+	let hours = t.getHours();
+	if (hours < 10) hours = `0${hours}`;
+	return `${hours}:${t.getMinutes()}`;
+}
+
+export function getTimeString(time, duration) {
+	let endTime = parseEndTime(time, duration);
+	let end = formatTime(endTime);
+	let start = formatTime(time);
+
+	return `${start} - ${end} ${endTime >= "12:00" ? "PM" : "AM"}`;
+}
+
+export function formatTime(time) {
+	let hour = time.substring(0, 2);
+	if (time >= "12:00") hour = parseInt(hour) - 12;
+	else if (hour[0] === "0") hour = hour[1];
+
+	return hour + time.substring(2, 5);
+}

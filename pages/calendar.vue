@@ -169,6 +169,9 @@
 						:start="start"
 						:end="end"
 						:type="'custom-daily'"
+						:first-interval="firstInterval"
+						:interval-count="24 - firstInterval"
+						:interval-height="intervalHeight"
 						:weekdays="[1, 2, 3, 4, 5]"
 						:weekday-format="
 							vTimestamp => {
@@ -176,47 +179,32 @@
 							}
 						"
 						:max-days="5"
+						class="classes-wrapper"
 						@change="updateWeek($event.start.date)"
 					>
-						<template v-slot:day-body="{ date }">
-							<template v-for="event in eventsMap[date]">
+						<template v-slot:dayBody="{ date, timeToY, minutesToPixels }">
+							<template v-for="event in classMap[date]">
 								<div
-									v-if="event.duration"
 									:key="event.event_id"
 									:style="{
 										top: timeToY(event.time) + 'px',
 										height: minutesToPixels(event.duration) + 'px',
-										border:
-											'2px solid ' +
-											'var(--v-' +
-											getClassColour(event.class_id) +
-											'-base)'
+										backgroundColor:
+											'var(--v-' + getClassColour(event.class_id) + '-base)'
 									}"
-									class="schedule-event with-time"
+									class="class-event with-time"
 									@click="open(event)"
 								>
-									<div
-										class="schedule-event--details"
-										:style="{
-											backgroundColor:
-												'var(--v-' + getClassColour(event.class_id) + '-base)',
-											width: event.weight + '%',
-											height: minutesToPixels(event.duration) - 3 + 'px'
-										}"
-									>
-										<div class="schedule-event--details__text-wrapper">
-											<div class="schedule-event--details__left">
-												<span class="schedule-event--details__title">{{
-													event.title
-												}}</span>
-												<span class="schedule-event--details__time">{{
-													event.time
-												}}</span>
-											</div>
-											<span class="schedule-event--details__weight">{{
-												event.weight + "%"
-											}}</span>
-										</div>
+									<div class="class-event--details">
+										<span class="class-event--details__title">{{
+											event.title + "-" + event.section
+										}}</span>
+										<span class="class-event--details__time">{{
+											getTimeString(event.time, event.duration)
+										}}</span>
+										<span class="class-event--details__location">{{
+											event.location
+										}}</span>
 									</div>
 								</div>
 							</template>
@@ -258,7 +246,9 @@ export default {
 			day: currentDay,
 			start: startString,
 			end: "2050-01-01",
-			weekHeader: "This Week"
+			weekHeader: "This Week",
+			firstInterval: 24,
+			intervalHeight: 60
 		};
 	},
 	computed: {
@@ -273,6 +263,13 @@ export default {
 			this.$store.state.events.forEach(e =>
 				(map[e.date] = map[e.date] || []).push(e)
 			);
+			return map;
+		},
+		classMap() {
+			const map = {};
+			this.$store.state.classEvents.forEach(e => {
+				(map[e.date] = map[e.date] || []).push(e);
+			});
 			return map;
 		},
 		showingEvents() {
@@ -319,6 +316,26 @@ export default {
 			let date = new Date(this.start + " 00:00");
 			date.setDate(date.getDate() + (1 - date.getDay()));
 			this.start = this.dateToString(date);
+
+			let endOfWeek = new Date(+date);
+			endOfWeek.setDate(endOfWeek.getDate() + 4);
+			endOfWeek = this.dateToString(endOfWeek);
+
+			this.firstInterval = 24;
+			while (this.dateToString(date) != endOfWeek) {
+				if (this.classMap[this.dateToString(date)]) {
+					this.classMap[this.dateToString(date)].forEach(e => {
+						if (e.time.substring(0, 2) < this.firstInterval)
+							this.firstInterval = e.time.substring(0, 2);
+					});
+				}
+				date.setDate(date.getDate() + 1);
+			}
+			this.firstInterval -= 1;
+
+			if (this.firstInterval > 20) {
+				this.firstInterval = 9;
+			}
 		},
 		getClassColour(id) {
 			return this.$store.state.classes.find(c => c.class_id == id).colour;
@@ -345,7 +362,8 @@ export default {
 			}
 
 			this.start = this.dateToString(date);
-		}
+		},
+		getTimeString: helpers.getTimeString
 	}
 };
 </script>
@@ -429,6 +447,11 @@ export default {
 	max-height: calc(100vh - 56px - 56px - 32px - 39px);
 	overflow-y: scroll;
 }
+.classes-wrapper {
+	// total height - toolbar - footer - margin - header
+	max-height: calc(100vh - 56px - 56px - 45px - 39px);
+	overflow-y: scroll;
+}
 
 #schedule,
 #classes {
@@ -510,6 +533,27 @@ export default {
 			font-size: 12px;
 			line-height: 1.5;
 			padding: 0;
+		}
+	}
+	.class-event {
+		max-width: 100%;
+		overflow: hidden;
+		text-align: left;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		color: white;
+		font-size: 12px;
+		cursor: pointer;
+		left: 0px;
+		position: absolute;
+		.class-event--details {
+			display: flex;
+			flex-direction: column;
+			padding: 4px;
+			line-height: 1;
+			.class-event--details__title {
+				font-weight: 700;
+			}
 		}
 	}
 }

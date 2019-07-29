@@ -177,20 +177,8 @@ export default {
 			}
 		},
 		getWeekString: helpers.getWeekString,
-		parseEndTime(time, duration) {
-			let t = new Date(`01-01-01 ${time}`);
-			t.setMinutes(t.getMinutes() + duration);
-			let hours = t.getHours();
-			if (hours < 10) hours = `0${hours}`;
-			return `${hours}:${t.getMinutes()}`;
-		},
-		getTimeString(time, duration) {
-			let endTime = this.parseEndTime(time, duration);
-			let end = this.formatTime(endTime);
-			let start = this.formatTime(time);
-
-			return `${start} - ${end} ${endTime >= "12:00" ? "PM" : "AM"}`;
-		},
+		parseEndTime: helpers.parseEndTime,
+		getTimeString: helpers.getTimeString,
 		getDetailDayString(dateString) {
 			const today = new Date();
 			const date = new Date(`${dateString} ${"00:00"}`);
@@ -219,13 +207,7 @@ export default {
 		},
 		getWeekNumber: helpers.getWeekNumber,
 		weeksFromToday: helpers.weeksFromToday,
-		formatTime(time) {
-			let hour = time.substring(0, 2);
-			if (time >= "12:00") hour = parseInt(hour) - 12;
-			else if (hour[0] === "0") hour = hour[1];
-
-			return hour + time.substring(2, 5);
-		}
+		formatTime: helpers.formatTime
 	}
 };
 </script>

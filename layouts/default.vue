@@ -162,6 +162,9 @@ export default {
 		},
 		showingEvents() {
 			return this.$store.state.showingEvents;
+		},
+		classesGenerated() {
+			return this.$store.state.classEvents.length > 0;
 		}
 	},
 	mounted() {
@@ -170,9 +173,17 @@ export default {
 			.querySelector("a.v-btn--active")
 			.getAttribute("value");
 		this.title = navValue;
+		if (!this.classesGenreated) {
+			this.generateAllClassEvents();
+		}
 	},
 	methods: {
-		...mapMutations(["toggleHidden", "toggleUnfold", "toggleCalendar"]),
+		...mapMutations([
+			"toggleHidden",
+			"toggleUnfold",
+			"toggleCalendar",
+			"generateAllClassEvents"
+		]),
 		...mapActions(["scrollScheduleIntoView"]),
 		swipeLeft(title) {
 			if (title == "tasks") {
