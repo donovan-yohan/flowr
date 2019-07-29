@@ -1,5 +1,8 @@
+<!-- Tasks tab - defaults as the homepage for loading the app -->
+
 <template>
 	<v-layout column class="page">
+		<!-- for all the weeks in eventsMap -->
 		<div v-for="(week, i) in eventsMap" :key="i">
 			<h2
 				v-if="week.length > 0"
@@ -12,6 +15,7 @@
 			</h2>
 			<template>
 				<transition-group name="fade">
+					<!-- for all the events in the eventsMap index for this week -->
 					<v-layout v-for="e in eventsMap[i]" :key="e.event_id" row>
 						<div v-ripple class="task-wrapper" @click="() => {}">
 							<div class="task-folded">
@@ -21,6 +25,7 @@
 											check_circle_outline
 										</v-icon>
 									</v-btn>
+									<!-- title of the task -->
 									<span
 										:style="{
 											maxWidth:
@@ -32,12 +37,14 @@
 									>
 										{{ e.title }}
 									</span>
+									<!-- percentage weight of the task (Ex. a 20% assignment)  -->
 									<span
 										:style="{
 											color: 'var(--v-' + getClassColour(e.class_id) + '-base)'
 										}"
 										class="task-weight"
 									>{{ e.weight + "%" }}</span>
+									<!-- bar representing a % of the total course grade (ex a 25% assignment is given a bar of 20px, out of a total possible bar length of 80px) -->
 									<div
 										:style="{
 											width: e.weight / 1.25 + 'px',
@@ -47,7 +54,7 @@
 										class="task-weight-bar"
 									/>
 								</div>
-
+								<!-- other information including the task date, name, location, and time -->
 								<div class="task-class-info">
 									<transition name="fade" mode="out-in">
 										<span
@@ -106,6 +113,7 @@ import * as helpers from "@/global/mixins.js";
 
 export default {
 	key: to => to.fullPath,
+	//transitions between calendar and grades tabs, and the tasks tab
 	transition(to, from) {
 		if (to.name == "calendar" || (from && from.name == "grades")) {
 			return { name: "slide-left" };
@@ -123,6 +131,7 @@ export default {
 		events() {
 			return this.$store.state.events;
 		},
+		//eventsMap takes an unsorted array of events, and sorts events into their respective weeks
 		eventsMap() {
 			let weekArray = this.$store.state.events.reduce((r, e, i, a) => {
 				// find week e belongs in as an index
@@ -162,6 +171,7 @@ export default {
 		}
 	},
 	methods: {
+		//determines what the date should be displayed as
 		getDayString(dateString, week) {
 			const date = new Date(`${dateString} ${"00:00"}`);
 			const today = new Date();
@@ -173,12 +183,16 @@ export default {
 				today.getDate() == date.getDate() &&
 				today.getMonth() == date.getMonth()
 			)
+			/* if the date requested is the same as the current date, rather than
+			putting July 5th, we put "Today"*/
 				return "Today";
 			else if (
 				today.getDate() + 1 == date.getDate() &&
 				today.getMonth() == date.getMonth()
 			)
+			// if the date requested is tomorrows date, the date is displayed as "tomorrow"
 				return "Tomorrow";
+			// if the date requested is in the next week
 			else if (week == 0 || week == 1) {
 				let oneWeekFromToday = new Date();
 
@@ -186,14 +200,17 @@ export default {
 				if (date.getDate() <= oneWeekFromToday.getDate()) {
 					return `${weekday}`;
 				}
-				console.log("made it?");
-			} else {
+			}
+			//else, we return the day requested
+			else {
 				return `${month} ${day}`;
 			}
 		},
 		getWeekString: helpers.getWeekString,
 		parseEndTime: helpers.parseEndTime,
 		getTimeString: helpers.getTimeString,
+		// similar to function above, except now all dates beyond today/tomorrow have a day of the week, a date, and a month
+		// Ex. "Monday July 10"
 		getDetailDayString(dateString) {
 			const today = new Date();
 			const date = new Date(`${dateString} ${"00:00"}`);
@@ -214,9 +231,11 @@ export default {
 
 			return `${weekday}, ${month} ${day}`;
 		},
+		//gets the name of the course
 		getClassName(id) {
 			return this.$store.state.classes.find(c => c.class_id == id).name;
 		},
+		//gets the colour assigned to the course
 		getClassColour(id) {
 			return this.$store.state.classes.find(c => c.class_id == id).colour;
 		},
@@ -226,7 +245,7 @@ export default {
 	}
 };
 </script>
-
+<!-- CSS Styling -->
 <style lang="scss">
 .page {
 	margin-bottom: 64px;
