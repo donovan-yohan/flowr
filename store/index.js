@@ -251,6 +251,7 @@ export const state = () => ({
 	gradesHidden: true,
 	unfolded: true,
 	showingEvents: true,
+	intervalHeight: 60,
 	eventIDtracker: 0,
 	classIDtracker: 0,
 	classEventIDtracker: 0
@@ -293,6 +294,9 @@ export const mutations = {
 			}
 			current.setDate(current.getDate() + 1);
 		}
+	},
+	setIntervalHeight(state, newHeight) {
+		state.intervalHeight = newHeight;
 	},
 
 	// testing function

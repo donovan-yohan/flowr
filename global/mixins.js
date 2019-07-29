@@ -113,7 +113,7 @@ export function getTimeString(time, duration) {
 
 export function formatTime(time) {
 	let hour = time.substring(0, 2);
-	if (time >= "12:00") hour = parseInt(hour) - 12;
+	if (time >= "13:00") hour = parseInt(hour) - 12;
 	else if (hour[0] === "0") hour = hour[1];
 
 	return hour + time.substring(2, 5);

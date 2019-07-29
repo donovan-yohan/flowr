@@ -247,8 +247,7 @@ export default {
 			start: startString,
 			end: "2050-01-01",
 			weekHeader: "This Week",
-			firstInterval: 24,
-			intervalHeight: 60
+			firstInterval: 24
 		};
 	},
 	computed: {
@@ -274,6 +273,9 @@ export default {
 		},
 		showingEvents() {
 			return this.$store.state.showingEvents;
+		},
+		intervalHeight() {
+			return this.$store.state.intervalHeight;
 		}
 	},
 	watch: {
@@ -549,10 +551,12 @@ export default {
 		.class-event--details {
 			display: flex;
 			flex-direction: column;
-			padding: 4px;
-			line-height: 1;
+			padding: 3px;
+			line-height: 1.1;
 			.class-event--details__title {
 				font-weight: 700;
+				font-size: 13px;
+				margin-bottom: 2px;
 			}
 		}
 	}

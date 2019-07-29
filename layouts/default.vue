@@ -15,16 +15,13 @@
 			<transition name="fade" mode="out-in" />
 
 			<transition name="fade" mode="out-in">
-				<v-btn
-					v-if="title === 'classes'"
-					:key="0"
-					icon
-					@click="toggleHidden()"
-				>
-					<v-icon color="flowrYellow">
-						{{ gradesHidden ? "visibility_off" : "visibility" }}
-					</v-icon>
-				</v-btn>
+				<div v-if="title === 'classes'" :key="0">
+					<v-btn icon @click="toggleHidden()">
+						<v-icon color="flowrYellow">
+							{{ gradesHidden ? "visibility_off" : "visibility" }}
+						</v-icon>
+					</v-btn>
+				</div>
 				<div v-else-if="title === 'tasks'" :key="1">
 					<v-btn
 						icon
@@ -45,26 +42,46 @@
 						</v-icon>
 					</v-btn>
 				</div>
-				<div v-else :key="2" class="calendar-switch">
-					<v-btn
-						small
-						flat
-						round
-						@click="toggleCalendar()"
+				<div v-else :key="2" class="calendar-toolbar">
+					<div class="calendar-switch">
+						<v-btn
+							small
+							flat
+							round
+							@click="toggleCalendar()"
+						>
+							<span :class="{ 'active-calendar': showingEvents }">
+								Tasks
+							</span>
+							<span :class="{ 'active-calendar': !showingEvents }">
+								Classes
+							</span>
+						</v-btn>
+					</div>
+					<v-menu
+						bottom
+						left
+						content-class="calendar-class-menu"
+						:close-on-content-click="false"
 					>
-						<span :class="{ 'active-calendar': showingEvents }">
-							Tasks
-						</span>
-						<span :class="{ 'active-calendar': !showingEvents }">
-							Classes
-						</span>
-					</v-btn>
+						<template v-slot:activator="{ on }">
+							<v-btn icon v-on="on">
+								<v-icon>more_vert</v-icon>
+							</v-btn>
+						</template>
+						<v-slider
+							v-if="!showingEvents"
+							v-model="intervalHeight"
+							append-icon="zoom_in"
+							prepend-icon="zoom_out"
+							:min="20"
+							:max="100"
+							@click:append="zoomIn"
+							@click:prepend="zoomOut"
+						/>
+					</v-menu>
 				</div>
 			</transition>
-
-			<v-btn icon>
-				<v-icon>more_vert</v-icon>
-			</v-btn>
 		</v-toolbar>
 
 		<v-content
@@ -165,6 +182,14 @@ export default {
 		},
 		classesGenerated() {
 			return this.$store.state.classEvents.length > 0;
+		},
+		intervalHeight: {
+			get: function() {
+				return this.$store.state.intervalHeight;
+			},
+			set: function(newHeight) {
+				this.$store.commit("setIntervalHeight", newHeight);
+			}
 		}
 	},
 	mounted() {
@@ -204,6 +229,20 @@ export default {
 				this.title = "tasks";
 				this.$router.push({ path: "/" });
 			}
+		},
+		zoomOut() {
+			let val =
+				this.$store.state.intervalHeight - 5 < 20
+					? 20
+					: this.$store.state.intervalHeight - 5;
+			this.$store.commit("setIntervalHeight", val);
+		},
+		zoomIn() {
+			let val =
+				this.$store.state.intervalHeight + 5 > 100
+					? 100
+					: this.$store.state.intervalHeight + 5;
+			this.$store.commit("setIntervalHeight", val);
 		}
 	}
 };
@@ -233,6 +272,11 @@ export default {
 	overflow-x: hidden;
 }
 
+.calendar-toolbar {
+	display: flex;
+	align-items: center;
+}
+
 .calendar-switch {
 	button {
 		margin: 0;
@@ -246,6 +290,11 @@ export default {
 		font-weight: 700;
 		color: var(--v-flowrRed-base) !important;
 	}
+}
+
+.calendar-class-menu {
+	background-color: white;
+	padding: 0 4px;
 }
 
 .v-content {
