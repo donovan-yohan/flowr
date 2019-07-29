@@ -1,0 +1,19 @@
+Test Case Log
+
+Test Name:
+Test Case Author:
+Tester Name:
+Project Name:
+Test Cycle ID:
+Date Tested:
+
+================================================================================
+
+Test Case ID:
+Test Objective ID:
+Category:
+Condition:
+Expected Results:
+Actual Results:
+
+--------------------------------------------------------------------------------
