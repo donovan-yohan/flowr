@@ -1,23 +1,28 @@
+<!-- Functionality for the calendar view of flowr -->
 <template>
 	<v-layout column>
 		<transition name="fade" mode="out-in">
+			<!-- Key 0 is for viewing the calendar in a monthly persepctive -->
 			<div v-if="showingEvents" :key="0">
 				<div class="calendar-header">
 					<h1 id="header" :key="month">
 						{{ month }}
 					</h1>
 					<v-spacer />
+					<!-- See the previous month's schedule -->
 					<v-btn icon @click="$refs.calendar.prev()">
 						<v-icon color="gray">
 							chevron_left
 						</v-icon>
 					</v-btn>
+					<!-- See the next month's schedule -->
 					<v-btn icon @click="$refs.calendar.next()">
 						<v-icon color="gray">
 							chevron_right
 						</v-icon>
 					</v-btn>
 				</div>
+				<!-- Formatting for the calendar -->
 				<v-flex text-xs-center class="calendar-wrapper">
 					<v-calendar
 						id="month-calendar"
@@ -37,11 +42,14 @@
 						<template v-slot:day="{ date, past }">
 							<template v-if="eventsMap[date]">
 								<div class="weight-wrapper">
+									<!-- Ensure events are added to the proper dates -->
 									<div
 										v-for="event in eventsMap[date]"
 										:key="event.event_id"
 										:style="{
 											height: event.weight + '%',
+											/* Style the calendar events by the colour of their class that they belong to
+											Fade if the event has already passed */
 											background:
 												'var(--v-' + getClassColour(event.class_id) + '-base)'
 										}"
