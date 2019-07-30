@@ -1,6 +1,11 @@
 <template>
 	<v-app class="app-wrapper">
-		<v-toolbar :clipped-left="clipped" fixed app color="white">
+		<v-toolbar
+			:clipped-left="clipped"
+			fixed
+			app
+			color="white"
+		>
 			<transition name="fade" mode="out-in">
 				<v-toolbar-title :key="title" class="text-capitalize">
 					{{ title }}
@@ -18,10 +23,7 @@
 					</v-btn>
 				</div>
 				<div v-else-if="title === 'tasks'" :key="1">
-					<v-btn
-						icon
-						@click="toggleMissingGrades()"
-					>
+					<v-btn icon @click="toggleMissingGrades()">
 						<v-icon color="flowrOrange">
 							spellcheck
 						</v-icon>
@@ -35,7 +37,12 @@
 				</div>
 				<div v-else :key="2" class="calendar-toolbar">
 					<div class="calendar-switch">
-						<v-btn small flat round @click="toggleCalendar()">
+						<v-btn
+							small
+							flat
+							round
+							@click="toggleCalendar()"
+						>
 							<span :class="{ 'active-calendar': showingEvents }">
 								Tasks
 							</span>
@@ -108,17 +115,36 @@
 			color="white"
 			mandatory
 		>
-			<v-btn color="flowrYellow" flat value="classes" to="grades" nuxt>
+			<v-btn
+				color="flowrYellow"
+				flat
+				value="classes"
+				to="grades"
+				nuxt
+			>
 				<span>Classes</span>
 				<v-icon>spellcheck</v-icon>
 			</v-btn>
 
-			<v-btn color="flowrOrange" flat value="tasks" to="/" exact nuxt>
+			<v-btn
+				color="flowrOrange"
+				flat
+				value="tasks"
+				to="/"
+				exact
+				nuxt
+			>
 				<span>Tasks</span>
 				<v-icon>list</v-icon>
 			</v-btn>
 
-			<v-btn color="flowrRed" flat value="calendar" to="calendar" nuxt>
+			<v-btn
+				color="flowrRed"
+				flat
+				value="calendar"
+				to="calendar"
+				nuxt
+			>
 				<span>Calendar</span>
 				<v-icon>calendar_today</v-icon>
 			</v-btn>

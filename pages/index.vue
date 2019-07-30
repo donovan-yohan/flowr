@@ -1,17 +1,23 @@
 <template>
 	<v-layout column class="page">
-		<div :key="6000" v-if="showMissingGrades" class="missing-wrapper">
-			<h2 class="weekheader">Missing Grades</h2>
-			<div class="no-missing" v-if="pastEventsMap.length == 0">All caught up!</div>
+		<div v-if="showMissingGrades" :key="6000" class="missing-wrapper">
+			<h2 class="weekheader">
+				Missing Grades
+			</h2>
+			<div v-if="pastEventsMap.length == 0" class="no-missing">
+				All caught up!
+			</div>
 			<template>
 				<v-layout v-for="e in pastEventsMap" :key="e.event_id" row>
 					<div class="task-wrapper">
 						<div class="task-folded">
 							<div class="task-info">
-								<div class="class-colour-icon"
-										 :style="{
-												backgroundColor: 'var(--v-' + getClassColour(e.class_id) + '-base)'
-										 }"/>
+								<div
+									class="class-colour-icon"
+									:style="{
+										backgroundColor: 'var(--v-' + getClassColour(e.class_id) + '-base)'
+									}"
+								/>
 								<span
 									:style="{
 										maxWidth:
@@ -54,27 +60,26 @@
 								</div>
 							</div>
 						</div>
-							<div class="task-unfolded">
-								<div class="task-detail">
-									<div class="task-detail-date">
-										{{ getDetailDayString(e.date) }}
-									</div>
-									<div class="task-detail-time">
-										{{ `${getTimeString(e.time, e.duration)}` }}
-									</div>
+						<div class="task-unfolded">
+							<div class="task-detail">
+								<div class="task-detail-date">
+									{{ getDetailDayString(e.date) }}
 								</div>
-								<v-spacer />
-								<v-text-field
-									class="grade-input"
-									prefix="%"
-									mask="##"
-									reverse
-									:color="getClassColour(e.class_id)"
-									:value="e.grade" @blur="e.grade = $event.target.value"
-								>
-
-								</v-text-field>
+								<div class="task-detail-time">
+									{{ `${getTimeString(e.time, e.duration)}` }}
+								</div>
 							</div>
+							<v-spacer />
+							<v-text-field
+								class="grade-input"
+								prefix="%"
+								mask="##"
+								reverse
+								:color="getClassColour(e.class_id)"
+								:value="e.grade"
+								@blur="e.grade = $event.target.value"
+							/>
+						</div>
 						</transition>
 					</div>
 				</v-layout>

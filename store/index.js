@@ -201,14 +201,14 @@ export const mutations = {
 	},
 	deleteClass(state, id) {
 		let events = state.events.filter(e => {
-			return e.class_id != id
+			return e.class_id != id;
 		});
 		let classes = state.classes.filter(c => {
-			return c.class_id != id
+			return c.class_id != id;
 		});
 		let classEvents = state.classEvents.filter(ce => {
-			return ce.class_id != id
-		})
+			return ce.class_id != id;
+		});
 		state.events = events;
 		state.classes = classes;
 		state.classEvents = classEvents;

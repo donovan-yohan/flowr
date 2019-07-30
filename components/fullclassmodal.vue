@@ -11,7 +11,7 @@
 			</v-toolbar-title>
 			<v-spacer />
 			<v-btn icon @click="hidden = !hidden">
-				<v-icon>{{ hidden ? 'visibility_off' : 'visibility'}}</v-icon>
+				<v-icon>{{ hidden ? 'visibility_off' : 'visibility' }}</v-icon>
 			</v-btn>
 			<v-dialog v-model="dialog">
 				<template v-slot:activator="{ on }">
@@ -120,13 +120,16 @@
 									mask="##"
 									reverse
 									:color="getClassColour(e.class_id)"
-									:value="e.grade" @blur="e.grade = $event.target.value"
-								>
-								</v-text-field>
+									:value="e.grade"
+									@blur="e.grade = $event.target.value"
+								/>
 								</span>
 							</transition>
 						</div>
 						<div
+							<
+							div
+						/>
 					</div>
 				</div>
 			</v-layout>
@@ -150,10 +153,10 @@ export default {
 		name: String,
 		section: String,
 		colour: String,
-		class_id: Number,
-		start_date: String,
+		classId: Number,
+		startDate: String,
 		start: String,
-		end_date: String,
+		endDate: String,
 		end: String,
 		duration: Number,
 		grade: Number,
@@ -171,14 +174,14 @@ export default {
 	computed: {
 		classEventsMap() {
 			let map = this.$store.state.events.filter(e => {
-				return e.weight && (e.class_id == this.class_id)
+				return e.weight && (e.class_id == this.class_id);
 			});
 			map.sort((a, b) => {
 				if (a.time < b.time) return -1;
 				else if (a.time > b.time) return 1;
 				else return 0;
 			});
-			return map
+			return map;
 		},
 	},
 	methods: {

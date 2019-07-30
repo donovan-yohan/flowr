@@ -10,7 +10,12 @@
 					scrollable
 				>
 					<template v-slot:activator="{ on }">
-						<v-card v-on="on" v-ripple :color="c.colour" class="class-card">
+						<v-card
+							v-ripple
+							:color="c.colour"
+							class="class-card"
+							v-on="on"
+						>
 							<v-layout row>
 								<div>
 									<v-card-title>
@@ -60,9 +65,7 @@
 					</template>
 					<fullclassmodal
 						v-bind="c"
-						@exit="
-							modal = false;
-						"
+						@exit="modal = false"
 						@delete="deleteClass(c.class_id)"
 					/>
 				</v-dialog>
@@ -86,12 +89,12 @@ export default {
 		}
 	},
 	components: {
-		fullclassmodal,
+		fullclassmodal
 	},
 	data() {
 		return {
 			daysOfWeek: SHORTDAYS,
-			modal: false,
+			modal: false
 		};
 	},
 	computed: {

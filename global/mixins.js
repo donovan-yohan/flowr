@@ -109,10 +109,9 @@ export function getTimeString(time, duration) {
 	let endTime = parseEndTime(time, duration);
 	let end = formatTime(endTime);
 	let start = formatTime(time);
-  if(duration != 0)
-	   return `${start} - ${end} ${endTime >= "12:00" ? "PM" : "AM"}`;
-  else
-    return `${end} ${endTime >= "12:00" ? "PM" : "AM"}`;
+	if (duration != 0)
+		return `${start} - ${end} ${endTime >= "12:00" ? "PM" : "AM"}`;
+	else return `${end} ${endTime >= "12:00" ? "PM" : "AM"}`;
 }
 
 export function formatTime(time) {

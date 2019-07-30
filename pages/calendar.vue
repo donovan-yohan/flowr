@@ -379,8 +379,8 @@ export default {
 		eventsMap() {
 			const map = {};
 			this.$store.state.events.forEach(e => {
-				if(e.weight) {
-					(map[e.date] = map[e.date] || []).push(e)
+				if (e.weight) {
+					(map[e.date] = map[e.date] || []).push(e);
 				}
 			});
 			return map;
