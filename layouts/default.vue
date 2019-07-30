@@ -21,6 +21,25 @@
 							{{ gradesHidden ? "visibility_off" : "visibility" }}
 						</v-icon>
 					</v-btn>
+					<v-dialog
+						v-model="buildModal"
+
+						fullscreen
+						hide-overlay
+						transition="slide-x-transition"
+						scrollable
+					>
+						<template v-slot:activator="{ on }">
+							<v-btn icon v-on="on">
+								<v-icon color="flowrYellow">add</v-icon>
+							</v-btn>
+						</template>
+						<buildclassmodal
+							@exit="
+								buildModal = false;
+							"
+						/>
+					</v-dialog>
 				</div>
 				<div v-else-if="title === 'tasks'" :key="1">
 					<v-btn icon @click="toggleMissingGrades()">
@@ -154,6 +173,7 @@
 
 <script>
 import { mapMutations, mapActions } from "vuex";
+import buildclassmodal from "~/components/buildclassmodal.vue";
 
 export default {
 	data() {
@@ -163,6 +183,9 @@ export default {
 			miniVariant: false,
 			title: ""
 		};
+	},
+	components: {
+			buildclassmodal
 	},
 	computed: {
 		gradesHidden() {
