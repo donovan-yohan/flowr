@@ -1,4 +1,4 @@
-import { MONTHS, DAYSOFWEEK, SHORTMONTHS } from "@/global/constants.js";
+import { MONTHS, DAYSOFWEEK, SHORTMONTHS } from "../global/constants.js";
 
 export function getWeekString(i, short) {
 	short = short || false;
