@@ -4,10 +4,12 @@
 			<v-btn icon dark @click="$emit('exit')">
 				<v-icon>chevron_left</v-icon>
 			</v-btn>
-			<v-toolbar-title class="modal-toolbar__title">{{
-				title
-			}}</v-toolbar-title>
-			<v-spacer></v-spacer>
+			<v-toolbar-title class="modal-toolbar__title">
+				{{
+					title
+				}}
+			</v-toolbar-title>
+			<v-spacer />
 			<v-dialog v-model="dialog">
 				<template v-slot:activator="{ on }">
 					<v-btn icon class="event-preview__button" v-on="on">
@@ -58,20 +60,24 @@
 			<v-list>
 				<v-list-tile v-for="item in checklist" class="list-item">
 					<v-list-tile-action>
-						<v-checkbox v-model="item.completed"></v-checkbox>
+						<v-checkbox v-model="item.completed" />
 					</v-list-tile-action>
 					<v-list-tile-content>
-						<v-list-tile-title :class="{ completed: item.completed }">{{
-							item.name
-						}}</v-list-tile-title>
+						<v-list-tile-title :class="{ completed: item.completed }">
+							{{
+								item.name
+							}}
+						</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
 				<v-list-tile class="list-item">
 					<v-list-tile-action>
 						<v-btn icon :disabled="!newTodo" @click="addTodo(newTodo)">
-							<v-icon :color="newTodo ? colour : 'gray'"
-								>add_circle_outline</v-icon
+							<v-icon
+								:color="newTodo ? colour : 'gray'"
 							>
+								add_circle_outline
+							</v-icon>
 						</v-btn>
 					</v-list-tile-action>
 					<v-list-tile-content>
@@ -80,7 +86,7 @@
 								v-model="newTodo"
 								label="Add an item"
 								single-line
-							></v-text-field>
+							/>
 						</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
@@ -93,7 +99,7 @@
 			 </v-textarea> -->
 		</v-card-text>
 
-		<div style="flex: 1 1 auto;"></div>
+		<div style="flex: 1 1 auto;" />
 	</v-card>
 </template>
 

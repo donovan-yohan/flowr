@@ -1,6 +1,11 @@
 <template>
 	<v-card flat class="event-preview">
-		<v-toolbar class="event-preview__toolbar" :color="colour" dark flat>
+		<v-toolbar
+			class="event-preview__toolbar"
+			:color="colour"
+			dark
+			flat
+		>
 			<v-toolbar-title class="event-preview__title">
 				{{ title }}
 			</v-toolbar-title>
@@ -36,20 +41,19 @@
 					</v-btn>
 				</template>
 				<fullmodal
+					:id="id"
 					:title="title"
 					:colour="colour"
 					:date="date"
 					:weight="weight"
 					:location="location"
 					:checklist="checklist"
-					:id="id"
 					@exit="
 						modal = false;
 						dialog = false;
 					"
-					v-on:delete="$emit('delete')"
-				>
-				</fullmodal>
+					@delete="$emit('delete')"
+				/>
 			</v-dialog>
 		</v-toolbar>
 		<v-card-title primary-title>
