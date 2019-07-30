@@ -4,7 +4,7 @@ import * as helpers from "@/global/mixins.js";
 export const state = () => ({
 	events: [
 		{
-			title: "Test 4",
+			title: "Assignment 1",
 			details: "",
 			event_id: 5,
 			date: "2019-08-03",
@@ -23,14 +23,14 @@ export const state = () => ({
 			]
 		},
 		{
-			title: "Test 6 lol",
+			title: "Assignment 2",
 			details: "",
 			event_id: 10,
 			date: "2019-08-04",
 			time: "16:00",
 			duration: 0,
 			location: "LH1024",
-			weight: 25,
+			weight: 30,
 			grade: 0,
 			class_id: 0,
 			completed: false,
@@ -42,33 +42,14 @@ export const state = () => ({
 			]
 		},
 		{
-			title: "Test",
+			title: "Midterm",
 			details: "",
 			event_id: 1,
-			date: "2019-07-24",
+			date: "2019-08-19",
 			time: "09:30",
-			duration: 30,
+			duration: 90,
 			location: "SC1001",
-			weight: 15,
-			grade: 0,
-			class_id: 0,
-			completed: false,
-			checklist: [
-				{
-					name: "",
-					completed: false
-				}
-			]
-		},
-		{
-			title: "August 2",
-			details: "",
-			event_id: 2,
-			date: "2019-08-17",
-			time: "09:30",
-			duration: 30,
-			location: "SC1001",
-			weight: 15,
+			weight: 45,
 			grade: 0,
 			class_id: 0,
 			completed: false,
@@ -99,16 +80,149 @@ export const state = () => ({
 			]
 		},
 		{
-			title: "Big Assignment 2",
+			title: "Assignment 1",
 			details: "",
-			event_id: 7,
-			date: "2019-08-08",
+			event_id: 21,
+			date: "2019-07-27",
 			time: "13:00",
+			duration: 0,
+			location: "LH1024",
+			weight: 10,
+			grade: 0,
+			class_id: 1,
+			completed: false,
+			checklist: [
+				{
+					name: "",
+					completed: false
+				}
+			]
+		},
+		{
+			title: "Assignment 2",
+			details: "",
+			event_id: 22,
+			date: "2019-08-10",
+			time: "16:00",
+			duration: 0,
+			location: "LH1024",
+			weight: 20,
+			grade: 0,
+			class_id: 1,
+			completed: false,
+			checklist: [
+				{
+					name: "",
+					completed: false
+				}
+			]
+		},
+		{
+			title: "Midterm",
+			details: "",
+			event_id: 24,
+			date: "2019-08-19",
+			time: "12:30",
+			duration: 90,
+			location: "N2001",
+			weight: 55,
+			grade: 0,
+			class_id: 1,
+			completed: false,
+			checklist: [
+				{
+					name: "",
+					completed: false
+				}
+			]
+		},
+		{
+			title: "Big Assignment",
+			details: "",
+			event_id: 25,
+			date: "2019-08-11",
+			time: "16:30",
 			duration: 80,
-			location: "SC1001",
+			location: "LH2020",
+			weight: 70,
+			grade: 0,
+			class_id: 1,
+			completed: false,
+			checklist: [
+				{
+					name: "",
+					completed: false
+				}
+			]
+		},
+		{
+			title: "Assignment 1",
+			details: "",
+			event_id: 31,
+			date: "2019-07-27",
+			time: "11:00",
+			duration: 0,
+			location: "LH1024",
+			weight: 25,
+			grade: 0,
+			class_id: 2,
+			completed: false,
+			checklist: [
+				{
+					name: "",
+					completed: false
+				}
+			]
+		},
+		{
+			title: "Assignment 2",
+			details: "",
+			event_id: 32,
+			date: "2019-08-10",
+			time: "18:00",
+			duration: 0,
+			location: "LH1024",
 			weight: 40,
 			grade: 0,
-			class_id: 0,
+			class_id: 2,
+			completed: false,
+			checklist: [
+				{
+					name: "",
+					completed: false
+				}
+			]
+		},
+		{
+			title: "Midterm",
+			details: "",
+			event_id: 34,
+			date: "2019-08-19",
+			time: "19:30",
+			duration: 90,
+			location: "N2001",
+			weight: 45,
+			grade: 0,
+			class_id: 2,
+			completed: false,
+			checklist: [
+				{
+					name: "",
+					completed: false
+				}
+			]
+		},
+		{
+			title: "Big Assignment",
+			details: "",
+			event_id: 35,
+			date: "2019-09-22",
+			time: "16:30",
+			duration: 80,
+			location: "LH2020",
+			weight: 50,
+			grade: 0,
+			class_id: 2,
 			completed: false,
 			checklist: [
 				{
@@ -120,19 +234,49 @@ export const state = () => ({
 	],
 	classes: [
 		{
-			class_id: 0,
-			name: "CP317",
-			grade: 100,
+			class_id: 2,
+			name: "BU317",
+			grade: 0,
 			colour: "flowrGreen",
 			start: "08:30",
 			end: "09:20",
 			duration: 50,
-			start_date: "2019-07-01",
+			start_date: "2019-05-01",
 			end_date: "2019-08-20",
 			days: [1, 0, 1, 0, 1],
-			location: "place",
+			location: "SC1001",
+			section: "A5",
+			professor: "Jane"
+		},
+		{
+			class_id: 1,
+			name: "CP468",
+			grade: 0,
+			colour: "flowrTurquoise",
+			start: "12:30",
+			end: "13:50",
+			duration: 80,
+			start_date: "2019-05-01",
+			end_date: "2019-08-20",
+			days: [0, 1, 0, 1, 0],
+			location: "N2000",
 			section: "Q",
-			professor: "person"
+			professor: "Doe"
+		},
+		{
+			class_id: 0,
+			name: "CP329",
+			grade: 100,
+			colour: "flowrBlue",
+			start: "19:00",
+			end: "22:50",
+			duration: 170,
+			start_date: "2019-05-01",
+			end_date: "2019-08-20",
+			days: [1, 0, 0, 0, 0],
+			location: "LH2001",
+			section: "A",
+			professor: "Professor"
 		}
 	],
 	classEvents: [],
@@ -246,7 +390,7 @@ export const mutations = {
 							location: c.location,
 							section: c.section,
 							class_id: c.class_id,
-							checklist: [{ name: "FUCK", completed: false }]
+							checklist: []
 						};
 						state.classEvents.push(classEvent);
 					}

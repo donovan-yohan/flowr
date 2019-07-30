@@ -10,12 +10,7 @@
 					scrollable
 				>
 					<template v-slot:activator="{ on }">
-						<v-card
-							v-ripple
-							:color="c.colour"
-							class="class-card"
-							v-on="on"
-						>
+						<v-card v-ripple :color="c.colour" class="class-card" v-on="on">
 							<v-layout row>
 								<div>
 									<v-card-title>
@@ -174,5 +169,8 @@ export default {
 	.hidden {
 		opacity: 0.5;
 	}
+}
+.container.grid-list-md .layout .flex {
+	margin-bottom: -20px;
 }
 </style>

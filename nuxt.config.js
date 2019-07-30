@@ -7,7 +7,7 @@ export default {
 	 */
 	head: {
 		titleTemplate: "Flowr",
-		title: process.env.npm_package_name || "",
+		title: "Flowr",
 		meta: [
 			{ charset: "utf-8" },
 			{ name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -44,8 +44,7 @@ export default {
 	modules: [
 		"@nuxtjs/vuetify",
 		// Doc: https://axios.nuxtjs.org/usage
-		"@nuxtjs/axios",
-		"@nuxtjs/pwa"
+		"@nuxtjs/axios"
 	],
 	/*
 	 ** Axios module configuration
@@ -84,14 +83,8 @@ export default {
 
 	router: {
 		base: "/flowr/"
-	},
+	}
 	/*
 	 ** Build configuration
 	 */
-	build: {
-		/*
-		 ** You can extend webpack config here
-		 */
-		extend(config, ctx) {}
-	}
 };

@@ -48,6 +48,7 @@
 											else if (a.time > b.time) return 1;
 											else return 0;
 										})"
+										v-if="!event.completed"
 										:key="event.event_id"
 										:style="{
 											height: event.weight + '%',
