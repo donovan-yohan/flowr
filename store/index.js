@@ -199,6 +199,15 @@ export const mutations = {
 			}
 		}
 	},
+	deleteEvent(state, id) {
+		let found = false;
+		for (let i = 0; i < state.events.length && !found; i++) {
+			if (state.events[i].event_id == id) {
+				state.events.splice(i, 1);
+				found = true;
+			}
+		}
+	},
 	deleteClass(state, id) {
 		let events = state.events.filter(e => {
 			return e.class_id != id;

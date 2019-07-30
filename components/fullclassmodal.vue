@@ -174,13 +174,14 @@ export default {
 	computed: {
 		classEventsMap() {
 			let map = this.$store.state.events.filter(e => {
-				return e.weight && (e.class_id == this.class_id);
+				return (e.weight > 0) && (e.class_id == this.class_id);
 			});
 			map.sort((a, b) => {
 				if (a.time < b.time) return -1;
 				else if (a.time > b.time) return 1;
 				else return 0;
 			});
+			console.log(map);
 			return map;
 		},
 	},

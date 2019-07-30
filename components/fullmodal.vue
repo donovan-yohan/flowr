@@ -5,9 +5,7 @@
 				<v-icon>chevron_left</v-icon>
 			</v-btn>
 			<v-toolbar-title class="modal-toolbar__title">
-				{{
-					title
-				}}
+				{{ title }}
 			</v-toolbar-title>
 			<v-spacer />
 			<v-dialog v-model="dialog">
@@ -64,29 +62,21 @@
 					</v-list-tile-action>
 					<v-list-tile-content>
 						<v-list-tile-title :class="{ completed: item.completed }">
-							{{
-								item.name
-							}}
+							{{ item.name }}
 						</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
 				<v-list-tile class="list-item">
 					<v-list-tile-action>
 						<v-btn icon :disabled="!newTodo" @click="addTodo(newTodo)">
-							<v-icon
-								:color="newTodo ? colour : 'gray'"
-							>
+							<v-icon :color="newTodo ? colour : 'gray'">
 								add_circle_outline
 							</v-icon>
 						</v-btn>
 					</v-list-tile-action>
 					<v-list-tile-content>
 						<v-list-tile-title class="list-add-item">
-							<v-text-field
-								v-model="newTodo"
-								label="Add an item"
-								single-line
-							/>
+							<v-text-field v-model="newTodo" label="Add an item" single-line />
 						</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
@@ -170,5 +160,9 @@ export default {
 .completed {
 	color: var(--v-gray-base);
 	text-decoration: line-through;
+}
+.weight-title {
+	font-size: 16px;
+	font-weight: 700;
 }
 </style>

@@ -23,7 +23,6 @@
 					</v-btn>
 					<v-dialog
 						v-model="buildModal"
-
 						fullscreen
 						hide-overlay
 						transition="slide-x-transition"
@@ -31,14 +30,12 @@
 					>
 						<template v-slot:activator="{ on }">
 							<v-btn icon v-on="on">
-								<v-icon color="flowrYellow">add</v-icon>
+								<v-icon color="flowrYellow">
+									add
+								</v-icon>
 							</v-btn>
 						</template>
-						<buildclassmodal
-							@exit="
-								buildModal = false;
-							"
-						/>
+						<buildclassmodal @exit="buildModal = false" />
 					</v-dialog>
 				</div>
 				<div v-else-if="title === 'tasks'" :key="1">
@@ -106,22 +103,33 @@
 				<nuxt />
 			</v-container>
 		</v-content>
-		<transition appear name="fade">
-			<v-btn
-				v-if="title == 'tasks'"
-				color="flowrOrange"
-				class="fab-button"
-				fixed
-				bottom
-				right
-				fab
-				@click="() => {}"
-			>
-				<v-icon color="white">
-					add
-				</v-icon>
-			</v-btn>
-		</transition>
+		<v-dialog
+			v-model="eventModal"
+			width="80vw"
+			height="200px"
+			scrollable
+		>
+			<template v-slot:activator="{ on }">
+				<transition appear name="fade">
+					<v-btn
+						v-if="title == 'tasks'"
+						color="flowrOrange"
+						class="fab-button"
+						fixed
+						bottom
+						right
+						fab
+						v-on="on"
+						@click="() => {}"
+					>
+						<v-icon color="white">
+							add
+						</v-icon>
+					</v-btn>
+				</transition>
+			</template>
+			<buildeventmodal @exit="eventModal = false" />
+		</v-dialog>
 		<v-bottom-nav
 			ref="bottomNav"
 			v-touch="{
@@ -174,18 +182,21 @@
 <script>
 import { mapMutations, mapActions } from "vuex";
 import buildclassmodal from "~/components/buildclassmodal.vue";
+import buildeventmodal from "~/components/buildeventmodal.vue";
 
 export default {
+	components: {
+		buildclassmodal,
+		buildeventmodal
+	},
 	data() {
 		return {
 			clipped: false,
 			buildModal: false,
+			eventModal: false,
 			miniVariant: false,
 			title: ""
 		};
-	},
-	components: {
-			buildclassmodal
 	},
 	computed: {
 		gradesHidden() {

@@ -85,92 +85,119 @@
 							v-slot:dayBody="{ date, timeToY, minutesToPixels, present, past }"
 						>
 							<template v-for="event in eventsMap[date]">
-								<div
-									v-if="event.duration"
+								<v-menu
 									:key="event.event_id"
-									:style="{
-										top: timeToY(event.time) + 'px',
-										height: minutesToPixels(event.duration) + 'px',
-										border:
-											'2px solid ' +
-											'var(--v-' +
-											getClassColour(event.class_id) +
-											'-base)',
-										/* im sorry */
-										background:
-											'linear-gradient(90deg, ' +
-											'var(--v-' +
-											getClassColour(event.class_id) +
-											'-base)' +
-											' ' +
-											(event.weight / 2 + 50) +
-											'%,' +
-											' white 0%)'
-									}"
-									class="schedule-event with-time"
+									full-width
+									offset-x
+									transition="slide-y-transition"
+									max-height="275px"
 								>
-									<div
-										class="schedule-event--details__left"
-										:style="{
-											height: minutesToPixels(event.duration) - 8 + 'px',
-											width: event.weight / 2 + 50 + '%'
-										}"
-									>
-										<span class="schedule-event--details__title">
-											{{ event.title }}
-										</span>
-										<span class="schedule-event--details__time">
-											{{ event.time }}
-										</span>
-									</div>
-									<div>
-										<span class="schedule-event--details__weight">
-											{{ event.weight + "%" }}
-										</span>
-									</div>
-								</div>
-								<div
-									v-else
-									:key="event.event_id"
-									:style="{
-										top: timeToY(event.time) + 'px',
-										borderTop:
-											'2px solid ' +
-											'var(--v-' +
-											getClassColour(event.class_id) +
-											'-base)',
-										/* im sorry */
-										background:
-											'linear-gradient(90deg, ' +
-											'var(--v-' +
-											getClassColour(event.class_id) +
-											'-base)' +
-											' ' +
-											(event.weight / 2 + 50) +
-											'%,' +
-											' white 0%)'
-									}"
-									class="schedule-event"
-								>
-									<div
-										class="schedule-event--details__left"
-										:style="{
-											width: event.weight / 2 + 50 + '%'
-										}"
-									>
-										<span class="schedule-event--details__title">
-											{{ event.title }}
-										</span>
-										<span class="schedule-event--details__time">
-											{{ event.time }}
-										</span>
-									</div>
-									<div>
-										<span class="schedule-event--details__weight">
-											{{ event.weight + "%" }}
-										</span>
-									</div>
-								</div>
+									<template v-slot:activator="{ on }">
+										<div
+											v-if="event.duration"
+											:key="event.event_id"
+											v-ripple
+											:style="{
+												top: timeToY(event.time) + 'px',
+												height: minutesToPixels(event.duration) + 'px',
+												border:
+													'2px solid ' +
+													'var(--v-' +
+													getClassColour(event.class_id) +
+													'-base)',
+												/* im sorry */
+												background:
+													'linear-gradient(90deg, ' +
+													'var(--v-' +
+													getClassColour(event.class_id) +
+													'-base)' +
+													' ' +
+													(event.weight / 2 + 50) +
+													'%,' +
+													' white 0%)'
+											}"
+											class="schedule-event with-time"
+											v-on="on"
+										>
+											<div
+												class="schedule-event--details__left"
+												:style="{
+													height: minutesToPixels(event.duration) - 8 + 'px',
+													width: event.weight / 2 + 50 + '%'
+												}"
+											>
+												<span class="schedule-event--details__title">
+													{{ event.title }}
+												</span>
+												<span class="schedule-event--details__time">
+													{{ event.time }}
+												</span>
+											</div>
+											<div>
+												<span class="schedule-event--details__weight">
+													{{ event.weight + "%" }}
+												</span>
+											</div>
+										</div>
+										<div
+											v-else
+											:key="event.event_id"
+											v-ripple
+											:style="{
+												top: timeToY(event.time) + 'px',
+												borderTop:
+													'2px solid ' +
+													'var(--v-' +
+													getClassColour(event.class_id) +
+													'-base)',
+												/* im sorry */
+												background:
+													'linear-gradient(90deg, ' +
+													'var(--v-' +
+													getClassColour(event.class_id) +
+													'-base)' +
+													' ' +
+													(event.weight / 2 + 50) +
+													'%,' +
+													' white 0%)'
+											}"
+											class="schedule-event"
+											v-on="on"
+										>
+											<div
+												class="schedule-event--details__left"
+												:style="{
+													width: event.weight / 2 + 50 + '%'
+												}"
+											>
+												<span class="schedule-event--details__title">
+													{{ event.title }}
+												</span>
+												<span class="schedule-event--details__time">
+													{{ event.time }}
+												</span>
+											</div>
+											<div>
+												<span class="schedule-event--details__weight">
+													{{ event.weight + "%" }}
+												</span>
+											</div>
+										</div>
+									</template>
+									<preview
+										:id="event.event_id"
+										scrollable
+										:colour="getClassColour(event.class_id)"
+										:title="event.title"
+										:date="getDetailDayString(event.date)"
+										:time="getTimeString(event.time, event.duration)"
+										:location="event.location"
+										:checklist="event.checklist"
+										:details="event.details"
+										:weight="event.weight"
+										@delete="deleteEvent(event.event_id)"
+									/>
+								</v-menu>
 							</template>
 							<template v-if="present">
 								<div
@@ -414,7 +441,7 @@ export default {
 		this.updateWeek(this.start);
 	},
 	methods: {
-		...mapMutations(["deleteClassEvent", "deleteClass"]),
+		...mapMutations(["deleteClassEvent", "deleteClass", "deleteEvent"]),
 		scrollScheduleIntoView: helpers.scrollScheduleIntoView,
 		updateMonth(e) {
 			this.month = MONTHS[e.start.month - 1];
