@@ -1,1 +1,13 @@
-testing
+Methods to test:
+
+mixins.js
+
+getWeekString
+getWeekNumber
+weeksFromToday
+scrollScheduleIntoView
+
+dateToString
+parseEndTime
+getTimeString
+formatTime
