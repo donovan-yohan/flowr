@@ -10,10 +10,27 @@ export const state = () => ({
 			date: "2019-08-03",
 			time: "12:00",
 			duration: 45,
-			open: false,
 			location: "LH1024",
 			weight: 15,
-			class_id: 4,
+			class_id: 0,
+			completed: false,
+			checklist: [
+				{
+					name: "",
+					completed: false
+				}
+			]
+		},
+		{
+			title: "Test 6 lol",
+			details: "",
+			event_id: 10,
+			date: "2019-08-04",
+			time: "16:00",
+			duration: 0,
+			location: "LH1024",
+			weight: 25,
+			class_id: 0,
 			completed: false,
 			checklist: [
 				{
@@ -29,7 +46,6 @@ export const state = () => ({
 			date: "2019-07-24",
 			time: "09:30",
 			duration: 30,
-			open: false,
 			location: "SC1001",
 			weight: 15,
 			class_id: 0,
@@ -48,7 +64,6 @@ export const state = () => ({
 			date: "2019-08-17",
 			time: "09:30",
 			duration: 30,
-			open: false,
 			location: "SC1001",
 			weight: 15,
 			class_id: 0,
@@ -61,16 +76,33 @@ export const state = () => ({
 			]
 		},
 		{
-			title: "August",
+			title: "Big Assignment",
 			details: "",
 			event_id: 4,
-			date: "2019-08-17",
-			time: "18:00",
-			duration: 90,
-			open: false,
-			location: "Online",
-			weight: 25,
-			class_id: 4,
+			date: "2019-08-08",
+			time: "13:30",
+			duration: 80,
+			location: "SC1001",
+			weight: 70,
+			class_id: 0,
+			completed: false,
+			checklist: [
+				{
+					name: "",
+					completed: false
+				}
+			]
+		},
+		{
+			title: "Big Assignment 2",
+			details: "",
+			event_id: 7,
+			date: "2019-08-08",
+			time: "13:00",
+			duration: 80,
+			location: "SC1001",
+			weight: 40,
+			class_id: 0,
 			completed: false,
 			checklist: [
 				{
@@ -95,96 +127,6 @@ export const state = () => ({
 			location: "place",
 			section: "Q",
 			professor: "person"
-		},
-		{
-			class_id: 1,
-			name: "BU212",
-			grade: 67,
-			colour: "flowrTurquoise",
-			start: "12:30",
-			end: "13:50",
-			duration: 80,
-			start_date: "2019-07-01",
-			end_date: "019-08-31",
-			days: [0, 1, 0, 1, 0],
-			location: "place",
-			section: "J",
-			professor: "person"
-		},
-		{
-			class_id: 2,
-			name: "CP412",
-			grade: 90,
-			colour: "flowrBlue",
-			start: "17:30",
-			end: "18:50",
-			duration: 80,
-			start_date: "2019-07-01",
-			end_date: "2019-07-31",
-			days: [1, 0, 1, 0, 0],
-			location: "place",
-			section: "A3",
-			professor: "person"
-		},
-		{
-			class_id: 3,
-			name: "PS302",
-			grade: 8,
-			colour: "flowrIndigo",
-			start: "19:00",
-			end: "21:50",
-			duration: 170,
-			start_date: "2019-07-01",
-			end_date: "2019-07-31",
-			days: [1, 0, 0, 0, 0],
-			location: "place",
-			section: "A5",
-			professor: "person"
-		},
-		{
-			class_id: 4,
-			name: "BU402",
-			grade: 24,
-			colour: "flowrViolet",
-			start: "09:30",
-			end: "10:20",
-			duration: 50,
-			start_date: "2019-07-01",
-			end_date: "2019-08-31",
-			days: [1, 0, 1, 0, 1],
-			location: "place",
-			section: "B5",
-			professor: "person"
-		},
-		{
-			class_id: 5,
-			name: "CP102",
-			grade: 67,
-			colour: "flowrPurple",
-			start: "19:00",
-			end: "22:50",
-			duration: 80,
-			start_date: "2019-07-01",
-			end_date: "2019-08-31",
-			days: [0, 0, 0, 1, 0],
-			location: "place",
-			section: "A",
-			professor: "person"
-		},
-		{
-			class_id: 6,
-			name: "CP468",
-			grade: 88,
-			colour: "flowrMagenta",
-			start: "11:30",
-			end: "12:50",
-			duration: 80,
-			start_date: "2019-07-14",
-			end_date: "2019-09-21",
-			days: [0, 1, 0, 1, 0],
-			location: "place",
-			section: "V",
-			professor: "person"
 		}
 	],
 	classEvents: [],
@@ -192,9 +134,9 @@ export const state = () => ({
 	unfolded: true,
 	showingEvents: true,
 	intervalHeight: 60,
-	eventIDtracker: 0,
-	classIDtracker: 0,
-	classEventIDtracker: 0
+	eventIDtracker: 30000,
+	classIDtracker: 20000,
+	classEventIDtracker: 10000
 });
 
 export const mutations = {
@@ -238,6 +180,15 @@ export const mutations = {
 	setIntervalHeight(state, newHeight) {
 		state.intervalHeight = newHeight;
 	},
+	deleteClassEvent(state, id) {
+		let found = false;
+		for (let i = 0; i < state.classEvents.length && !found; i++) {
+			if (state.classEvents[i].event_id == id) {
+				state.classEvents.splice(i, 1);
+				found = true;
+			}
+		}
+	},
 
 	// testing function
 	generateAllClassEvents(state) {
@@ -255,7 +206,6 @@ export const mutations = {
 							event_id: state.classEventIDtracker++,
 							date: helpers.dateToString(current),
 							time: c.start,
-							open: false,
 							duration: c.duration,
 							location: c.location,
 							section: c.section,

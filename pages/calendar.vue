@@ -43,7 +43,11 @@
 							<template v-if="eventsMap[date]">
 								<div class="weight-wrapper">
 									<div
-										v-for="event in eventsMap[date]"
+										v-for="event in eventsMap[date].sort((a, b) => {
+											if (a.time < b.time) return -1;
+											else if (a.time > b.time) return 1;
+											else return 0;
+										})"
 										:key="event.event_id"
 										:style="{
 											height: event.weight + '%',
@@ -91,33 +95,80 @@
 											'2px solid ' +
 											'var(--v-' +
 											getClassColour(event.class_id) +
-											'-base)'
+											'-base)',
+										/* im sorry */
+										background:
+											'linear-gradient(90deg, ' +
+											'var(--v-' +
+											getClassColour(event.class_id) +
+											'-base)' +
+											' ' +
+											(event.weight / 2 + 50) +
+											'%,' +
+											' white 0%)'
 									}"
 									class="schedule-event with-time"
-									@click="open(event)"
 								>
 									<div
-										class="schedule-event--details"
+										class="schedule-event--details__left"
 										:style="{
-											backgroundColor:
-												'var(--v-' + getClassColour(event.class_id) + '-base)',
-											width: event.weight + '%',
-											height: minutesToPixels(event.duration) - 3 + 'px'
+											height: minutesToPixels(event.duration) - 8 + 'px',
+											width: event.weight / 2 + 50 + '%'
 										}"
 									>
-										<div class="schedule-event--details__text-wrapper">
-											<div class="schedule-event--details__left">
-												<span class="schedule-event--details__title">{{
-													event.title
-												}}</span>
-												<span class="schedule-event--details__time">{{
-													event.time
-												}}</span>
-											</div>
-											<span class="schedule-event--details__weight">{{
-												event.weight + "%"
-											}}</span>
-										</div>
+										<span class="schedule-event--details__title">
+											{{ event.title }}
+										</span>
+										<span class="schedule-event--details__time">
+											{{ event.time }}
+										</span>
+									</div>
+									<div>
+										<span class="schedule-event--details__weight">
+											{{ event.weight + "%" }}
+										</span>
+									</div>
+								</div>
+								<div
+									v-else
+									:key="event.event_id"
+									:style="{
+										top: timeToY(event.time) + 'px',
+										borderTop:
+											'2px solid ' +
+											'var(--v-' +
+											getClassColour(event.class_id) +
+											'-base)',
+										/* im sorry */
+										background:
+											'linear-gradient(90deg, ' +
+											'var(--v-' +
+											getClassColour(event.class_id) +
+											'-base)' +
+											' ' +
+											(event.weight / 2 + 50) +
+											'%,' +
+											' white 0%)'
+									}"
+									class="schedule-event"
+								>
+									<div
+										class="schedule-event--details__left"
+										:style="{
+											width: event.weight / 2 + 50 + '%'
+										}"
+									>
+										<span class="schedule-event--details__title">
+											{{ event.title }}
+										</span>
+										<span class="schedule-event--details__time">
+											{{ event.time }}
+										</span>
+									</div>
+									<div>
+										<span class="schedule-event--details__weight">
+											{{ event.weight + "%" }}
+										</span>
 									</div>
 								</div>
 							</template>
@@ -200,8 +251,8 @@
 									:key="event.event_id"
 									full-width
 									offset-x
-									transition="scale-transition"
-									max-height="255px"
+									transition="slide-y-transition"
+									max-height="275px"
 								>
 									<template v-slot:activator="{ on }">
 										<div
@@ -228,58 +279,16 @@
 											</div>
 										</div>
 									</template>
-									<v-card flat class="event-preview">
-										<v-toolbar
-											class="event-preview__toolbar"
-											:color="getClassColour(event.class_id)"
-											dark
-											flat
-										>
-											<v-toolbar-title class="event-preview__title">
-												{{ event.title + "-" + event.section }}
-											</v-toolbar-title>
-											<v-spacer />
-											<v-btn icon class="event-preview__button">
-												<v-icon>edit</v-icon>
-											</v-btn>
-											<v-btn icon class="event-preview__button">
-												<v-icon>delete</v-icon>
-											</v-btn>
-										</v-toolbar>
-										<v-card-title primary-title>
-											<div class="event-preview__detail">
-												<span class="event-preview__line-item event-preview__date">
-													<v-icon>calendar_today</v-icon>
-													<span>{{ getDetailDayString(event.date) }}</span>
-												</span>
-												<span class="event-preview__line-item event-preview__time">
-													<v-icon>access_time</v-icon>
-													<span>{{ getTimeString(event.time, event.duration) }}</span>
-												</span>
-												<span class="event-preview__line-item event-preview__location">
-													<v-icon>location_on</v-icon>
-													<span>{{ event.location }}</span>
-												</span>
-											</div>
-
-											<div class="event-preview__checklist">
-												<span
-													v-if="event.checklist.length == 0"
-													class="event-preview__empty-list"
-												>
-													No todos
-												</span>
-												<span
-													v-for="item in event.checklist"
-													v-else
-													:key="item.name + random()"
-													class="event-preview__list-item"
-												>
-													{{ item.name }}
-												</span>
-											</div>
-										</v-card-title>
-									</v-card>
+									<preview
+										:colour="getClassColour(event.class_id)"
+										:title="event.title + '-' + event.section"
+										:date="getDetailDayString(event.date)"
+										:time="getTimeString(event.time, event.duration)"
+										:location="event.location"
+										:checklist="event.checklist"
+										:details="event.details"
+										@delete="deleteClassEvent(event.event_id)"
+									/>
 								</v-menu>
 							</template>
 							<template v-if="present">
@@ -288,18 +297,17 @@
 									:style="{
 										height:
 											minutesToPixels(
-												getCurrentMinutes(date) - firstInterval * intervalHeight
+												getCurrentMinutes(date) - firstInterval * 60
 											) + 'px'
 									}"
 								/>
 								<div
-									id="currentTime"
 									class="current-time"
 									:style="{
 										borderBottom: '2px solid var(--v-flowrRed-base)',
 										top:
 											minutesToPixels(
-												getCurrentMinutes(date) - firstInterval * intervalHeight
+												getCurrentMinutes(date) - firstInterval * 60
 											) + 'px'
 									}"
 								/>
@@ -324,6 +332,7 @@
 import { MONTHS, SHORTDAYS, DAYSOFWEEK } from "@/global/constants.js";
 import { mapMutations, mapActions } from "vuex";
 import * as helpers from "@/global/mixins.js";
+import preview from "~/components/preview.vue";
 
 export default {
 	key: to => to.fullPath,
@@ -333,6 +342,9 @@ export default {
 		} else {
 			return { name: "slide-right" };
 		}
+	},
+	components: {
+		preview
 	},
 	shortdays: SHORTDAYS,
 	data() {
@@ -397,6 +409,7 @@ export default {
 		this.updateWeek(this.start);
 	},
 	methods: {
+		...mapMutations(["deleteClassEvent"]),
 		scrollScheduleIntoView: helpers.scrollScheduleIntoView,
 		updateMonth(e) {
 			this.month = MONTHS[e.start.month - 1];
@@ -566,7 +579,14 @@ export default {
 }
 
 .schedule-event {
+	position: absolute;
+	right: 0;
+	margin-right: 0px;
+	overflow: hidden;
+	display: flex;
+	justify-content: space-between;
 	text-align: left;
+	align-items: center;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	color: white;
@@ -575,38 +595,31 @@ export default {
 	cursor: pointer;
 	margin-bottom: 1px;
 	left: 0px;
-	margin-right: 8px;
-	position: relative;
 
 	&.with-time {
-		position: absolute;
-		right: 8px;
-		margin-right: 0px;
+		background: white;
 	}
-	.schedule-event--details {
+	.schedule-event--details__left {
+		display: flex;
+		flex-flow: column wrap;
+		justify-content: center;
+		align-content: flex-start;
+		overflow: hidden;
+		min-width: 0;
+	}
+	.schedule-event--details__title {
+		font-weight: 700;
+		padding: 0 4px;
+	}
+	.schedule-event--details__time {
+		padding: 0 4px;
+	}
+	.schedule-event--details__weight {
 		padding: 0 4px;
 		color: black;
-		min-height: fit-content;
-		overflow: visible;
-
-		.schedule-event--details__text-wrapper {
-			position: absolute;
-			width: 96%;
-			display: flex;
-			justify-content: space-between;
-			.schedule-event--details__left {
-				display: flex;
-				flex-direction: column;
-			}
-			.schedule-event--details__title {
-				font-weight: 700;
-			}
-			.schedule-event--details__weight {
-				text-align: right;
-				font-weight: 700;
-				font-size: 18px;
-			}
-		}
+		text-align: right;
+		font-weight: 700;
+		font-size: 18px;
 	}
 }
 
@@ -663,44 +676,6 @@ export default {
 				font-size: 13px;
 				margin-bottom: 2px;
 			}
-		}
-	}
-}
-
-.event-preview {
-	min-width: 200px;
-	.v-card__title {
-		padding-top: 12px;
-	}
-	.event-preview__toolbar {
-		font-size: 14px;
-	}
-
-	.event-preview__title {
-		font-weight: 700;
-	}
-	.event-preview__detail {
-		display: flex;
-		flex-direction: column;
-		border-bottom: 1px solid var(--v-gray-base);
-		width: 100%;
-	}
-	.event-preview__line-item {
-		display: flex;
-		align-items: center;
-		i {
-			padding: 6px 8px 6px 0;
-			font-size: 20px;
-		}
-	}
-	.event-preview__checklist {
-		margin-top: 8px;
-		overflow: scroll;
-		// font-size * line height * number of lines
-		max-height: calc(1em * 1.5 * 3);
-		.event-preview__empty-list {
-			color: var(--v-gray-base);
-			font-style: italic;
 		}
 	}
 }

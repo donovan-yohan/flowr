@@ -16,7 +16,7 @@
 						<div v-ripple class="task-wrapper" @click="() => {}">
 							<div class="task-folded">
 								<div class="task-info">
-									<v-btn icon class="task-checkbox">
+									<v-btn icon class="task-checkbox" @click="() => {}">
 										<v-icon color="gray">
 											check_circle_outline
 										</v-icon>
@@ -181,15 +181,12 @@ export default {
 				return "Tomorrow";
 			else if (week == 0 || week == 1) {
 				let oneWeekFromToday = new Date();
-
 				oneWeekFromToday.setDate(oneWeekFromToday.getDate() + 7);
 				if (date.getDate() <= oneWeekFromToday.getDate()) {
 					return `${weekday}`;
 				}
-				console.log("made it?");
-			} else {
-				return `${month} ${day}`;
 			}
+			return `${month} ${day}`;
 		},
 		getWeekString: helpers.getWeekString,
 		parseEndTime: helpers.parseEndTime,
@@ -233,6 +230,7 @@ export default {
 	.task-info {
 		display: inline-flex;
 		align-items: center;
+		min-width: 0;
 		.task-checkbox {
 			margin: 0 0 0 -0.5em;
 			z-index: 1;
@@ -250,6 +248,7 @@ export default {
 		}
 		.task-weight-bar {
 			height: 0.8em;
+			flex-shrink: 0;
 		}
 	}
 	.task-detail {
@@ -258,8 +257,11 @@ export default {
 	.task-class-info {
 		display: inline-flex;
 		align-items: center;
+
 		.task-class-date {
 			font-size: 12px;
+			white-space: nowrap;
+			padding-left: 8px;
 		}
 		.task-class-wrapper {
 			height: 1em;
