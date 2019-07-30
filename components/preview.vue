@@ -1,18 +1,10 @@
 <template>
 	<v-card flat class="event-preview">
-		<v-toolbar
-			class="event-preview__toolbar"
-			:color="colour"
-			dark
-			flat
-		>
+		<v-toolbar class="event-preview__toolbar" :color="colour" dark flat>
 			<v-toolbar-title class="event-preview__title">
 				{{ title }}
 			</v-toolbar-title>
 			<v-spacer />
-			<v-btn icon class="event-preview__button">
-				<v-icon>edit</v-icon>
-			</v-btn>
 			<v-dialog v-model="dialog">
 				<template v-slot:activator="{ on }">
 					<v-btn icon class="event-preview__button" v-on="on">
@@ -28,8 +20,36 @@
 					"
 					@cancel="dialog = false"
 				>
-					Are you sure you want to delete this class?
+					Are you sure you want to delete this occurence?
 				</confirm>
+			</v-dialog>
+			<v-dialog
+				v-model="modal"
+				fullscreen
+				hide-overlay
+				transition="slide-x-transition"
+				scrollable
+			>
+				<template v-slot:activator="{ on }">
+					<v-btn icon class="event-preview__button" v-on="on">
+						<v-icon>chevron_right</v-icon>
+					</v-btn>
+				</template>
+				<fullmodal
+					:title="title"
+					:colour="colour"
+					:date="date"
+					:weight="weight"
+					:location="location"
+					:checklist="checklist"
+					:id="id"
+					@exit="
+						modal = false;
+						dialog = false;
+					"
+					v-on:delete="$emit('delete')"
+				>
+				</fullmodal>
 			</v-dialog>
 		</v-toolbar>
 		<v-card-title primary-title>
@@ -47,22 +67,25 @@
 					<span>{{ location }}</span>
 				</span>
 			</div>
-			<div class="event-preview__notes">
+			<!-- <div class="event-preview__notes">
 				<span v-if="!details" class="event-preview__empty-list">
 					No notes
 				</span>
 				<span v-else class="event-preview__list-item">
 					{{ details }}
 				</span>
-			</div>
+			</div> -->
 			<div class="event-preview__checklist">
-				<span v-if="checklist.length == 0" class="event-preview__empty-list">
+				<span
+					v-if="checklist.filter(i => !i.completed).length == 0"
+					class="event-preview__empty-list"
+				>
 					No todos
 				</span>
 				<span
 					v-for="item in checklist"
-					v-else
-					:key="item.name + random()"
+					v-if="!item.completed"
+					:key="item.name + Math.random()"
 					class="event-preview__list-item"
 				>
 					{{ item.name }}
@@ -74,10 +97,12 @@
 
 <script>
 import confirm from "~/components/confirm.vue";
+import fullmodal from "~/components/fullmodal.vue";
 
 export default {
 	components: {
-		confirm
+		confirm,
+		fullmodal
 	},
 	props: {
 		title: String,
@@ -86,11 +111,14 @@ export default {
 		checklist: Array,
 		date: String,
 		time: String,
-		location: String
+		location: String,
+		weight: Number,
+		id: Number
 	},
 	data() {
 		return {
-			dialog: false
+			dialog: false,
+			modal: false
 		};
 	}
 };
@@ -132,6 +160,7 @@ export default {
 		width: 100%;
 	}
 	.event-preview__checklist {
+		width: 100%;
 		display: flex;
 		flex-direction: column;
 		margin-top: 8px;

@@ -189,6 +189,9 @@ export const mutations = {
 			}
 		}
 	},
+	setClassEventDetails(state, id, val) {
+		state.classEvents.find(e => (e.event_id = id)).details = val;
+	},
 
 	// testing function
 	generateAllClassEvents(state) {
@@ -210,7 +213,7 @@ export const mutations = {
 							location: c.location,
 							section: c.section,
 							class_id: c.class_id,
-							checklist: []
+							checklist: [{ name: "FUCK", completed: false }]
 						};
 						state.classEvents.push(classEvent);
 					}
@@ -220,3 +223,5 @@ export const mutations = {
 		});
 	}
 };
+
+export const strict = false;

@@ -280,6 +280,7 @@
 										</div>
 									</template>
 									<preview
+										scrollable
 										:colour="getClassColour(event.class_id)"
 										:title="event.title + '-' + event.section"
 										:date="getDetailDayString(event.date)"
@@ -287,6 +288,8 @@
 										:location="event.location"
 										:checklist="event.checklist"
 										:details="event.details"
+										:weight="event.weight"
+										:id="event.event_id"
 										@delete="deleteClassEvent(event.event_id)"
 									/>
 								</v-menu>
