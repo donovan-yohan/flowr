@@ -1,10 +1,10 @@
 Test Case Log
 
-Test Name:
-Test Case Author:
-Tester Name:
-Project Name:
-Test Cycle ID:
+Test Name: Testing functions within the mixins.js file
+Test Case Author: JC Labatt, Ashleigh Stroud
+Tester Name: JC Labatt, Ashleigh Stroud
+Project Name: Flowr - CP317 Software Development Project
+Test Cycle ID: 
 Date Tested:
 
 ================================================================================
