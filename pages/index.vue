@@ -1,5 +1,85 @@
 <template>
 	<v-layout column class="page">
+		<div :key="6000" v-if="showMissingGrades" class="missing-wrapper">
+			<h2 class="weekheader">Missing Grades</h2>
+			<div class="no-missing" v-if="pastEventsMap.length == 0">All caught up!</div>
+			<template>
+				<v-layout v-for="e in pastEventsMap" :key="e.event_id" row>
+					<div class="task-wrapper">
+						<div class="task-folded">
+							<div class="task-info">
+								<div class="class-colour-icon"
+										 :style="{
+												backgroundColor: 'var(--v-' + getClassColour(e.class_id) + '-base)'
+										 }"/>
+								<span
+									:style="{
+										maxWidth:
+											'calc(100vw - 32px - 30px - 80px' +
+											e.weight / 1.25 +
+											')'
+									}"
+									class="task-title"
+								>
+									{{ e.title }}
+								</span>
+								<span
+									:style="{
+										color: 'var(--v-' + getClassColour(e.class_id) + '-base)'
+									}"
+									class="task-weight"
+								>{{ e.weight + "%" }}</span>
+								<div
+									:style="{
+										width: e.weight / 1.25 + 'px',
+										backgroundColor:
+											'var(--v-' + getClassColour(e.class_id) + '-base)'
+									}"
+									class="task-weight-bar"
+								/>
+							</div>
+
+							<div class="task-class-info">
+								<div
+									:style="{
+										backgroundColor:
+											'var(--v-' + getClassColour(e.class_id) + '-base)'
+									}"
+									class="task-class-wrapper"
+								>
+									<span
+										:key="e.class_id + 'F1'"
+										class="task-class-name"
+									>{{ getClassName(e.class_id) }}</span>
+								</div>
+							</div>
+						</div>
+							<div class="task-unfolded">
+								<div class="task-detail">
+									<div class="task-detail-date">
+										{{ getDetailDayString(e.date) }}
+									</div>
+									<div class="task-detail-time">
+										{{ `${getTimeString(e.time, e.duration)}` }}
+									</div>
+								</div>
+								<v-spacer />
+								<v-text-field
+									class="grade-input"
+									prefix="%"
+									mask="##"
+									reverse
+									:color="getClassColour(e.class_id)"
+									:value="e.grade" @blur="e.grade = $event.target.value"
+								>
+
+								</v-text-field>
+							</div>
+						</transition>
+					</div>
+				</v-layout>
+			</template>
+		</div>
 		<div v-for="(week, i) in eventsMap" :key="i">
 			<h2
 				v-if="week.length > 0"
@@ -13,11 +93,11 @@
 			<template>
 				<transition-group name="fade">
 					<v-layout v-for="e in eventsMap[i]" :key="e.event_id" row>
-						<div v-ripple class="task-wrapper" @click="() => {}">
+						<div :class="{'task-wrapper': true, 'complete': e.completed}" @click="() => {}">
 							<div class="task-folded">
 								<div class="task-info">
-									<v-btn icon class="task-checkbox" @click="() => {}">
-										<v-icon color="gray">
+									<v-btn icon class="task-checkbox" @click="e.completed = !e.completed">
+										<v-icon :color="e.completed ? getClassColour(e.class_id) : 'gray'">
 											check_circle_outline
 										</v-icon>
 									</v-btn>
@@ -116,7 +196,7 @@ export default {
 	data() {
 		return {
 			startMonday: false,
-			remainingDays: 0
+			remainingDays: 0,
 		};
 	},
 	computed: {
@@ -157,8 +237,17 @@ export default {
 			});
 			return weekArray;
 		},
+		pastEventsMap() {
+			let past = this.$store.state.events.filter(e => {
+				return e.date < this.dateToString(new Date()) && e.grade == 0;
+			});
+			return past;
+		},
 		unfolded() {
 			return this.$store.state.unfolded;
+		},
+		showMissingGrades() {
+			return this.$store.state.showMissingGrades;
 		}
 	},
 	methods: {
@@ -200,7 +289,8 @@ export default {
 		},
 		getWeekNumber: helpers.getWeekNumber,
 		weeksFromToday: helpers.weeksFromToday,
-		formatTime: helpers.formatTime
+		formatTime: helpers.formatTime,
+		dateToString: helpers.dateToString,
 	}
 };
 </script>
@@ -219,6 +309,12 @@ export default {
 	}
 }
 
+.missing-wrapper {
+	border-bottom: 1px solid var(--v-flowrOrange-base);
+}
+.no-missing {
+	padding: 8px 0;
+}
 .task-wrapper {
 	display: inline-flex;
 	flex-direction: column;
@@ -293,5 +389,22 @@ export default {
 		align-items: center;
 		justify-content: space-between;
 	}
+}
+
+.complete {
+	opacity: 0.6;
+}
+
+.class-colour-icon {
+	width: 20px;
+	height: 20px;
+	margin: 8px 8px 8px 0;
+	border-radius: 50%;
+	content: "";
+}
+.grade-input {
+	width: 10%;
+	padding: 0;
+	margin: 0;
 }
 </style>

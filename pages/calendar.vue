@@ -378,9 +378,11 @@ export default {
 		},
 		eventsMap() {
 			const map = {};
-			this.$store.state.events.forEach(e =>
-				(map[e.date] = map[e.date] || []).push(e)
-			);
+			this.$store.state.events.forEach(e => {
+				if(e.weight) {
+					(map[e.date] = map[e.date] || []).push(e)
+				}
+			});
 			return map;
 		},
 		classMap() {
@@ -412,7 +414,7 @@ export default {
 		this.updateWeek(this.start);
 	},
 	methods: {
-		...mapMutations(["deleteClassEvent"]),
+		...mapMutations(["deleteClassEvent", "deleteClass"]),
 		scrollScheduleIntoView: helpers.scrollScheduleIntoView,
 		updateMonth(e) {
 			this.month = MONTHS[e.start.month - 1];

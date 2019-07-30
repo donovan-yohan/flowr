@@ -20,11 +20,7 @@
 				<div v-else-if="title === 'tasks'" :key="1">
 					<v-btn
 						icon
-						@click="
-							() => {
-								return null;
-							}
-						"
+						@click="toggleMissingGrades()"
 					>
 						<v-icon color="flowrOrange">
 							spellcheck
@@ -137,6 +133,7 @@ export default {
 	data() {
 		return {
 			clipped: false,
+			buildModal: false,
 			miniVariant: false,
 			title: ""
 		};
@@ -178,7 +175,8 @@ export default {
 			"toggleHidden",
 			"toggleUnfold",
 			"toggleCalendar",
-			"generateAllClassEvents"
+			"generateAllClassEvents",
+			"toggleMissingGrades"
 		]),
 		...mapActions(["scrollScheduleIntoView"]),
 		swipeLeft(title) {

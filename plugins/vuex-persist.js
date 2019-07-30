@@ -8,15 +8,16 @@ const reducer = state => {
 	let persistedState = clone(state);
 
 	delete persistedState.gradesHidden;
-	delete persistedState.unfolded;
-	delete persistedState.showingEvents;
-	delete persistedState.intervalHeight;
+  delete persistedState.unfolded;
+  delete persistedState.showingEvents;
+  delete persistedState.intervalHeight;
+  delete persistedState.showMissingGrades;
 
 	return persistedState;
 };
 
 export default ({ store }) => {
-	window.onNuxtReady(() => {
-		new VuexPersistence({ reducer }).plugin(store);
-	});
+  window.onNuxtReady(() => {
+    new VuexPersistence({ reducer }).plugin(store);
+  });
 };

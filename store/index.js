@@ -12,6 +12,7 @@ export const state = () => ({
 			duration: 45,
 			location: "LH1024",
 			weight: 15,
+			grade: 0,
 			class_id: 0,
 			completed: false,
 			checklist: [
@@ -30,6 +31,7 @@ export const state = () => ({
 			duration: 0,
 			location: "LH1024",
 			weight: 25,
+			grade: 0,
 			class_id: 0,
 			completed: false,
 			checklist: [
@@ -48,6 +50,7 @@ export const state = () => ({
 			duration: 30,
 			location: "SC1001",
 			weight: 15,
+			grade: 0,
 			class_id: 0,
 			completed: false,
 			checklist: [
@@ -66,6 +69,7 @@ export const state = () => ({
 			duration: 30,
 			location: "SC1001",
 			weight: 15,
+			grade: 0,
 			class_id: 0,
 			completed: false,
 			checklist: [
@@ -84,6 +88,7 @@ export const state = () => ({
 			duration: 80,
 			location: "SC1001",
 			weight: 70,
+			grade: 0,
 			class_id: 0,
 			completed: false,
 			checklist: [
@@ -102,6 +107,7 @@ export const state = () => ({
 			duration: 80,
 			location: "SC1001",
 			weight: 40,
+			grade: 0,
 			class_id: 0,
 			completed: false,
 			checklist: [
@@ -133,6 +139,7 @@ export const state = () => ({
 	gradesHidden: true,
 	unfolded: true,
 	showingEvents: true,
+	showMissingGrades: false,
 	intervalHeight: 60,
 	eventIDtracker: 30000,
 	classIDtracker: 20000,
@@ -148,6 +155,9 @@ export const mutations = {
 	},
 	toggleCalendar(state) {
 		state.showingEvents = !state.showingEvents;
+	},
+	toggleMissingGrades(state) {
+		state.showMissingGrades = !state.showMissingGrades;
 	},
 	generateClassEvents(state, class_id) {
 		let filter = state.classes.filter(classItem => {
@@ -188,6 +198,20 @@ export const mutations = {
 				found = true;
 			}
 		}
+	},
+	deleteClass(state, id) {
+		let events = state.events.filter(e => {
+			return e.class_id != id
+		});
+		let classes = state.classes.filter(c => {
+			return c.class_id != id
+		});
+		let classEvents = state.classEvents.filter(ce => {
+			return ce.class_id != id
+		})
+		state.events = events;
+		state.classes = classes;
+		state.classEvents = classEvents;
 	},
 	setClassEventDetails(state, id, val) {
 		state.classEvents.find(e => (e.event_id = id)).details = val;

@@ -2,53 +2,70 @@
 	<v-container fluid grid-list-md>
 		<v-layout column>
 			<v-flex v-for="c in classes" :key="c.classes_id">
-				<v-card :color="c.colour" class="class-card">
-					<v-layout row>
-						<div>
-							<v-card-title>
-								<h1>{{ c.name + "-" + c.section }}</h1>
-							</v-card-title>
-							<v-card-text>
-								<span class="class-time">{{
-									formatTime(c.start) + " - " + formatTime(c.end)
-								}}</span>
-								<span>
-									{{ c.end >= "12:00" ? "PM" : "AM" }}
-								</span>
-							</v-card-text>
-							<v-card-text>
-								<div class="class-day-wrapper">
-									<div
-										v-for="(day, i) in c.days"
-										:key="i"
-										:class="{ day: 'true', class: day > 0 }"
-									>
-										{{ daysOfWeek[i + 1] }}
-									</div>
+				<v-dialog
+					v-model="modal"
+					fullscreen
+					hide-overlay
+					transition="slide-x-transition"
+					scrollable
+				>
+					<template v-slot:activator="{ on }">
+						<v-card v-on="on" v-ripple :color="c.colour" class="class-card">
+							<v-layout row>
+								<div>
+									<v-card-title>
+										<h1>{{ c.name + "-" + c.section }}</h1>
+									</v-card-title>
+									<v-card-text>
+										<span class="class-time">{{
+											formatTime(c.start) + " - " + formatTime(c.end)
+										}}</span>
+										<span>
+											{{ c.end >= "12:00" ? "PM" : "AM" }}
+										</span>
+									</v-card-text>
+									<v-card-text>
+										<div class="class-day-wrapper">
+											<div
+												v-for="(day, i) in c.days"
+												:key="i"
+												:class="{ day: 'true', class: day > 0 }"
+											>
+												{{ daysOfWeek[i + 1] }}
+											</div>
+										</div>
+									</v-card-text>
 								</div>
-							</v-card-text>
-						</div>
-						<v-spacer />
-						<div class="grade-wrapper">
-							<v-card-title>
-								<transition name="fade" mode="out-in">
-									<h1 v-if="hidden" :key="'hidden'" class="hidden">
-										--%
-									</h1>
-									<h1 v-else :key="'unhidden'">
-										{{ c.grade + "%" }}
-									</h1>
-								</transition>
-							</v-card-title>
-							<v-card-text>
-								<span class="class-location">{{ c.location }}</span>
-							</v-card-text>
-							<v-card-text>
-								<span>{{ c.professor }}</span>
-							</v-card-text>
-						</div>
-					</v-layout>
-				</v-card>
+								<v-spacer />
+								<div class="grade-wrapper">
+									<v-card-title>
+										<transition name="fade" mode="out-in">
+											<h1 v-if="hidden" :key="'hidden'" class="hidden">
+												--%
+											</h1>
+											<h1 v-else :key="'unhidden'">
+												{{ c.grade + "%" }}
+											</h1>
+										</transition>
+									</v-card-title>
+									<v-card-text>
+										<span class="class-location">{{ c.location }}</span>
+									</v-card-text>
+									<v-card-text>
+										<span>{{ c.professor }}</span>
+									</v-card-text>
+								</div>
+							</v-layout>
+						</v-card>
+					</template>
+					<fullclassmodal
+						v-bind="c"
+						@exit="
+							modal = false;
+						"
+						@delete="deleteClass(c.class_id)"
+					/>
+				</v-dialog>
 			</v-flex>
 		</v-layout>
 	</v-container>
@@ -57,8 +74,10 @@
 <script>
 import { mapMutations } from "vuex";
 import { SHORTDAYS } from "@/global/constants.js";
+import fullclassmodal from "~/components/fullclassmodal.vue";
 
 export default {
+	key: to => to.fullPath,
 	transition(to, from) {
 		if (to.name == "grades") {
 			return { name: "slide-right" };
@@ -66,9 +85,13 @@ export default {
 			return { name: "slide-left" };
 		}
 	},
+	components: {
+		fullclassmodal,
+	},
 	data() {
 		return {
-			daysOfWeek: SHORTDAYS
+			daysOfWeek: SHORTDAYS,
+			modal: false,
 		};
 	},
 	computed: {
@@ -83,6 +106,7 @@ export default {
 		}
 	},
 	methods: {
+		...mapMutations(["deleteClassEvent", "deleteClass"]),
 		getClassColour(id) {
 			return this.$store.state.classes.find(c => c.class_id === id).colour;
 		},
