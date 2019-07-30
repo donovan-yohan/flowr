@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Methods to test:
 
 mixins.js
@@ -11,3 +12,6 @@ dateToString
 parseEndTime
 getTimeString
 formatTime
+=======
+testing
+>>>>>>> eebb3ac5d42f5e084065304ad9acaaa437fc247e
