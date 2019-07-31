@@ -52,20 +52,25 @@ function testGetWeekString() {
 function testGetWeekNumber() {
 	console.log("Testing getWeekNumber:");
 	console.log("Test 1:");
-	console.log("Input: new Date(2019, 1, 1)");
+	console.log("Input: new Date(January 1, 2019 0:00:00)");
 	console.log("Expected output: 2019,1");
-	console.log("Actual Output: " + helpers.getWeekNumber(new Date(2019, 1, 1)));
-	if (helpers.getWeekNumber(new Date(2019, 1, 1)) == "2019,1") {
+	console.log(
+		"Actual Output: " +
+			helpers.getWeekNumber(new Date("January 1, 2019 0:00:00"))
+	);
+	if (helpers.getWeekNumber(new Date("January 1, 2019 0:00:00")) == "2019,1") {
 		console.log("Test 1 Successful");
 	} else {
 		console.log("Test 1 Failed");
 	}
 	console.log();
 	console.log("Test 2:");
-	console.log("Input: new Date(2020, 3, 1)");
+	console.log("Input: new Date(March 1, 2020 0:00:00)");
 	console.log("Expected output: 2020,10");
-	console.log("Actual Output: " + helpers.getWeekNumber(new Date(2020, 3, 1)));
-	if (helpers.getWeekNumber(new Date(2020, 3, 1)) == "2020,10") {
+	console.log(
+		"Actual Output: " + helpers.getWeekNumber(new Date("March 1, 2020 0:00:00"))
+	);
+	if (helpers.getWeekNumber(new Date("March 1, 2020 0:00:00")) == "2020,10") {
 		console.log("Test 2 Successful");
 	} else {
 		console.log("Test 2 Failed");
